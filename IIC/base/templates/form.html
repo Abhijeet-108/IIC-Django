@@ -1,0 +1,25 @@
+{% extends "main.html" %} {% load static %} {% block content %}
+<section class="about" id="about">
+  <div class="container">
+    <div class="about-content">
+      <div class="about-text">
+        <div>
+          <form method="POST" action="">
+            {% csrf_token %} {{queryf.fullname.label_tag }} {{ queryf.fullname}}
+            <br />
+            {{ queryf.email.label_tag }} {{ queryf.email }}
+            <br />
+            {{ queryf.phone.label_tag }} {{ queryf.phone }}
+            <br />
+            {{ queryf.message.label_tag }} {{ queryf.message }}
+            <br />
+            {{ queryf.subject.label_tag }} {{ queryf.subject }}
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

@@ -65,3 +65,19 @@ class organisation(models.Model):
 
     def __str__(self):
         return self.name
+    
+class querys(models.Model):
+    class sub(models.TextChoices):
+        Gen = "General Inquiry"
+        Mem = "IIC Membership"
+        PS = "Project Support"
+        Competition = "Competition Information"
+        Other = "Other"
+    fullname = models.CharField(max_length = 70 , null = False , blank = False)
+    email = models.EmailField(blank = False , null = False)
+    phone = models.CharField(max_length = 11 , blank = False , null = False)
+    message = models.TextField(blank = False , null = False)
+    subject = models.CharField(choices = sub , max_length = 70 , null = False , blank = False)
+
+    def __str__(self):
+        return self.subject + " " + self.fullname

@@ -111,3 +111,14 @@ class conference(models.Model):
 
     def __str__(self):
         return self.journalName
+    
+class basicDetails(models.Model):
+    faculty = models.ForeignKey(facult , on_delete = models.CASCADE)
+    googleScholar = models.CharField(max_length = 500 , null = True , blank = True)
+    orcid = models.CharField(max_length = 50 , null = True , blank = True)
+    scopusid = models.CharField(max_length = 50 , null = True , blank = True)
+    researchid = models.CharField(max_length = 50 , null = True , blank = True)
+    vidwanPortal = models.CharField(max_length = 500 , null = True , blank = True)
+
+    def __str__(self):
+        return self.faculty + "  Basics"

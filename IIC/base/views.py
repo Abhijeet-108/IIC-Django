@@ -3,6 +3,9 @@ from .models import posts
 
 from django.db.models import Q
 
+from .forms import queryForm
+from .models import querys
+
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate , login , logout
@@ -42,3 +45,18 @@ def loginFac(req):
 def logoutFac(req):
     logout(req)
     return redirect('home')
+
+def queryCreate(req):
+    queryf = queryForm()
+    if(req.method == "POST"):
+        queryf = queryForm(req.POST)
+        if(queryf.is_valid()):
+            queryf.save()
+        return redirect("admin-site")
+    context = {'queryf' : queryf}
+    return render(req , "form.html" , context)
+
+def queryDeletion(req , pk):
+    query = querys.objects.get(id = pk)
+    query.delete()
+    return redirect('admin-site')
