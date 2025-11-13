@@ -32,6 +32,9 @@
         {% endfor %}
 
         <h3>Books</h3>
+        <a href="{% url "bookform" %}" style="text-decoration: none;">
+          <button style="background: #3788d4; color: #fff; border-radius: 5px; padding:10px 20px">Add Books</button>
+        </a>
         {% for i in books %}
         <div class="about-card">
           <p>Title {{i.title}}</p>

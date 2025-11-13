@@ -17,13 +17,19 @@ from django.contrib.auth.forms import UserCreationForm
 
 def home(req):
     post = posts.objects.all()
-    context = {"posts" : post}
-    return render(req,"home.html" , context)
+    queryf = queryForm()
+    if(req.method == "POST"):
+        queryf = queryForm(req.POST)
+        if(queryf.is_valid()):
+            queryf.save()
+        return redirect("home")
+    context = {"posts" : post , 'queryf' : queryf}
+    return render(req,"a1home.html" , context)
 
 def loginFac(req):
     page = 'login'
     if(req.user.is_authenticated):
-        return redirect('home')
+        return redirect('a1home')
     if(req.method == "POST"):
         username = req.POST.get('username')
         password = req.POST.get('password')
@@ -40,7 +46,7 @@ def loginFac(req):
                 return redirect('home')
         else:
             messages.error(req, 'Username or Password is not correct!')
-    return render(req,"login.html")
+    return render(req,"a1login.html")
 
 def logoutFac(req):
     logout(req)
@@ -54,7 +60,7 @@ def queryCreate(req):
             queryf.save()
         return redirect("admin-site")
     context = {'queryf' : queryf}
-    return render(req , "form.html" , context)
+    return render(req , "form2.html" , context)
 
 def queryDeletion(req , pk):
     query = querys.objects.get(id = pk)

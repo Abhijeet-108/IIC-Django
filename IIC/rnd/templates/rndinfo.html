@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>R&D — Anchor-linked Form (Section Redirect)</title>
+
+    <!-- Fonts: use your app fonts or Google fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Poppins:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* ---------- Root styles & layout (kept visually identical) ---------- */
+      :root {
+        --accent1: #2563eb;
+        --accent2: #06b6d4;
+        --muted: #555;
+        --text: #111;
+        --white: #fff;
+        --radius: 14px;
+        --maxw: 1100px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        padding: 36px 20px;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        color: var(--text);
+        background: radial-gradient(
+            900px 400px at 10% 10%,
+            rgba(37, 99, 235, 0.06),
+            transparent 10%
+          ),
+          radial-gradient(
+            700px 300px at 90% 90%,
+            rgba(6, 182, 212, 0.06),
+            transparent 10%
+          ),
+          linear-gradient(180deg, #f7f8fa 0%, #ffffff 100%);
+      }
+
+      .rnd-wrap {
+        width: 100%;
+        max-width: var(--maxw);
+        display: grid;
+        grid-template-columns: 340px 1fr;
+        gap: 26px;
+        align-items: start;
+      }
+
+      .rnd-sidebar {
+        background: linear-gradient(
+          180deg,
+          rgba(0, 0, 0, 0.02),
+          rgba(0, 0, 0, 0.01)
+        );
+        border-radius: var(--radius);
+        padding: 18px;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        position: sticky;
+        top: 36px;
+        height: fit-content;
+      }
+
+      .rnd-top-image {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 18px;
+        text-align: center;
+      }
+      .rnd-top-image img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid rgba(0, 0, 0, 0.08);
+        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.1);
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
+      }
+      .rnd-top-image img:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
+      }
+
+      .rnd-brand h3 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 900;
+        color: var(--text);
+      }
+      .rnd-brand p {
+        margin: 0;
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .rnd-progress {
+        margin-top: 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .rnd-step-link {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        padding: 10px;
+        border-radius: 10px;
+        text-decoration: none;
+        color: var(--text);
+        background: linear-gradient(
+          180deg,
+          rgba(0, 0, 0, 0.02),
+          rgba(0, 0, 0, 0)
+        );
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        transition: all 0.22s ease;
+      }
+      .rnd-step-link:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        border-image: linear-gradient(90deg, var(--accent1), var(--accent2)) 1;
+        background: linear-gradient(
+          90deg,
+          rgba(37, 99, 235, 0.08),
+          rgba(6, 182, 212, 0.05)
+        );
+      }
+      .rnd-bullet {
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, var(--accent1), var(--accent2));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: white;
+        font-size: 15px;
+      }
+      .rnd-step-text {
+        font-size: 13px;
+        color: var(--text);
+      }
+      .rnd-step-sub {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+
+      .rnd-hint {
+        margin-top: 12px;
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.45;
+        padding-top: 6px;
+      }
+
+      .rnd-card {
+        background: var(--white);
+        border-radius: var(--radius);
+        padding: 22px;
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      }
+
+      .rnd-card h1 {
+        font-size: 22px;
+        margin: 0 0 6px;
+        color: var(--text);
+        font-weight: 800;
+      }
+      .rnd-lead {
+        color: var(--muted);
+        font-size: 14px;
+        margin-bottom: 16px;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .rnd-section {
+        border-radius: 12px;
+        padding: 16px;
+        border: 2px solid rgba(0, 0, 0, 0.05);
+        background: rgba(255, 255, 255, 0.8);
+        transition: all 0.35s cubic-bezier(0.2, 0.9, 0.2, 1);
+      }
+
+      .rnd-section:hover,
+      .rnd-section:focus-within {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
+        border-image: linear-gradient(90deg, var(--accent1), var(--accent2)) 1;
+        background: rgba(255, 255, 255, 0.95);
+      }
+
+      .rnd-section:target {
+        outline: 4px solid rgba(37, 99, 235, 0.25);
+        box-shadow: 0 16px 40px rgba(37, 99, 235, 0.18);
+        transform: translateY(-6px);
+        background: linear-gradient(
+          90deg,
+          rgba(37, 99, 235, 0.05),
+          rgba(6, 182, 212, 0.04)
+        );
+      }
+
+      .rnd-section .title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 10px;
+      }
+      .rnd-badge {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, var(--accent1), var(--accent2));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: white;
+        font-size: 18px;
+      }
+      .rnd-section h3 {
+        margin: 0;
+        font-size: 15px;
+        color: var(--text);
+        font-weight: 700;
+      }
+      .rnd-section p.desc {
+        margin: 4px 0 12px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .rnd-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .rnd-full {
+        grid-column: 1/-1;
+      }
+
+      label {
+        display: block;
+        font-size: 13px;
+        color: var(--muted);
+        margin-bottom: 6px;
+      }
+      input,
+      select,
+      textarea {
+        width: 100%;
+        background: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        padding: 12px 12px;
+        border-radius: 10px;
+        color: var(--text);
+        outline: none;
+        font-size: 14px;
+        transition: all 0.18s ease;
+      }
+      textarea {
+        min-height: 96px;
+        resize: vertical;
+      }
+      input::placeholder,
+      textarea::placeholder {
+        color: rgba(0, 0, 0, 0.32);
+      }
+
+      input:focus,
+      textarea:focus,
+      select:focus {
+        border-color: var(--accent1);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+      }
+
+      .rnd-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+        align-items: center;
+        margin-top: 6px;
+      }
+
+      .btn {
+        position: relative;
+        overflow: hidden;
+        border: 0;
+        padding: 12px 18px;
+        border-radius: 10px;
+        font-weight: 700;
+        cursor: pointer;
+        color: #fff;
+        background: linear-gradient(90deg, var(--accent1), var(--accent2));
+        box-shadow: 0 10px 24px rgba(37, 99, 235, 0.28);
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
+      }
+      .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 16px 36px rgba(37, 99, 235, 0.36);
+      }
+      .btn.primary {
+        background: linear-gradient(90deg, var(--accent2), var(--accent1));
+      }
+
+      .small {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 6px;
+      }
+
+      @media (max-width: 980px) {
+        .rnd-wrap {
+          grid-template-columns: 1fr;
+        }
+        .rnd-sidebar {
+          position: static;
+          width: 100%;
+        }
+      }
+
+      /* Ripple animation keyframes (used by JS) */
+      @keyframes ripple {
+        to {
+          transform: scale(3);
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      class="rnd-wrap"
+      role="region"
+      aria-label="R&D Form with anchor navigation"
+    >
+      <!-- Sidebar with jumps -->
+      <aside class="rnd-sidebar" aria-hidden="false">
+        <div class="rnd-top-image">
+          <a href="#sec-research" title="Jump to Research Links">
+            <!-- image kept same as React version (SVG data URI). Replace with actual image src if desired -->
+            <img
+              src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><rect width='100%' height='100%' fill='%23ffffff' opacity='0.0'/><text x='50%' y='50%' font-size='180' dominant-baseline='middle' text-anchor='middle'>%F0%9F%90%B1</text></svg>"
+              alt="Cat image"
+            />
+          </a>
+
+          <div class="rnd-brand">
+            <div>
+              <h3>Innovation Council</h3>
+              <p class="small">
+                Click items to jump to the relevant section on the form.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <nav class="rnd-progress" aria-label="Form sections (click to jump)">
+          <a class="rnd-step-link" href="#sec-research">
+            <div class="rnd-bullet">1</div>
+            <div>
+              <div class="rnd-step-text">Research Links</div>
+              <div class="rnd-step-sub">Scholar, ORCID, Vidwan</div>
+            </div>
+          </a>
+
+          <a class="rnd-step-link" href="#sec-patent">
+            <div class="rnd-bullet">2</div>
+            <div>
+              <div class="rnd-step-text">Patents & Copyrights</div>
+              <div class="rnd-step-sub">Numbers, status, year</div>
+            </div>
+          </a>
+
+          <a class="rnd-step-link" href="#sec-journal">
+            <div class="rnd-bullet">3</div>
+            <div>
+              <div class="rnd-step-text">Publications</div>
+              <div class="rnd-step-sub">Journal, DOI, pages</div>
+            </div>
+          </a>
+
+          <a class="rnd-step-link" href="#sec-book">
+            <div class="rnd-bullet">4</div>
+            <div>
+              <div class="rnd-step-text">Books / Chapters</div>
+              <div class="rnd-step-sub">ISBN, chapters</div>
+            </div>
+          </a>
+
+          <a class="rnd-step-link" href="#sec-conf">
+            <div class="rnd-bullet">5</div>
+            <div>
+              <div class="rnd-step-text">Conferences</div>
+              <div class="rnd-step-sub">Paper, DOI, year</div>
+            </div>
+          </a>
+        </nav>
+
+        <div class="rnd-hint">
+          Tip: clicking any item or the image will scroll to that form section.
+          The section will be highlighted so you can see the exact spot.
+        </div>
+      </aside>
+
+      <!-- Main card with form -->
+      <main class="rnd-card" role="main">
+        <h1>R&D Submission</h1>
+        <p class="rnd-lead">
+          Fill details from <strong>Research Links</strong> to
+          <strong>Conference Details</strong>. Click the left items to jump to
+          sections.
+        </p>
+
+        <!--
+        IMPORTANT for Django:
+        - Add {% csrf_token %} inside this form when rendering via Django template.
+        - Set form "action" to your Django URL endpoint (e.g. /submit-research/).
+        - enctype is multipart/form-data (keeps compatibility with file uploads).
+        - If you plan to submit via AJAX, see the JS block below.
+      -->
+        <form
+          id="rdForm"
+          action=""
+          method="POST"
+          enctype="multipart/form-data"
+          autocomplete="on"
+        >
+          {% csrf_token %}
+          <!-- Add your Django CSRF token here when rendering: {% csrf_token %} -->
+
+          <!-- Research Links -->
+          <section
+            id="sec-research"
+            class="rnd-section"
+            aria-labelledby="sec-research-label"
+          >
+            <div class="title">
+              <div class="rnd-badge">RL</div>
+              <div>
+                <h3 id="sec-research-label">Research Links</h3>
+                <p class="desc">
+                  Google Scholar, ORCID, Scopus ID, Vidwan — add the profile
+                  URLs/IDs.
+                </p>
+              </div>
+            </div>
+
+            <div class="rnd-grid">
+              <div>
+                <label for="google_scholar">Google Scholar Link</label>
+                <!-- name attribute used by backend: google_scholar (type: url) -->
+                {{basicf.googleScholar}}
+              </div>
+
+              <div>
+                <label for="orcid">ORCID</label>
+                <!-- name: orcid. Format: 0000-0000-0000-0000 (string) -->
+                {{basicf.orcid}}
+              </div>
+
+              <div>
+                <label for="scopus">Scopus ID</label>
+                <!-- name: scopus -->
+                {{basicf.scopusid}}
+              </div>
+
+              <div>
+                <label for="researcher_id">Researcher ID</label>
+                <!-- name: researcher_id -->
+                {{basicf.researchid}}
+              </div>
+
+              <div class="rnd-full">
+                <label for="vidwan">Vidwan Portal Link</label>
+                <!-- name: vidwan (type: url) -->
+                {{basicf.vidwanPortal}}
+                <div class="small">
+                  Provide public profile URL to link your publications and
+                  profile.
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Patents and Copyrights -->
+          <section
+            id="sec-patent"
+            class="rnd-section"
+            aria-labelledby="sec-patent-label"
+          >
+            <div class="title">
+              <div class="rnd-badge">PT</div>
+              <div>
+                <h3 id="sec-patent-label">Patent and Copyright Details</h3>
+                <p class="desc">
+                  Patent/Application number, area, domain, title and status.
+                </p>
+              </div>
+            </div>
+
+            <div class="rnd-grid">
+              <div>
+                <label for="patent_no"
+                  >Patent Number / Application Number</label
+                >
+                <!-- name: patent_no -->
+                {{patentf.patentNumber}}
+              </div>
+
+              <div>
+                <label for="patent_area">Area</label>
+                <!-- name: patent_area -->
+                {{patentf.area}}
+              </div>
+
+              <div>
+                <label for="patent_domain">Domain</label>
+                <!-- name: patent_domain -->
+                {{patentf.domain}}
+              </div>
+
+              <div>
+                <label for="patent_title">Title</label>
+                <!-- name: patent_title -->
+                {{patentf.title}}
+              </div>
+
+              <div>
+                <label for="patent_status">Status</label>
+                <!-- name: patent_status. Values: Filed, Published, Granted -->
+                {{patentf.stat}}
+              </div>
+
+              <div>
+                <label for="patent_year">Year</label>
+                <!-- name: patent_year (string or int) -->
+                {{patentf.year}}
+              </div>
+            </div>
+
+            <div>
+              <p class="desc">
+                Patent/Application number, area, domain, title and status.
+              </p>
+            </div>
+            <div class="rnd-grid">
+              <div>
+                <label for="patent_no">
+                  Copyright Number / Application Number</label
+                >
+                <!-- name: patent_no -->
+                {{copyrightf.copyrightNumber}}
+              </div>
+              <div>
+                <label for="patent_no"> Area</label>
+                <!-- name: patent_no -->
+                {{copyrightf.area}}
+              </div>
+              <div>
+                <label for="patent_no"> Domain</label>
+                <!-- name: patent_no -->
+                {{copyrightf.domain}}
+              </div>
+              <div>
+                <label for="patent_no"> Title</label>
+                <!-- name: patent_no -->
+                {{copyrightf.title}}
+              </div>
+              <div>
+                <label for="patent_no"> Year</label>
+                <!-- name: patent_no -->
+                {{copyrightf.year}}
+              </div>
+              <div>
+                <label for="patent_no"> Status</label>
+                <!-- name: patent_no -->
+                {{copyrightf.stat}}
+              </div>
+            </div>
+          </section>
+
+          <!-- Journal -->
+          <section
+            id="sec-journal"
+            class="rnd-section"
+            aria-labelledby="sec-journal-label"
+          >
+            <div class="title">
+              <div class="rnd-badge">JP</div>
+              <div>
+                <h3 id="sec-journal-label">Journal / Manuscript Details</h3>
+                <p class="desc">
+                  Manuscript title, authors, ISBN, publisher, pages, DOI.
+                </p>
+              </div>
+            </div>
+
+            <div class="rnd-grid">
+              <div class="rnd-full">
+                <label for="ms_title">Title of the Manuscript</label>
+                <!-- name: ms_title -->
+                {{journalf.title}}
+              </div>
+
+              <div>
+                <label for="ms_authors">Authors Details</label>
+                <!-- name: ms_authors. Format sample: "Dr. A; Dr. B" -->
+                {{journalf.authors}}
+              </div>
+
+              <div>
+                <label for="ms_isbn">ISBN</label>
+                <!-- name: ms_isbn -->
+                {{journalf.isbn}}
+              </div>
+
+              <div>
+                <label for="ms_journal">Journal / Conference Name</label>
+                <!-- name: ms_journal -->
+                {{journalf.journalName}}
+              </div>
+
+              <div>
+                <label for="ms_publisher">Publisher Name</label>
+                <!-- name: ms_publisher -->
+                {{journalf.publisherName}}
+              </div>
+
+              <div>
+                <label for="ms_issue">Issue</label>
+                <!-- name: ms_issue -->
+                {{journalf.issue}}
+              </div>
+
+              <div>
+                <label for="ms_no">No</label>
+                <!-- name: ms_no -->
+                {{journalf.no}}
+              </div>
+
+              <div>
+                <label for="ms_pages">Page No</label>
+                <!-- name: ms_pages -->
+                {{journalf.pageNo}}
+              </div>
+
+              <div>
+                <label for="ms_year">Year</label>
+                <!-- name: ms_year -->
+                {{journalf.year}}
+              </div>
+
+              <div class="rnd-full">
+                <label for="ms_doi">DOI / Link</label>
+                <!-- name: ms_doi (type: url) -->
+                {{journalf.doiLink}}
+              </div>
+            </div>
+          </section>
+
+          <!-- Book -->
+          <section
+            id="sec-book"
+            class="rnd-section"
+            aria-labelledby="sec-book-label"
+          >
+            <div class="title">
+              <div class="rnd-badge">BK</div>
+              <div>
+                <h3 id="sec-book-label">Book Details</h3>
+                <p class="desc">Title, authors, ISBN, publisher, year.</p>
+              </div>
+            </div>
+
+            <div class="rnd-grid">
+              <div class="rnd-full">
+                <label for="book_title">Title of the Book</label>
+                <!-- name: book_title -->
+                {{bookf.title}}
+              </div>
+
+              <div>
+                <label for="book_authors">Authors Details</label>
+                <!-- name: book_authors -->
+                {{bookf.authors}}
+              </div>
+
+              <div>
+                <label for="book_isbn">ISBN</label>
+                <!-- name: book_isbn -->
+                {{bookf.isbn}}
+              </div>
+
+              <div>
+                <label for="book_publisher">Publisher Name</label>
+                <!-- name: book_publisher -->
+                {{bookf.publisherName}}
+              </div>
+
+              <div>
+                <label for="book_year">Year</label>
+                <!-- name: book_year -->
+                {{bookf.year}}
+              </div>
+            </div>
+          </section>
+
+          <!-- Book Chapter -->
+          <section
+            id="sec-chapter"
+            class="rnd-section"
+            aria-labelledby="sec-chapter-label"
+          >
+            <div class="title">
+              <div class="rnd-badge">CH</div>
+              <div>
+                <h3 id="sec-chapter-label">Book Chapter Details</h3>
+                <p class="desc">Chapter title, book ISBN, pages, DOI.</p>
+              </div>
+            </div>
+
+            <div class="rnd-grid">
+              <div class="rnd-full">
+                <label for="ch_book">Title of the Book</label>
+                <!-- name: ch_book -->
+                {{bookcf.title}}
+              </div>
+
+              <div>
+                <label for="ch_authors">Authors Details</label>
+                <!-- name: ch_authors -->
+                {{bookcf.authors}}
+              </div>
+
+              <div>
+                <label for="ch_isbn">ISBN</label>
+                <!-- name: ch_isbn -->
+                {{bookcf.isbn}}
+              </div>
+
+              <div>
+                <label for="ch_name">Name of the Chapter</label>
+                <!-- name: ch_name -->
+                {{bookcf.chapterName}}
+              </div>
+
+              <div>
+                <label for="ch_publisher">Publisher Name</label>
+                <!-- name: ch_publisher -->
+                {{bookcf.publisherName}}
+              </div>
+
+              <div>
+                <label for="ch_pages">Page No</label>
+                <!-- name: ch_pages -->
+                {{bookcf.pageNo}}
+              </div>
+
+              <div>
+                <label for="ch_year">Year</label>
+                <!-- name: ch_year -->
+                {{bookcf.year}}
+              </div>
+
+              <div class="rnd-full">
+                <label for="ch_doi">DOI / Link</label>
+                <!-- name: ch_doi (type: url) -->
+                {{bookcf.doiLink}}
+              </div>
+            </div>
+          </section>
+
+          <!-- Conference -->
+          <section
+            id="sec-conf"
+            class="rnd-section"
+            aria-labelledby="sec-conf-label"
+          >
+            <div class="title">
+              <div class="rnd-badge">CF</div>
+              <div>
+                <h3 id="sec-conf-label">Conference Details</h3>
+                <p class="desc">
+                  Paper title, authors, ISSN, proceedings, DOI and year.
+                </p>
+              </div>
+            </div>
+
+            <div class="rnd-grid">
+              <div class="rnd-full">
+                <label for="conf_title">Title of the Paper</label>
+                <!-- name: conf_title -->
+                {{conferencef.title}}
+              </div>
+
+              <div>
+                <label for="conf_authors">Authors Details</label>
+                <!-- name: conf_authors -->
+                {{conferencef.authors}}
+              </div>
+
+              <div>
+                <label for="conf_issn">ISSN</label>
+                <!-- name: conf_issn -->
+                {{conferencef.issn}}
+              </div>
+
+              <div>
+                <label for="conf_journal">Conference / Journal Name</label>
+                <!-- name: conf_journal -->
+                {{conferencef.journalName}}
+              </div>
+
+              <div>
+                <label for="conf_publisher">Publisher / Organiser</label>
+                <!-- name: conf_publisher -->
+                {{conferencef.publisherName}}
+              </div>
+
+              <div>
+                <label for="conf_issue">Issue</label>
+                <!-- name: conf_issue -->
+                {{conferencef.issue}}
+              </div>
+
+              <div>
+                <label for="conf_no">No</label>
+                <!-- name: conf_no -->
+                {{conferencef.no}}
+              </div>
+
+              <div>
+                <label for="conf_pages">Page No</label>
+                <!-- name: conf_pages -->
+                {{conferencef.pageNo}}
+              </div>
+
+              <div>
+                <label for="conf_year">Year</label>
+                <!-- name: conf_year -->
+                {{conferencef.year}}
+              </div>
+
+              <div class="rnd-full">
+                <label for="conf_doi">DOI / Link</label>
+                <!-- name: conf_doi (type: url) -->
+                {{conferencef.doiLink}}
+              </div>
+            </div>
+          </section>
+
+          <!-- Submit area -->
+          <div
+            class="rnd-section"
+            style="
+              display: flex;
+              flex-direction: column;
+              gap: 12px;
+              align-items: stretch;
+            "
+          >
+            <div class="rnd-actions">
+              <button type="reset" class="btn" title="Reset">Reset</button>
+              <button type="submit" class="btn primary">Submit</button>
+            </div>
+            <div class="small">
+              Native form submission — change <code>action</code> to your server
+              or a Google Form POST endpoint to collect responses online.
+            </div>
+          </div>
+        </form>
+      </main>
+    </div>
+
+    <script>
+      /************************************************************************
+       * Ripple effect for buttons
+       * - Adds the small expanding circle on .btn click (keeps identical visuals)
+       ************************************************************************/
+      document.addEventListener("DOMContentLoaded", function () {
+        const buttons = Array.from(document.querySelectorAll(".btn"));
+        buttons.forEach((btn) => {
+          btn.addEventListener("click", function (e) {
+            const circle = document.createElement("span");
+            const d = Math.max(this.clientWidth, this.clientHeight);
+            const rect = this.getBoundingClientRect();
+            circle.style.width = circle.style.height = d + "px";
+            circle.style.left = e.clientX - rect.left - d / 2 + "px";
+            circle.style.top = e.clientY - rect.top - d / 2 + "px";
+            circle.style.position = "absolute";
+            circle.style.borderRadius = "50%";
+            circle.style.background = "rgba(0,0,0,0.08)";
+            circle.style.transform = "scale(0)";
+            circle.style.animation = "ripple 600ms linear";
+            circle.style.pointerEvents = "none";
+            circle.style.zIndex = 2;
+            // ensure parent has positioning
+            if (getComputedStyle(this).position === "static") {
+              this.style.position = "relative";
+            }
+            this.appendChild(circle);
+            setTimeout(() => {
+              try {
+                circle.remove();
+              } catch (err) {}
+            }, 650);
+          });
+        });
+      });
+
+      /************************************************************************
+       * Form submission guidance for Django backend
+       *
+       * Two options:
+       * 1) Native form submit:
+       *    - Set form.action = "/your-django-url/" and ensure the page is rendered
+       *      by Django with a {% csrf_token %} inside the form.
+       *
+       * 2) AJAX submit (fetch + FormData) — example below:
+       *    - Useful if you want to submit without page reload and handle response.
+       *    - Must include CSRF token (from cookie or template) for POST in Django.
+       ************************************************************************/
+
+      /***********************
+       * Notes for Django:
+       *
+       * - If rendering this template from Django (recommended), update the form tag:
+       *     <form id="rdForm" action=" method="post" enctype="multipart/form-data">
+       *       {% csrf_token %}
+       *       ...
+       *     </form>
+       *
+       * - In Django view:
+       *     def submit_research(request):
+       *         if request.method == 'POST':
+       *             google_scholar = request.POST.get('google_scholar')
+       *             orcid = request.POST.get('orcid')
+       *             ...
+       *             # validate and save to models
+       *             return JsonResponse({'status':'ok'})
+       *
+       * - For file uploads, use request.FILES.
+       *
+       * - For AJAX POST, ensure CSRF cookie is sent; Django's CSRF middleware will verify.
+       *
+       ***********************/
+    </script>
+  </body>
+</html>

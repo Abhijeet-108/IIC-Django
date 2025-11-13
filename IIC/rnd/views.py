@@ -1,9 +1,9 @@
 from django.shortcuts import render , redirect
 from .models import dept , facult , suff , patent , copyright , conference , book , bookChapter , journal , basicDetails
-from .forms import basicDetailsForm
+from .forms import basicDetailsForm , patentForm
 from django.shortcuts import render, redirect
 from .models import dept , facult , suff , patent , copyright , conference , book , bookChapter , journal
-from .forms import Form, bookForm, bookChapterForm, deptForm, facultForm, suffForm, copyrightForm, conferenceForm, journalForm
+from .forms import bookForm, bookChapterForm, deptForm, facultForm, suffForm, copyrightForm, conferenceForm, journalForm
 
 # Create your views here.
 
@@ -59,29 +59,29 @@ def basicDeletion(req , pk):
 
 #------------------- patent----------------------
 def add_form(req):
-    form = Form()
+    form = patentForm()
     if req.method == 'POST':
-        form = Form(req.POST)
+        form = patentForm(req.POST)
         if form.is_valid():
             form.save()
             return redirect('research')
     else:
-        form = Form()
+        form = patentForm()
     
-    return render(req, 'form.html', {'form': form})
+    return render(req, 'form.html', {'patentf': form})
 
 def update_form(req, pk):
     form = patent.objects.get(id = pk)
-    update_form = Form(instance=form)
+    update_form = patentForm(instance=form)
     if req.method == 'POST':
-        update_form = Form(req.POST, instance=form)
+        update_form = patentForm(req.POST, instance=form)
         if update_form.is_valid():
             update_form.save()
             return redirect('research')
         else:
-            update_form = Form()
+            update_form = patentForm()
     
-    return render(req, 'form.html', {'form': update_form})
+    return render(req, 'form.html', {'patentf': update_form})
     
 def delete_form(req, pk):
     form = patent.objects.get(id = pk)
@@ -340,3 +340,40 @@ def delete_journalform(req, pk):
     journalform = journal.objects.get(id = pk)
     journalform.delete()
     return redirect('research')
+
+def rndinfo(req):
+    basicf = basicDetailsForm()
+    patentf = patentForm()
+    copyrightf = copyrightForm()
+    journalf = journalForm()
+    bookf = bookForm()
+    bookcf = bookChapterForm()
+    conferencef = conferenceForm()
+    if req.method == 'POST':
+        basicf = basicDetailsForm(req.POST)
+        patentf = patentForm(req.POST)
+        copyrightf = copyrightForm(req.POST)
+        journalf = journalForm(req.POST)
+        bookf = bookForm(req.POST)
+        bookcf = bookChapterForm(req.POST)
+        conferencef = conferenceForm(req.POST)
+        if basicf.is_valid():  
+            basicf.save()
+        if patentf.is_valid():
+            patentf.save()
+        if copyrightf.is_valid():
+            copyrightf.save()
+        if journalf.is_valid():
+            journalf.save()
+        if bookf.is_valid():
+            bookf.save()
+        if bookcf.is_valid():
+            bookcf.save()
+        if conferencef.is_valid():
+            conferencef.save()
+        return redirect('home')
+    else:
+        basicf = basicDetailsForm()
+        patentf = patentForm()    
+    context = {"basicf" : basicf , "patentf" : patentf , "bookcf" : bookcf , "bookf" : bookf , "copyrightf" : copyrightf , "journalf" : journalf , "conferencef" : conferencef}
+    return render(req , "rndinfo.html" , context)

@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>IIC — Navbar (desktop only)</title>
+    <meta
+      name="description"
+      content="Desktop-only Navbar for IIC — ready to integrate with Django"
+    />
+
+    <style>
+      /* --- Basic resets & tokens --- */
+      :root {
+        --bg: #ffffff;
+        --accent: #2563eb;
+        --accent-2: #06b6d4;
+        --muted: #64748b;
+        --text: #0f1724;
+        --radius: 12px;
+        --nav-height: 72px;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      /* --- Navbar container --- */
+      .nav-wrap {
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        z-index: 1000;
+        transition: all 0.28s ease;
+      }
+      .nav {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 24px;
+        height: var(--nav-height);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      /* Logo */
+      .logo-mark {
+        width: 56px;
+        height: 56px;
+        border-radius: 10px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        box-shadow: none;
+        border: 0;
+      }
+      .logo-mark img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        background: transparent;
+      }
+
+      /* About button in left brand */
+      .about-left {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: 10px;
+        background: transparent;
+        border: 1px solid rgba(15, 23, 36, 0.04);
+        color: var(--muted);
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.16s ease;
+      }
+      .about-left:hover {
+        color: var(--text);
+        background: rgba(15, 23, 36, 0.03);
+        transform: translateY(-2px);
+      }
+
+      /* right container holds menu + auth */
+      .right-area {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: auto;
+      }
+
+      /* desktop menu */
+      .menu {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+      }
+      .menu-item {
+        position: relative;
+      }
+
+      .menu-link {
+        display: inline-block;
+        padding: 10px 14px;
+        border-radius: 10px;
+        font-weight: 600;
+        color: var(--muted);
+        transition: all 0.18s ease;
+      }
+
+      .menu-link:hover {
+        color: var(--text);
+        background: rgba(15, 23, 36, 0.03);
+        transform: translateY(-2px);
+      }
+      .menu-link.active {
+        background: rgba(15, 23, 36, 0.06);
+        color: var(--text);
+        box-shadow: 0 6px 14px rgba(2, 6, 23, 0.04);
+      }
+
+      /* ensure parent menu-links look clickable */
+      .menu-item > .menu-link {
+        cursor: pointer;
+      }
+      .menu-item > .menu-link:hover {
+        color: var(--text);
+        background: rgba(15, 23, 36, 0.03);
+        transform: translateY(-2px);
+      }
+      .menu-item > .menu-link.active {
+        background: rgba(15, 23, 36, 0.06);
+        color: var(--text);
+        box-shadow: 0 6px 14px rgba(2, 6, 23, 0.04);
+      }
+
+      /* dropdown */
+      .dropdown {
+        position: absolute;
+        left: 0;
+        top: 100%;
+        margin-top: 8px;
+        min-width: 220px;
+        background: #fff;
+        border: 1px solid rgba(15, 23, 36, 0.06);
+        border-radius: 12px;
+        box-shadow: 0 18px 50px rgba(2, 6, 23, 0.08);
+        padding: 8px;
+        display: none;
+        transform-origin: top center;
+        z-index: 60;
+      }
+      .dropdown.show {
+        display: block;
+        animation: dropdown-in 0.18s ease;
+      }
+      @keyframes dropdown-in {
+        from {
+          opacity: 0;
+          transform: translateY(-6px) scale(0.98);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      .dropdown a {
+        display: block;
+        padding: 10px 12px;
+        border-radius: 8px;
+        color: var(--muted);
+        font-weight: 600;
+      }
+      .dropdown a:hover {
+        background: rgba(15, 23, 36, 0.03);
+        color: var(--text);
+      }
+
+      /* right-side auth buttons */
+      .auth {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        margin-left: 6px;
+      }
+      .btn {
+        padding: 10px 14px;
+        border-radius: 10px;
+        font-weight: 700;
+        cursor: pointer;
+        border: 0;
+      }
+      .btn.ghost {
+        background: transparent;
+        border: 1px solid rgba(15, 23, 36, 0.06);
+        color: var(--text);
+      }
+      .btn.primary {
+        background: linear-gradient(90deg, var(--accent), var(--accent-2));
+        color: #fff;
+        box-shadow: 0 10px 24px rgba(37, 99, 235, 0.18);
+      }
+
+      /* transparent vs scrolled (applied to .nav-wrap) */
+      .nav-wrap.transparent {
+        background: #fff;
+        border-bottom: 0;
+        box-shadow: none;
+      }
+      {% comment %} .nav-wrap.scrolled {
+        background: var(--bg);
+        border-bottom: 1px solid rgba(15, 23, 36, 0.06);
+        box-shadow: 0 6px 18px rgba(2, 6, 23, 0.06);
+      } {% endcomment %}
+
+      /* accessibility focus rings */
+      .menu-link:focus,
+      .btn:focus,
+      .about-left:focus {
+        outline: 3px solid rgba(37, 99, 235, 0.12);
+        outline-offset: 2px;
+      }
+
+      /* small helper for page content spacing so navbar does not overlap content */
+      main {
+        padding-top: 96px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAVBAR (desktop-only) -->
+    <header class="nav-wrap transparent" id="siteNav">
+      <nav class="nav" role="navigation" aria-label="Main navigation">
+        <!-- left: logo + About IIC button -->
+        <div class="brand">
+          <!-- Replace src with Django static tag if needed:  -->
+          <a href="/" aria-label="Home" title="Home">
+            <span class="logo-mark" aria-hidden="true">
+              <img src="/IIC-Django/Frontend/nav.jpeg" alt="IIC Logo" />
+            </span>
+          </a>
+
+          <!-- About IIC button placed on left panel:
+             Replace href with Django url tag if desired, e.g. href= -->
+        </div>
+
+        <!-- right: menu + auth -->
+        <div class="right-area" style="margin-left: auto; align-items: center">
+          <div
+            class="menu"
+            id="desktopMenu"
+            role="menubar"
+            aria-label="Primary"
+          >
+            <!-- JS will populate menu items here -->
+          </div>
+
+          <div class="auth" id="authButtons" aria-live="polite"></div>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Keep a main placeholder — adjust in Django templates as needed -->
+    <main>
+      <div style="max-width: 1200px; margin: 40px auto; padding: 20px">
+        <!-- Page content goes here -->
+      </div>
+    </main>
+
+    <script>
+      /****************************************************************
+       * Desktop-only Navbar data (R&D removed, SignUp removed)
+       *
+       * To integrate with Django:
+       * - You can replace hardcoded href values with Django template tags.
+       * - Example: <a href="/login"> -> <a href="{% url 'login' %}">
+       ****************************************************************/
+      const navItems = [
+        { name: "Home", path: "{% url 'home' %}" },
+        {
+          name: "About",
+          path: "/#about",
+          submenu: [
+            //   { name: 'Mission', path: '/about/mission' },
+            //   { name: 'Functions', path: '/about/functions' },
+            { name: "IIC Team Members", path: "/about/team" },
+            { name: "Establishment Certificate", path: "/about/certificate" },
+          ],
+        },
+        // R&D Cell removed on request
+        { name: "R&D", path: "{% url 'research' %}" },
+        {
+          name: "Activities",
+          path: "/activities",
+          submenu: [
+            { name: "Meeting", path: "/activities" },
+            { name: "Activities", path: "/activities" },
+            { name: "Achievements", path: "/achievements" },
+          ],
+        },
+        {
+          name: "Innovation",
+          path: "/innovation",
+          submenu: [
+            { name: "IPR Cell", path: "/innovation/ipr-cell" },
+            { name: "Incubators List", path: "/innovation/incubators" },
+            { name: "Students Start-ups", path: "/innovation/startups" },
+          ],
+        },
+        {
+          name: "Connect",
+          path: "/connect",
+          submenu: [
+            { name: "Gallery", path: "/gallery" },
+            { name: "Notice Board", path: "/notice-board" },
+            { name: "Contact Us", path: "/contact" },
+          ],
+        },
+      ];
+
+      /****************************************************************
+       * Utility to detect active link (works with hash links too)
+       ****************************************************************/
+      function isHashLink(path) {
+        return path && path.includes("#") && path.split("#").length === 2;
+      }
+      function isActiveItem(itemPath) {
+        try {
+          const currentPath = window.location.pathname || "/";
+          const currentHash = window.location.hash || "";
+          if (isHashLink(itemPath)) {
+            const [p, h] = itemPath.split("#");
+            const hash = "#" + h;
+            return (
+              (p === currentPath || (p === "" && currentPath === "/")) &&
+              currentHash === hash
+            );
+          }
+          return currentPath.startsWith(itemPath);
+        } catch (e) {
+          return false;
+        }
+      }
+
+      /****************************************************************
+       * Render desktop menu (click-to-toggle dropdowns)
+       ****************************************************************/
+      const desktopMenu = document.getElementById("desktopMenu");
+
+      navItems.forEach((item) => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "menu-item";
+        wrapper.setAttribute("role", "none");
+
+        // Treat "Innovation" and "Connect" as non-clickable parents (matches previous behavior)
+        const isNonClickable =
+          item.name === "Innovation" || item.name === "Connect";
+
+        const link = document.createElement(isNonClickable ? "div" : "a");
+        link.className = "menu-link";
+        link.setAttribute("role", isNonClickable ? "presentation" : "menuitem");
+        link.setAttribute("tabindex", "0");
+        link.textContent = item.name;
+        if (!isNonClickable) link.href = item.path || "#";
+
+        if (isActiveItem(item.path)) link.classList.add("active");
+
+        wrapper.appendChild(link);
+
+        if (item.submenu && item.submenu.length) {
+          const dropdown = document.createElement("div");
+          dropdown.className = "dropdown";
+          dropdown.setAttribute("role", "menu");
+
+          item.submenu.forEach((sub) => {
+            const subLink = document.createElement("a");
+            subLink.href = sub.path || "#";
+            subLink.textContent = sub.name;
+            subLink.setAttribute("role", "menuitem");
+            dropdown.appendChild(subLink);
+          });
+
+          wrapper.appendChild(dropdown);
+
+          // Toggle dropdown on click of parent link
+          const toggleDropdown = (ev) => {
+            ev.stopPropagation();
+            // Close any other open dropdowns
+            document.querySelectorAll(".dropdown.show").forEach((d) => {
+              if (d !== dropdown) d.classList.remove("show");
+            });
+            dropdown.classList.toggle("show");
+          };
+
+          link.addEventListener("click", (e) => {
+            // allow modifier-clicks to behave normally (open in new tab)
+            if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+            e.preventDefault && e.preventDefault();
+            toggleDropdown(e);
+          });
+
+          // keyboard: Enter or Space toggles dropdown
+          link.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              toggleDropdown(e);
+            }
+          });
+
+          // keep dropdown open when clicking inside
+          dropdown.addEventListener("click", (e) => {
+            e.stopPropagation();
+          });
+
+          // close when focus moves outside wrapper
+          wrapper.addEventListener("focusout", (e) => {
+            if (!wrapper.contains(e.relatedTarget))
+              dropdown.classList.remove("show");
+          });
+        }
+
+        desktopMenu.appendChild(wrapper);
+      });
+
+      /****************************************************************
+       * Click outside to close open dropdowns
+       ****************************************************************/
+      document.addEventListener("click", () => {
+        document
+          .querySelectorAll(".dropdown.show")
+          .forEach((d) => d.classList.remove("show"));
+      });
+
+      /****************************************************************
+       * Auth area rendering (Sign Up intentionally removed)
+       * - For Django you can server-render auth state instead of using localStorage
+       ****************************************************************/
+      const authArea = document.getElementById("authButtons");
+
+      function renderAuth() {
+        authArea.innerHTML = "";
+        // default client-side behavior: check localStorage token (you can remove this and server-render)
+
+        {% if request.user.is_authenticated %}
+        const profile = document.createElement("a");
+          profile.href = "/profile"; // replace with Django {
+          profile.className = "btn ghost";
+          profile.textContent = "Profile";
+          authArea.appendChild(profile);
+
+          const logout = document.createElement("a");
+          logout.href = "{% url 'logout' %}"
+          logout.className = "btn primary";
+          logout.textContent = "Logout";
+          logout.addEventListener("click", () => {
+            // client-side logout helper — if using Django, use server-side logout route
+            localStorage.removeItem("authToken");
+            localStorage.removeItem("currentUser");
+            window.location.href = "/";
+          });
+          authArea.appendChild(logout);
+        {% else %}
+          const login = document.createElement("a");
+          login.href = "{% url 'login' %}"; // replace with Django {% url 'login' %}
+          login.className = "btn ghost";
+          login.textContent = "Login";
+          authArea.appendChild(login);
+          {% endif %}
+          // Sign Up intentionally removed
+        }
+      }
+
+      /****************************************************************
+       * Scroll listener (keeps the same visual behavior)
+       ****************************************************************/
+      {% comment %} const siteNav = document.getElementById("siteNav");
+      function handleScroll() {
+        const y = window.scrollY || document.documentElement.scrollTop;
+        if (y > 20) {
+          siteNav.classList.remove("transparent");
+          siteNav.classList.add("scrolled");
+        } else {
+          siteNav.classList.remove("scrolled");
+          siteNav.classList.add("transparent");
+        }
+      }
+      handleScroll();
+      window.addEventListener("scroll", handleScroll); {% endcomment %}
+
+      /****************************************************************
+       * Accessibility: close dropdowns with Escape
+       ****************************************************************/
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          document
+            .querySelectorAll(".dropdown.show")
+            .forEach((d) => d.classList.remove("show"));
+        }
+      });
+    </script>
+  </body>
+</html>

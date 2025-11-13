@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>IIC — Navbar (logo background removed)</title>
+    <meta
+      name="description"
+      content="Navbar with provided logo (outer background removed)"
+    />
+
+    <style>
+      /* --- Basic resets & tokens --- */
+      :root {
+        --bg: #ffffff;
+        --accent: #2563eb;
+        --accent-2: #06b6d4;
+        --muted: #64748b;
+        --text: #0f1724;
+        --radius: 12px;
+        --nav-height: 72px;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      /* --- Navbar container --- */
+      .nav-wrap {
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        z-index: 1000;
+        transition: all 0.28s ease;
+      }
+      .nav {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 24px;
+        height: var(--nav-height);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      /* Logo */
+      .logo-mark {
+        width: 56px;
+        height: 56px;
+        border-radius: 10px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        box-shadow: none;
+        border: 0;
+      }
+      .logo-mark img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        background: transparent;
+      }
+
+      /* right container holds menu + auth + mobile toggle */
+      .right-area {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: auto;
+      }
+
+      /* desktop menu */
+      .menu {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+      }
+      .menu-item {
+        position: relative;
+      }
+
+      .menu-link {
+        display: inline-block;
+        padding: 10px 14px;
+        border-radius: 10px;
+        font-weight: 600;
+        color: var(--muted);
+        transition: all 0.18s ease;
+      }
+
+      .menu-link:hover {
+        color: var(--text);
+        background: rgba(15, 23, 36, 0.03);
+        transform: translateY(-2px);
+      }
+      .menu-link.active {
+        background: rgba(15, 23, 36, 0.06);
+        color: var(--text);
+        box-shadow: 0 6px 14px rgba(2, 6, 23, 0.04);
+      }
+
+      /* -------------------------
+       FIX ADDED HERE
+       Give Innovation & Connect (div.menu-link) pointer + hover behavior
+    ---------------------------*/
+      .menu-item > .menu-link {
+        cursor: pointer;
+      }
+      .menu-item > .menu-link:hover {
+        color: var(--text);
+        background: rgba(15, 23, 36, 0.03);
+        transform: translateY(-2px);
+      }
+      .menu-item > .menu-link.active {
+        background: rgba(15, 23, 36, 0.06);
+        color: var(--text);
+        box-shadow: 0 6px 14px rgba(2, 6, 23, 0.04);
+      }
+      /* ------------------------- */
+
+      /* dropdown */
+      .dropdown {
+        position: absolute;
+        left: 0;
+        top: 100%;
+        margin-top: 8px;
+        min-width: 220px;
+        background: #fff;
+        border: 1px solid rgba(15, 23, 36, 0.06);
+        border-radius: 12px;
+        box-shadow: 0 18px 50px rgba(2, 6, 23, 0.08);
+        padding: 8px;
+        display: none;
+        transform-origin: top center;
+        z-index: 60;
+      }
+      .dropdown.show {
+        display: block;
+        animation: dropdown-in 0.18s ease;
+      }
+      @keyframes dropdown-in {
+        from {
+          opacity: 0;
+          transform: translateY(-6px) scale(0.98);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      .dropdown a {
+        display: block;
+        padding: 10px 12px;
+        border-radius: 8px;
+        color: var(--muted);
+        font-weight: 600;
+      }
+      .dropdown a:hover {
+        background: rgba(15, 23, 36, 0.03);
+        color: var(--text);
+      }
+
+      /* right-side auth buttons */
+      .auth {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        margin-left: 6px;
+      }
+      .btn {
+        padding: 10px 14px;
+        border-radius: 10px;
+        font-weight: 700;
+        cursor: pointer;
+        border: 0;
+      }
+      .btn.ghost {
+        background: transparent;
+        border: 1px solid rgba(15, 23, 36, 0.06);
+        color: var(--text);
+      }
+      .btn.primary {
+        background: linear-gradient(90deg, var(--accent), var(--accent-2));
+        color: #fff;
+        box-shadow: 0 10px 24px rgba(37, 99, 235, 0.18);
+      }
+
+      /* mobile toggle */
+      .mobile-toggle {
+        display: none;
+        background: transparent;
+        border: 0;
+        font-size: 20px;
+        cursor: pointer;
+        padding: 8px;
+      }
+
+      /* mobile menu panel */
+      .mobile-panel {
+        display: none;
+        background: #fff;
+        border-top: 1px solid rgba(15, 23, 36, 0.06);
+        box-shadow: 0 18px 40px rgba(2, 6, 23, 0.06);
+      }
+      .mobile-panel.open {
+        display: block;
+        animation: panel-in 0.16s ease;
+      }
+      @keyframes panel-in {
+        from {
+          opacity: 0;
+          transform: translateY(-6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .mobile-list {
+        padding: 12px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .mobile-list a {
+        padding: 12px 12px;
+        border-radius: 8px;
+        color: var(--muted);
+        font-weight: 600;
+      }
+      .mobile-list a:hover {
+        background: rgba(15, 23, 36, 0.03);
+        color: var(--text);
+      }
+      .mobile-sub {
+        padding-left: 14px;
+        margin-top: 4px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      /* small screens */
+      @media (max-width: 880px) {
+        .menu {
+          display: none;
+        }
+        .auth {
+          display: none;
+        }
+        .mobile-toggle {
+          display: inline-flex;
+        }
+        .nav {
+          padding: 0 12px;
+        }
+      }
+
+      /* transparent vs scrolled (applied to .nav-wrap) */
+      .nav-wrap.transparent {
+        background: transparent;
+        border-bottom: 0;
+        box-shadow: none;
+      }
+      .nav-wrap.scrolled {
+        background: var(--bg);
+        border-bottom: 1px solid rgba(15, 23, 36, 0.06);
+        box-shadow: 0 6px 18px rgba(2, 6, 23, 0.06);
+      }
+
+      /* accessibility focus rings */
+      .menu-link:focus,
+      .btn:focus,
+      .mobile-list a:focus {
+        outline: 3px solid rgba(37, 99, 235, 0.12);
+        outline-offset: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <header class="nav-wrap transparent" id="siteNav">
+      <nav class="nav" role="navigation" aria-label="Main navigation">
+        <!-- left: only logo -->
+        <div class="brand">
+          <a href="/" aria-label="Home">
+            <span class="logo-mark" aria-hidden="true">
+              <img src="/IIC-Django/Frontend/nav.jpeg" alt="IIC Logo" />
+            </span>
+          </a>
+        </div>
+
+        <!-- right: menu + auth + mobile toggle -->
+        <div class="right-area" style="margin-left: auto; align-items: center">
+          <div
+            class="menu"
+            id="desktopMenu"
+            role="menubar"
+            aria-label="Primary"
+          ></div>
+
+          <div class="auth" id="authButtons" aria-live="polite"></div>
+
+          <button
+            class="mobile-toggle"
+            id="mobileToggle"
+            aria-expanded="false"
+            aria-controls="mobilePanel"
+            aria-label="Toggle menu"
+          >
+            <svg
+              id="hambIcon"
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <path d="M3 7h18M3 12h18M3 17h18" />
+            </svg>
+            <svg
+              id="closeIcon"
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              style="display: none"
+            >
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </nav>
+
+      <!-- Mobile Panel -->
+      <div class="mobile-panel" id="mobilePanel" aria-hidden="true">
+        <div class="mobile-list" id="mobileList"></div>
+      </div>
+    </header>
+
+    <main style="padding-top: 96px">
+      <div style="max-width: 1200px; margin: 40px auto; padding: 20px"></div>
+    </main>
+
+    <script>
+      /****************************************************************
+       * Navbar data
+       ****************************************************************/
+      const navItems = [
+        { name: "Home" },
+        {
+          name: "About",
+          path: "/#about",
+          submenu: [
+            //   { name: 'Mission', path: '/about/mission' },
+            //   { name: 'Functions', path: '/about/functions' },
+            { name: "IIC Team Members", path: "/about/team" },
+            { name: "Establishment Certificate", path: "/about/certificate" },
+          ],
+        },
+
+        { name: "R&D Cell", path: "/rd-cell" },
+        {
+          name: "Activities",
+          path: "/activities",
+          submenu: [
+            { name: "Meeting", path: "/activities" },
+            { name: "Activities", path: "/activities" },
+            { name: "Achievements", path: "/achievements" },
+          ],
+        },
+        {
+          name: "Innovation",
+          path: "/innovation",
+          submenu: [
+            { name: "IPR Cell", path: "/innovation/ipr-cell" },
+            { name: "Incubators List", path: "/innovation/incubators" },
+            { name: "Students Start-ups", path: "/innovation/startups" },
+          ],
+        },
+        {
+          name: "Connect",
+          path: "/connect",
+          submenu: [
+            { name: "Gallery", path: "/gallery" },
+            { name: "Notice Board", path: "/notice-board" },
+            { name: "Contact Us", path: "/contact" },
+          ],
+        },
+      ];
+
+      /****************************************************************
+       * Utilities
+       ****************************************************************/
+      function isHashLink(path) {
+        return path && path.includes("#") && path.split("#").length === 2;
+      }
+
+      function isActiveItem(itemPath) {
+        try {
+          const currentPath = window.location.pathname || "/";
+          const currentHash = window.location.hash || "";
+          if (isHashLink(itemPath)) {
+            const [p, h] = itemPath.split("#");
+            const hash = "#" + h;
+            return (
+              (p === currentPath || (p === "" && currentPath === "/")) &&
+              currentHash === hash
+            );
+          }
+          return currentPath.startsWith(itemPath);
+        } catch (e) {
+          return false;
+        }
+      }
+
+      /****************************************************************
+       * Render desktop menu (with click-to-toggle dropdowns)
+       ****************************************************************/
+      const desktopMenu = document.getElementById("desktopMenu");
+
+      navItems.forEach((item) => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "menu-item";
+        wrapper.setAttribute("role", "none");
+
+        const isNonClickable =
+          item.name === "Innovation" || item.name === "Connect";
+
+        const link = document.createElement(isNonClickable ? "div" : "a");
+        link.className = "menu-link";
+        link.setAttribute("role", isNonClickable ? "presentation" : "menuitem");
+        link.setAttribute("tabindex", "0");
+        link.textContent = item.name;
+        if (!isNonClickable) link.href = item.path || "#";
+
+        if (isActiveItem(item.path)) link.classList.add("active");
+
+        wrapper.appendChild(link);
+
+        if (item.submenu && item.submenu.length) {
+          const dropdown = document.createElement("div");
+          dropdown.className = "dropdown";
+          dropdown.setAttribute("role", "menu");
+
+          item.submenu.forEach((sub) => {
+            const subLink = document.createElement("a");
+            subLink.href = sub.path || "#";
+            subLink.textContent = sub.name;
+            subLink.setAttribute("role", "menuitem");
+            dropdown.appendChild(subLink);
+          });
+
+          wrapper.appendChild(dropdown);
+
+          // --- Toggle dropdown on click of parent link ---
+          const toggleDropdown = (ev) => {
+            ev.stopPropagation();
+            // Close other dropdowns first:
+            document.querySelectorAll(".dropdown.show").forEach((d) => {
+              if (d !== dropdown) d.classList.remove("show");
+            });
+            const wasOpen = dropdown.classList.contains("show");
+            if (wasOpen) {
+              dropdown.classList.remove("show");
+            } else {
+              dropdown.classList.add("show");
+            }
+          };
+
+          // If parent is an anchor, prevent navigation when clicking to open dropdown
+          link.addEventListener("click", (e) => {
+            // Only toggle when clicking the parent (not using modifier keys)
+            if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
+              // allow modifiers to work (open in new tab)
+              return;
+            }
+            e.preventDefault && e.preventDefault();
+            toggleDropdown(e);
+          });
+
+          // keyboard: Enter or Space toggles
+          link.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              toggleDropdown(e);
+            }
+          });
+
+          // keep dropdown open when clicking inside
+          dropdown.addEventListener("click", (e) => {
+            e.stopPropagation();
+          });
+
+          // Close dropdown if focus leaves wrapper entirely
+          wrapper.addEventListener("focusout", (e) => {
+            // if focus goes outside wrapper, close
+            if (!wrapper.contains(e.relatedTarget)) {
+              dropdown.classList.remove("show");
+            }
+          });
+        }
+
+        desktopMenu.appendChild(wrapper);
+      });
+
+      /****************************************************************
+       * Click outside to close any open dropdowns
+       ****************************************************************/
+      document.addEventListener("click", () => {
+        document
+          .querySelectorAll(".dropdown.show")
+          .forEach((d) => d.classList.remove("show"));
+      });
+
+      /****************************************************************
+       * Auth buttons
+       ****************************************************************/
+      const authArea = document.getElementById("authButtons");
+
+      function renderAuth() {
+        authArea.innerHTML = "";
+        const isLoggedIn = !!localStorage.getItem("authToken");
+
+        {% if request.user.is_authenticated %}
+          const profile = document.createElement("a");
+          profile.href = "/profile";
+          profile.className = "btn ghost";
+          profile.textContent = "Profile";
+          authArea.appendChild(profile);
+
+          const logout = document.createElement("a");
+          logout.href = "{% url 'logout' %}"
+          logout.className = "btn primary";
+          logout.textContent = "Logout";
+          authArea.appendChild(logout);
+          {% else %}
+          const login = document.createElement("a");
+          login.href = "{% url 'login' %}";
+          login.className = "btn ghost";
+          login.textContent = "Login";
+          authArea.appendChild(login);
+          {% endif %}
+          // const signup = document.createElement('a');
+          // signup.href = '/signup';
+          // signup.className = 'btn primary';
+          // signup.textContent = 'Sign Up';
+          // authArea.appendChild(signup);
+        }
+      }
+      renderAuth();
+
+      /****************************************************************
+       * Mobile panel rendering + open/close
+       ****************************************************************/
+      const mobileToggle = document.getElementById("mobileToggle");
+      const mobilePanel = document.getElementById("mobilePanel");
+      const mobileList = document.getElementById("mobileList");
+      const hambIcon = document.getElementById("hambIcon");
+      const closeIcon = document.getElementById("closeIcon");
+
+      function renderMobileList() {
+        mobileList.innerHTML = "";
+
+        navItems.forEach((item) => {
+          const isNonClickable =
+            item.name === "Innovation" || item.name === "Connect";
+
+          if (isNonClickable) {
+            const title = document.createElement("div");
+            title.textContent = item.name;
+            title.style.fontWeight = 700;
+            title.style.padding = "8px 0";
+            mobileList.appendChild(title);
+          } else {
+            const link = document.createElement("a");
+            link.href = item.path || "#";
+            link.textContent = item.name;
+            mobileList.appendChild(link);
+          }
+
+          if (item.submenu && item.submenu.length) {
+            const subWrap = document.createElement("div");
+            subWrap.className = "mobile-sub";
+            item.submenu.forEach((sub) => {
+              const sLink = document.createElement("a");
+              sLink.href = sub.path || "#";
+              sLink.textContent = sub.name;
+              sLink.style.fontSize = "0.95rem";
+              subWrap.appendChild(sLink);
+            });
+            mobileList.appendChild(subWrap);
+          }
+        });
+
+        const sep = document.createElement("div");
+        sep.style.borderTop = "1px solid rgba(15,23,36,0.06)";
+        sep.style.marginTop = "8px";
+        sep.style.paddingTop = "10px";
+        mobileList.appendChild(sep);
+
+        const mobileAuthWrap = document.createElement("div");
+        mobileAuthWrap.style.display = "flex";
+        mobileAuthWrap.style.flexDirection = "column";
+        mobileAuthWrap.style.gap = "8px";
+
+        const isLoggedIn = !!localStorage.getItem("authToken");
+        if (isLoggedIn) {
+          const p = document.createElement("a");
+          p.href = "/profile";
+          p.textContent = "Profile";
+          p.style.fontWeight = 700;
+          p.style.padding = "8px 0";
+
+          const l = document.createElement("a");
+          l.href = "#";
+          l.textContent = "Logout";
+          l.style.color = "#fff";
+          l.style.background =
+            "linear-gradient(90deg,var(--accent),var(--accent-2))";
+          l.style.padding = "8px";
+          l.style.borderRadius = "8px";
+
+          l.addEventListener("click", (e) => {
+            e.preventDefault();
+            localStorage.removeItem("authToken");
+            localStorage.removeItem("currentUser");
+            window.location.href = "/";
+          });
+
+          mobileAuthWrap.appendChild(p);
+          mobileAuthWrap.appendChild(l);
+        } else {
+          const p1 = document.createElement("a");
+          p1.href = "/login";
+          p1.textContent = "Login";
+          p1.style.fontWeight = 700;
+          p1.style.padding = "8px 0";
+
+          const p2 = document.createElement("a");
+          p2.href = "/signup";
+          p2.textContent = "Sign Up";
+          p2.style.fontWeight = 700;
+          p2.style.padding = "8px 0";
+
+          mobileAuthWrap.appendChild(p1);
+          mobileAuthWrap.appendChild(p2);
+        }
+
+        mobileList.appendChild(mobileAuthWrap);
+      }
+      renderMobileList();
+
+      let mobileOpen = false;
+
+      function setMobileOpen(open) {
+        mobileOpen = open;
+
+        if (open) {
+          mobilePanel.classList.add("open");
+          mobilePanel.setAttribute("aria-hidden", "false");
+          mobileToggle.setAttribute("aria-expanded", "true");
+          hambIcon.style.display = "none";
+          closeIcon.style.display = "inline";
+        } else {
+          mobilePanel.classList.remove("open");
+          mobilePanel.setAttribute("aria-hidden", "true");
+          mobileToggle.setAttribute("aria-expanded", "false");
+          hambIcon.style.display = "inline";
+          closeIcon.style.display = "none";
+        }
+      }
+
+      mobileToggle.addEventListener("click", () => setMobileOpen(!mobileOpen));
+
+      mobileList.addEventListener("click", (e) => {
+        const a = e.target.closest("a");
+        if (a) {
+          setMobileOpen(false);
+        }
+      });
+
+      /****************************************************************
+       * Scroll listener
+       ****************************************************************/
+      const siteNav = document.getElementById("siteNav");
+      function handleScroll() {
+        const y = window.scrollY || document.documentElement.scrollTop;
+        if (y > 20) {
+          siteNav.classList.remove("transparent");
+          siteNav.classList.add("scrolled");
+        } else {
+          siteNav.classList.remove("scrolled");
+          siteNav.classList.add("transparent");
+        }
+      }
+      handleScroll();
+      window.addEventListener("scroll", handleScroll);
+
+      /****************************************************************
+       * Recompute active link
+       ****************************************************************/
+      function refreshActive() {
+        document
+          .querySelectorAll(".menu-link")
+          .forEach((el) => el.classList.remove("active"));
+        navItems.forEach((item) => {
+          const links = Array.from(document.querySelectorAll(".menu-link"));
+          links.forEach((link) => {
+            if (
+              link.textContent.trim() === item.name &&
+              isActiveItem(item.path)
+            ) {
+              link.classList.add("active");
+            }
+          });
+        });
+      }
+      refreshActive();
+      window.addEventListener("hashchange", refreshActive);
+      window.addEventListener("popstate", refreshActive);
+
+      /****************************************************************
+       * Keyboard: close dropdowns and mobile with Escape
+       ****************************************************************/
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          document
+            .querySelectorAll(".dropdown.show")
+            .forEach((d) => d.classList.remove("show"));
+          if (mobileOpen) setMobileOpen(false);
+        }
+      });
+    </script>
+  </body>
+</html>

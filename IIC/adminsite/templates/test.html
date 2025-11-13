@@ -1,0 +1,11 @@
+<html>
+  <head> </head>
+  <body>
+    <form method="POST" action="">
+      {% csrf_token %} {{ postf.title.label_tag }} {{ postf.title }}
+      <br />
+      {{ postf.description.label_tag }} {{ postf.description }}
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </body>
+</html>

@@ -57,4 +57,7 @@ urlpatterns = [
     path('journalform-update/<int:pk>', views.update_journalform, name="updatejournalform"),
     path('journalform-delete/<int:pk>', views.delete_journalform, name="deletejournalform"),
     
+    # ------------- RND Complete Form ---------------
+    path('infoteach/', views.rndinfo , name = "rndinfo"),
+
 ]

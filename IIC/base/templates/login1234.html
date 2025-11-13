@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>IIC — Login</title>
+  <meta name="description" content="Login — Institution Innovation Council" />
+  <style>
+    /* ---------- base ---------- */
+    :root{
+      --page-bg-1: #06122a;
+      --page-bg-2: #f8f9fb;
+      --glass-bg: rgba(255,255,255,0.04);
+      --glass-border: rgba(255,255,255,0.06);
+      --muted: #9aa8bd;
+      --accent1: #2563eb;
+      --accent2: #7c3aed;
+      --white: #ffffff;
+      --card-radius: 22px;
+      --max-w: 420px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial; -webkit-font-smoothing:antialiased;}
+    body{
+      background:
+        radial-gradient(900px 400px at 10% 10%, rgba(37,99,235,0.06), transparent 10%),
+        radial-gradient(700px 300px at 90% 90%, rgba(124,58,237,0.05), transparent 10%),
+        linear-gradient(180deg,#f7f8fa 0%, #ffffff 100%);
+      color:var(--white);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:100vh;
+      padding:40px 20px;
+    }
+
+    /* subtle animated overlay (pure CSS) */
+    .bg-overlay{
+      position:fixed; inset:0; pointer-events:none; z-index:0;
+      background: linear-gradient(180deg, rgba(6,18,42,0.08), rgba(255,255,255,0));
+      mix-blend-mode: overlay;
+    }
+
+    /* container */
+    .center-wrap{ width:100%; max-width:980px; margin:0 auto; position:relative; z-index:2; display:flex; justify-content:center; }
+
+    /* card */
+    .card {
+      width:100%; max-width:var(--max-w);
+      background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.95));
+      border-radius:var(--card-radius);
+      border:1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 14px 40px rgba(2,6,23,0.08);
+      padding:28px;
+      position:relative;
+      overflow:visible;
+    }
+
+    /* logo */
+    .logo-wrap { display:flex; justify-content:center; margin-bottom:18px; }
+    .logo-mark { width:80px; height:80px; border-radius:18px; overflow:hidden; display:flex; align-items:center; justify-content:center; background:transparent; }
+    .logo-mark img{ width:100%; height:100%; object-fit:contain; display:block; }
+
+    h1 { margin:6px 0 6px; font-size:26px; text-align:center; color:#0f1724; font-weight:800; }
+    p.lead { margin:0 0 14px; text-align:center; color:#475569; }
+
+    /* form */
+    form { display:flex; flex-direction:column; gap:16px; }
+    label { display:block; font-size:13px; color:#475569; margin-bottom:6px; font-weight:600; }
+    .field {
+      position:relative;
+    }
+    .field input[type="email"],
+    .field input[type="password"]{
+      width:100%;
+      padding:12px 14px 12px 44px;
+      border-radius:12px;
+      border:1px solid rgba(2,6,23,0.08);
+      font-size:15px;
+      outline:none;
+      background:#fff;
+      color:#0f1724;
+      transition: box-shadow .12s ease, border-color .12s ease;
+    }
+    .field input::placeholder { color: #9ca3af; }
+    .field svg.icon {
+      position:absolute; left:12px; top:50%; transform:translateY(-50%); width:18px; height:18px; color:#94a3b8;
+      pointer-events:none;
+    }
+    .field input:focus{
+      border-color: var(--accent1);
+      box-shadow: 0 6px 20px rgba(37,99,235,0.08);
+    }
+
+    .row-between { display:flex; justify-content:space-between; align-items:center; font-size:14px; color:#475569; }
+    .row-between a { color:var(--accent1); text-decoration:none; font-weight:600; }
+    .row-between input[type="checkbox"]{ margin-right:8px; width:16px; height:16px; }
+
+    /* submit button (no JS loader) */
+    .btn {
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      width:100%; padding:12px 14px; border-radius:12px; border:0;
+      background: linear-gradient(90deg,var(--accent1),var(--accent2));
+      color:white; font-weight:700; font-size:16px; cursor:pointer;
+      transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+    }
+    .btn:active{ transform:translateY(1px); }
+    .btn:disabled{ opacity:0.6; cursor:not-allowed; }
+
+    /* small text under form */
+    .muted-center { text-align:center; color:#475569; font-size:14px; margin-top:12px; }
+
+    /* accessible focus */
+    input:focus, .btn:focus, a:focus { outline: 3px solid rgba(37,99,235,0.12); outline-offset:2px; }
+
+    /* responsive */
+    @media (max-width:520px) {
+      .card { padding:20px; border-radius:16px; }
+      .logo-mark { width:68px; height:68px; }
+      h1 { font-size:22px; }
+    }
+
+    /* subtle fade-up via CSS class (JS adds class on DOMContentLoaded - optional) */
+    .fade { opacity:0; transform: translateY(8px); transition: all .6s cubic-bezier(.2,.9,.2,1); }
+    .fade.in { opacity:1; transform:none; }
+
+    /* error box (server can inject this markup or show message via template) */
+    .error {
+      background: #ffe9e9;
+      border: 1px solid #ffbcbc;
+      color: #7a1a1a;
+      padding:10px 12px;
+      border-radius:10px;
+      font-size:14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-overlay" aria-hidden="true"></div>
+
+  <div class="center-wrap">
+    <div class="card fade" id="loginCard" role="region" aria-labelledby="loginTitle">
+
+      <!-- Logo -->
+      <div class="logo-wrap" aria-hidden="true">
+        <div class="logo-mark">
+          <!-- replace src with Django static path if needed -->
+          <img src="/IIC-Django/Frontend/nav.jpeg" alt="IIC logo">
+        </div>
+      </div>
+
+      <h1 id="loginTitle">Welcome Back</h1>
+      <p class="lead">Login to your IIC account</p>
+
+      <!--
+        FORM:
+        - action: set to your Django login endpoint (example: /accounts/login/ or /api/auth/login/)
+        - method: POST
+        - Important: in a Django template, add {% csrf_token %} where indicated below
+        - field names: 'email', 'password', 'remember' (checkbox)
+      -->
+      <form action="/accounts/login/" method="post" novalidate>
+        <!-- In Django template: {% csrf_token %} -->
+        <!-- {% csrf_token %} -->
+
+        <!-- Optional server-side error message: insert a block here in your template if login fails -->
+        <!-- Example (Django): {% if error %}<div class="error">{{ error }}</div>{% endif %} -->
+
+        <!-- Email -->
+        <div>
+          <label for="email">Email Address</label>
+          <div class="field" aria-hidden="false">
+            <!-- icon (mail) -->
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 4h16v16H4z"/><path d="M22 6L12 13 2 6"/></svg>
+            <!-- name="email" is what your backend should expect -->
+            <input id="email" name="email" type="email" placeholder="your.email@example.com" required autocomplete="email" />
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div>
+          <label for="password">Password</label>
+          <div class="field">
+            <!-- icon (lock) -->
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 17a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2 2 2 0 0 0-2 2v3a2 2 0 0 0 2 2z"/><path d="M17 8V7a5 5 0 0 0-10 0v1"/></svg>
+            <!-- name="password" -->
+            <input id="password" name="password" type="password" placeholder="Enter your password" required autocomplete="current-password" />
+          </div>
+        </div>
+
+        <!-- Remember / Forgot -->
+        <div class="row-between" style="margin-top:-2px;">
+          <label style="display:flex;align-items:center;gap:8px;font-weight:500;color:#475569;">
+            <!-- name="remember" value="1" for checked -->
+            <input name="remember" type="checkbox" value="1" />
+            <span style="font-size:14px;color:#475569">Remember me</span>
+          </label>
+          <a href="/forgot-password" style="font-weight:600;color:var(--accent1)">Forgot Password?</a>
+        </div>
+
+        <!-- Submit button (native submit; no JS) -->
+        <button type="submit" class="btn" aria-label="Login">
+          <span>Login</span>
+          <!-- arrow icon -->
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="display:inline-block"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </button>
+      </form>
+
+      <div class="muted-center" style="margin-top:14px;">
+        Don't have an account? <a href="/signup" style="color:var(--accent1); font-weight:700; text-decoration:none;">Sign Up</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Optional: small JS only to add the "in" class for fade animation.
+       This script DOES NOT intercept or change form submission. Remove if you prefer no JS at all. -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var el = document.getElementById('loginCard');
+      if (el) el.classList.add('in');
+    });
+  </script>
+</body>
+</html>

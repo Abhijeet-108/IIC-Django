@@ -154,33 +154,7 @@ class eventForm(ModelForm):
 
 class queryForm(ModelForm):
     class Meta:
-        models = querys
+        model = querys
         fields = "__all__"
-        widgets = {
-            'fullname': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Enter Full Name',
-                'style': 'border-radius: 10px;'
-            }),
-            'email': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Enter Email',
-                'style': 'border-radius: 10px;'
-            }),
-            'phone': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Enter Phone Number',
-                'style': 'border-radius: 10px;'
-            }),
-            'subject': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Select Subject',
-                'style': 'border-radius: 10px;'
-            }),            
-            'message': forms.Textarea(attrs={
-                'class': 'form-control',
-                'placeholder': 'Type you Query Here ... ',
-                'rows': 4,
-                'style': 'resize: none; border-radius: 10px;'
-            }),
-    }
+
+    

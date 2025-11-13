@@ -10,7 +10,7 @@ def homepage(req):
         return redirect('home')
     post = posts.objects.all()
     context = {"posts" : post}
-    return render(req , 'adminsite.html' , context)
+    return render(req , 'adminhome.html' , context)
 
 def postCreate(req):
     postf = postForm()
@@ -20,7 +20,7 @@ def postCreate(req):
             postf.save()
         return redirect("admin-site")
     context = {'postf' : postf}
-    return render(req , "form.html" , context)
+    return render(req , "form1.html" , context)
 
 def postEdit(req , pk):
     post = posts.objects.get(id = pk)
@@ -32,7 +32,7 @@ def postEdit(req , pk):
             postf.save()
             return redirect('admin-site')
     context = {'postf' : postf}
-    return render(req,"form.html",context)
+    return render(req,"form1.html",context)
 
 def postDeletion(req , pk):
     post = posts.objects.get(id = pk)
@@ -47,7 +47,7 @@ def achievCreate(req):
             achievf.save()
         return redirect("admin-site")
     context = {'achievf' : achievf}
-    return render(req , "form.html" , context)
+    return render(req , "form1.html" , context)
 
 def achievEdit(req , pk):
     achiev = achievement.objects.get(id = pk)
@@ -59,7 +59,7 @@ def achievEdit(req , pk):
             achievf.save()
             return redirect('admin-site')
     context = {'achievf' : achievf}
-    return render(req,"form.html",context)
+    return render(req,"form1.html",context)
 
 def achievDeletion(req , pk):
     achiev = achievement.objects.get(id = pk)
@@ -74,7 +74,7 @@ def eventCreate(req):
             eventf.save()
         return redirect("admin-site")
     context = {'eventf' : eventf}
-    return render(req , "form.html" , context)
+    return render(req , "form1.html" , context)
 
 def eventEdit(req , pk):
     events = event.objects.get(id = pk)
@@ -86,7 +86,7 @@ def eventEdit(req , pk):
             eventf.save()
             return redirect('admin-site')
     context = {'eventf' : eventf}
-    return render(req,"form.html",context)
+    return render(req,"form1.html",context)
 
 def eventDeletion(req , pk):
     events = event.objects.get(id = pk)
@@ -101,7 +101,7 @@ def contactOrgCreate(req):
             contactf.save()
         return redirect("admin-site")
     context = {'contactf' : contactf}
-    return render(req , "form.html" , context)
+    return render(req , "form1.html" , context)
 
 def contactOrgEdit(req , pk):
     contact = contactOrg.objects.get(id = pk)
@@ -113,7 +113,7 @@ def contactOrgEdit(req , pk):
             contactf.save()
             return redirect('admin-site')
     context = {'contactf' : contactf}
-    return render(req,"form.html",context)
+    return render(req,"form1.html",context)
 
 def contactOrgDeletion(req , pk):
     contact = contactOrg.objects.get(id = pk)
@@ -128,7 +128,7 @@ def organisationCreate(req):
             organisationf.save()
         return redirect("admin-site")
     context = {'organisationf' : organisationf}
-    return render(req , "form.html" , context)
+    return render(req , "form1.html" , context)
 
 def organisationEdit(req , pk):
     organisations = organisation.objects.get(id = pk)
@@ -140,7 +140,7 @@ def organisationEdit(req , pk):
             organisationf.save()
             return redirect('admin-site')
     context = {'organisationf' : organisationf}
-    return render(req,"form.html",context)
+    return render(req,"form1.html",context)
 
 def organisationDeletion(req , pk):
     organisations = organisation.objects.get(id = pk)

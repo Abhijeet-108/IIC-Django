@@ -7,44 +7,11 @@ class basicDetailsForm(ModelForm):
     class Meta:
         model = basicDetails
         fields = "__all__"
-        widgets = {
-            'googleScholar': forms.Textarea(attrs={
-                'class': 'form-control',
-                'placeholder': 'Enter post description...',
-                'rows': 4,
-                'style': 'resize: none; border-radius: 10px;'
-            }),            
-            'orcid': forms.Textarea(attrs={
-                'class': 'form-control',
-                'placeholder': 'Enter post description...',
-                'rows': 4,
-                'style': 'resize: none; border-radius: 10px;'
-            }),            
-            'scopusid': forms.Textarea(attrs={
-                'class': 'form-control',
-                'placeholder': 'Enter post description...',
-                'rows': 4,
-                'style': 'resize: none; border-radius: 10px;'
-            }),            
-            'researchid': forms.Textarea(attrs={
-                'class': 'form-control',
-                'placeholder': 'Enter post description...',
-                'rows': 4,
-                'style': 'resize: none; border-radius: 10px;'
-            }),            
-            'vidwanPortal': forms.Textarea(attrs={
-                'class': 'form-control',
-                'placeholder': 'Enter post description...',
-                'rows': 4,
-                'style': 'resize: none; border-radius: 10px;'
-            }),            
-
-        }
         exclude = ["faculty"]        
 from django import forms
 from rnd.models import dept , facult , suff , patent , copyright , conference , book , bookChapter , journal
 
-class Form(forms.ModelForm):
+class patentForm(forms.ModelForm):
     class Meta:
         model = patent
         fields = "__all__"
@@ -54,7 +21,7 @@ class bookForm(forms.ModelForm):
     class Meta:
         model = book
         fields = "__all__"
-        eexculde = ['faculty']
+        exculde = ['faculty']
 
 class deptForm(forms.ModelForm):
     class Meta:
