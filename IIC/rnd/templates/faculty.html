@@ -12,11 +12,23 @@
           <p>{{faculty.email}}</p>
         </div>
         <h3>Patents</h3>
+        <a href="{% url "form" %}" style="text-decoration: none;">
+          <button style="background: #3788d4; color: #fff; border-radius: 5px; padding:10px 20px">Add Patent</button>
+        </a>
         {% for i in patent %}
         <div class="about-card">
-          <p>Patent Number : {{i.patentNumber}}</p>
-          <p>Title {{i.title}}</p>
+          <div>
+            <p>Patent Number : {{i.patentNumber}}</p>
+            <p>Title {{i.title}}</p>
+          </div>
+          <div>
+            <a href="{% url 'updateform' i.id %}"><button
+                style="background: #f0ad4e; color: #fff; border-radius: 5px; padding:5px 10px; margin-right:5px">Edit</button></a>
+            <a href="{% url 'deletePatentform' i.id %}"><button
+                style="background: #d9534f; color: #fff; border-radius: 5px; padding:5px 10px;">Delete</button></a>
+          </div>
         </div>
+
         {% endfor %}
 
         <h3>Books</h3>
