@@ -20,12 +20,13 @@ urlpatterns = [
     path('bookform/', views.add_bookform, name="bookform"),
     path('bookform-update/<int:pk>', views.update_bookform, name="updatebookform"),
     path('bookform-delete/<int:pk>', views.delete_bookform, name="deletebookform"),
+    
+    # ------------- Basic Details -------------------
 
     path('basic-create/' , views.basicCreate , name = "basic-create"),
     path('basic-update/<int:pk>' , views.basicEdit , name = "basic-update"),
     path('basic-delete/<int:pk>' , views.basicDeletion , name = "basic-delete"),
 
-]
     # ------------- Book Chapter -------------------
     path('bookChapterform/', views.add_bookChapterform, name="bookChapterform"),
     path('bookChapterform-update/<int:pk>', views.update_bookChapterform, name="updatebookChapterform"),
