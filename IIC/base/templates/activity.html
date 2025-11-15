@@ -1,0 +1,132 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>IIC — Activities</title>
+  <meta name="description" content="Institution Innovation Council — Activities (static HTML)" />
+  <style>
+    :root{
+      --bg-1: #f7f8fa;
+      --accent1: #2563eb;
+      --accent2: #06b6d4;
+      --muted: #475569;
+      --card-shadow: 0 12px 40px rgba(2,6,23,0.06);
+      --radius: 20px;
+      --maxw: 920px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;background:linear-gradient(180deg,var(--bg-1),#ffffff);color:var(--muted)}
+    a{color:inherit}
+    .page {
+      min-height:100vh;
+      padding:40px 20px;
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+    }
+
+    .wrap {
+      width:100%;
+      max-width:var(--maxw);
+      margin:0 auto;
+    }
+
+    h1.title {
+      margin:0 0 12px;
+      font-size:2.8rem;
+      line-height:1.02;
+      font-weight:800;
+      text-align:center;
+      background: linear-gradient(90deg,var(--accent1),var(--accent2));
+      -webkit-background-clip: text;
+      background-clip:text;
+      -webkit-text-fill-color: transparent;
+    }
+    @media(min-width:768px){ h1.title{ font-size:3.6rem } }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), #fff);
+      border-radius: var(--radius);
+      padding:28px;
+      box-shadow: var(--card-shadow);
+      border:1px solid rgba(0,0,0,0.04);
+    }
+
+    .lead {
+      color:var(--muted);
+      font-size:1.05rem;
+      line-height:1.6;
+      margin-bottom:18px;
+    }
+
+    ul.activities {
+      color:var(--muted);
+      margin:0;
+      padding-left:1.15rem;
+      list-style:disc;
+    }
+    ul.activities li {
+      margin:10px 0;
+      font-size:1rem;
+      line-height:1.6;
+    }
+
+    /* small decorative indicator under title */
+    .decor {
+      width:96px;
+      height:6px;
+      border-radius:6px;
+      margin:14px auto;
+      background: linear-gradient(90deg,var(--accent1),#374151);
+    }
+
+    /* subtle entrance animation */
+    .fade { opacity:0; transform:translateY(12px); transition: all .6s cubic-bezier(.2,.9,.2,1); }
+    .fade.in { opacity:1; transform:none; }
+
+    /* responsive spacing */
+    @media(max-width:520px){
+      .card { padding:18px; }
+      .lead { font-size:1rem; }
+    }
+  </style>
+</head>
+<body>
+  {% include 'nav.html' %}
+  <main class="page" id="activities-page">
+    <div class="wrap">
+      <header class="fade" id="header-block" aria-hidden="false">
+        <h1 class="title">Activities</h1>
+        <div class="decor" aria-hidden="true"></div>
+      </header>
+
+      <article class="card fade" id="content-card" role="article" aria-labelledby="activities-heading" style="margin-top:20px">
+        <h2 id="activities-heading" style="margin:0 0 12px; font-size:1.4rem; color:#0f1724">What we do</h2>
+        <p class="lead">
+          The Institution's Innovation Council (IIC) undertakes a wide range of initiatives with the objective of building a thriving local innovation ecosystem within the Institute.
+        </p>
+
+        <ul class="activities" aria-label="Activities list">
+          <li>In Higher Education Institutions (HEIs), IIC acts as a structured mechanism to support and nurture new business ventures and entrepreneurial activities.</li>
+          <li>It prepares the Institute to actively participate in the ATAL Institutional Ranking Framework for Innovation Achievements.</li>
+          <li>IIC establishes a functional ecosystem for idea scouting, pre-incubation, and prototype development.</li>
+        </ul>
+      </article>
+    </div>
+  </main>
+
+  <script>
+    // Decorative-only JS: add entrance classes on DOMContentLoaded.
+    // This does NOT affect any form submission or data flow.
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.fade').forEach((el, i) => {
+        setTimeout(() => el.classList.add('in'), 80 + i * 90);
+      });
+    });
+  </script>
+  {% include 'foot.html' %}
+</body>
+</html>

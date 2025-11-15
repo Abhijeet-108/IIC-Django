@@ -1,7 +1,170 @@
-{% extends 'main.html' %} {% load static %} {% block content %}
 
+{% load static %}
+<style>
+/* ===========================
+   Faculty / Departments — "Second" style
+   =========================== */
+
+/* Theme vars — tweak colors here */
+:root{
+  --page-bg: #ffffff;
+  --text-strong: #0f172a;
+  --muted: #6b7280;
+  --accent-blue: #2b51d6;       /* blue ring color */
+  --card-border: rgba(15,23,42,0.04);
+  --card-shadow: 0 10px 30px rgba(2,6,23,0.06);
+  --card-shadow-subtle: 0 6px 16px rgba(2,6,23,0.04);
+  --radius: 16px;
+  --card-max-width: 680px;      /* max width of each card track on wide screens */
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* Page spacing so header & footer don't overlap */
+.about {
+  background: var(--page-bg);
+  padding: 72px 0 140px; /* generous so footer won't overlap */
+  position: relative;
+  z-index: 1;
+}
+
+/* central container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+/* Departments heading (matches second screenshot) */
+.about h2.section-title,
+.about h2 {
+  font-size: clamp(28px, 3.6vw, 44px);
+  font-weight: 800;
+  color: var(--text-strong);
+  margin: 0 0 28px;
+  text-align: left; /* screenshot shows left aligned heading; change to center if needed */
+}
+
+/* Grid that centers cards and keeps them wide like the second image */
+.about-text {
+  display: grid;
+  gap: 28px;
+  grid-template-columns: repeat(1, minmax(0,1fr));
+  justify-items: center; /* center each track */
+  margin-top: 6px;
+}
+
+/* On wider screens we want two horizontally-separated card tracks,
+   each card track itself is wide (to produce the big rectangular card look) */
+@media (min-width: 720px) {
+  .about-text {
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    align-items: start;
+  }
+}
+
+/* Card: large, wide, airy */
+.about-card {
+  width: 100%;
+  max-width: var(--card-max-width); /* ensures the card becomes the big rectangular block */
+  background: #ffffff;
+  border-radius: calc(var(--radius) + 6px);
+  padding: 48px 36px;
+  box-shadow: var(--card-shadow-subtle);
+  border: 1px solid var(--card-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  box-sizing: border-box;
+}
+
+/* Hover/Focus lift */
+.about-card:hover,
+.about a:focus .about-card {
+  transform: translateY(-8px);
+  box-shadow: var(--card-shadow);
+  border-color: rgba(43,81,214,0.08);
+}
+
+/* Avatar ring (centered above name) */
+.card-icon {
+  width: 130px;
+  height: 130px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border: 6px solid var(--accent-blue); /* prominent blue ring */
+  box-shadow: 0 6px 22px rgba(43,81,214,0.08); /* soft blue glow */
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Avatar image inside ring */
+.card-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 999px;
+  display: block;
+  /* small white inner inset to mimic screenshot */
+  box-shadow: inset 0 0 0 6px #ffffff;
+}
+
+/* Name styling */
+.about-card h3 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-strong);
+  text-align: center;
+  line-height: 1.05;
+}
+
+/* Designation  */
+.about-card .role {
+  margin: 0;
+  font-size: 15px;
+  color: var(--muted);
+  text-align: center;
+  font-weight: 500;
+}
+
+.about a { display: block; color: inherit; text-decoration: none; }
+.about a:focus { outline: none; }
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 640px) {
+  .about {
+    padding: 48px 0 90px;
+  }
+  .about-card {
+    padding: 28px 18px;
+    max-width: 520px;
+  }
+  .card-icon {
+    width: 96px;
+    height: 96px;
+    border-width: 5px;
+  }
+  .about-card h3 { font-size: 18px; }
+  .about-card .role { font-size: 14px; }
+}
+
+.about-card h3 { word-break: break-word; }
+
+.about-text + * { margin-bottom: 80px; }
+
+</style>
+
+<body>
+  {% include 'nav.html' %}
 <section class="about" id="about">
   <div class="container">
+    <h2 style="text-align:center;margin-bottom:14px; color: black">{{ depart }}</h2>
     <div class="about-content">
       <div class="about-text">
         {% for i in faculty %}
@@ -18,5 +181,6 @@
     </div>
   </div>
 </section>
+{% include 'foot.html' %}
+</body>
 
-{% endblock %}

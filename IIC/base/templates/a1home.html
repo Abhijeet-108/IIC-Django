@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -71,16 +72,16 @@
       .logo {
         width: 180px;
         height: 180px;
-        border-radius: 50%;
+        {% comment %} border-radius: 50%; {% endcomment %}
         display: block;
         margin: 0 auto;
-        background: radial-gradient(
+        {% comment %} background: radial-gradient(
             circle at 30% 20%,
             rgba(37, 99, 235, 0.12),
             transparent 20%
           ),
           linear-gradient(135deg, var(--accent1), var(--accent2));
-        box-shadow: 0 12px 40px rgba(37, 99, 235, 0.12);
+        box-shadow: 0 12px 40px rgba(37, 99, 235, 0.12); {% endcomment %}
         display: flex;
         align-items: center;
         justify-content: center;
@@ -88,9 +89,9 @@
       }
 
       .img {
-        width: 200px;
-        height: 200px;
-        border-radius: 50%;
+        width: 180px;
+        height: 180px;
+        {% comment %} border-radius: 50%; {% endcomment %}
         object-fit: fill;
       }
       h1.title {
@@ -464,7 +465,7 @@
               <!-- simple SVG mark as placeholder for your Logo component -->
               <img
                 class="img"
-                src="/IIC-Django/Frontend/logo.jpeg"
+                src="{{ iic.home.url }}"
                 alt=""
                 srcset=""
               />
@@ -766,14 +767,14 @@
         },
         {
           title: "Notice Board",
-          path: "/notice-board",
+          path: "{% url 'notice' %}",
           colorFrom: "#4f46e5",
           colorTo: "#2563eb",
           icon: "clipboard",
         },
         {
           title: "Achievements",
-          path: "/achievements",
+          path: "{% url 'achievments' %}",
           colorFrom: "#ef4444",
           colorTo: "#ec4899",
           icon: "target",

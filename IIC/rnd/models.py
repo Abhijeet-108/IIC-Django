@@ -121,4 +121,4 @@ class basicDetails(models.Model):
     vidwanPortal = models.CharField(max_length = 500 , null = True , blank = True)
 
     def __str__(self):
-        return self.faculty + "  Basics"
+        return str(self.faculty) + "  Basics"

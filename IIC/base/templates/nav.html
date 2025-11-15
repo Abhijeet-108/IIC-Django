@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -44,6 +45,7 @@
         right: 0;
         top: 0;
         z-index: 1000;
+        padding-bottom: 10px;
         transition: all 0.28s ease;
       }
       .nav {
@@ -305,7 +307,7 @@
         <div class="brand">
           <a href="/" aria-label="Home">
             <span class="logo-mark" aria-hidden="true">
-              <img src="/IIC-Django/Frontend/nav.jpeg" alt="IIC Logo" />
+              <img src="{{iic.home.url}}" alt="IIC Logo" />
             </span>
           </a>
         </div>

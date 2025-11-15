@@ -1,7 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
   <head> </head>
-
+  <style>
+    body {
+      padding-top: 30px;
+    }
+    .gap-form {
+      padding-top: 20px;
+    }
+  </style>
   <body>
     {% include 'nav.html' %}
     <main class="container">
@@ -13,7 +20,7 @@
               <div>
                 <form method="POST" action="">
                   {% csrf_token %} {{ postf.title.label_tag }} {{ postf.title }}
-                  <br />
+                  <br /><div class = "gap-form"> </div>
                   {{ postf.description.label_tag }} {{ postf.description }}
                   <button type="submit" class="btn btn-primary">Submit</button>
                 </form>

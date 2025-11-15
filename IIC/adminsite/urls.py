@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 
 from . import views
 
@@ -25,4 +27,4 @@ urlpatterns = [
     path('organisation-update/<int:pk>' , views.organisationEdit , name = "organisation-update"),
     path('organisation-delete/<int:pk>' , views.organisationDeletion , name = "organisation-delete"),
 
-]
+] + static(settings.MEDIA_URL , document_root = settings.MEDIA_ROOT)

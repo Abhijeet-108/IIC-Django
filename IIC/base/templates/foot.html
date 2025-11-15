@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -228,7 +229,7 @@
           <div class="fade-up">
             <div class="brand">
               <div class="logo">
-                <img src="/IIC-Django/Frontend/nav.jpeg" alt="IIC Logo" />
+                <img src="{{iic.home.url}}" alt="IIC Logo" />
               </div>
               <div>
                 <div class="title">Institution Innovation Council</div>
@@ -292,8 +293,8 @@
             <div class="col-title">Quick Links</div>
             <ul class="plain">
               <li><a href="{% url 'research' %}">R&D Cell</a></li>
-              <li><a href="/activities">Activities</a></li>
-              <li><a href="/contact">Contact</a></li>
+              <li><a href="{% url 'activities' %}">Activities</a></li>
+              <li><a href="{% url 'contact' %}">Contact</a></li>
             </ul>
           </div>
 
@@ -301,9 +302,9 @@
           <div class="fade-up">
             <div class="col-title">Connect</div>
             <ul class="plain">
-              <li><a href="/gallery">Gallery</a></li>
-              <li><a href="/notice-board">Notice Board</a></li>
-              <li><a href="/innovation/startups">Start-Ups</a></li>
+              <li><a href="{% url 'gallery' %}">Gallery</a></li>
+              <li><a href="{% url 'notice' %}">Notice Board</a></li>
+              <li><a href="{% url 'achievments' %}">Achievements</a></li>
             </ul>
           </div>
 

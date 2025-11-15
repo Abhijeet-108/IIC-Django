@@ -2,36 +2,40 @@ from django.shortcuts import render , redirect
 from base.models import posts , achievement , event , organisation , contactOrg
 from base.forms import postForm , achievForm , eventForm , contactOrgForm , organisationForm
 from django.contrib.auth.models import User
+from base.models import iicInfo
 
 # Create your views here.
 
 def homepage(req):
+    info = iicInfo.objects.first()
     if not req.user.is_superuser:
         return redirect('home')
     post = posts.objects.all()
-    context = {"posts" : post}
+    context = {"posts" : post, 'iic' : info}
     return render(req , 'adminhome.html' , context)
 
 def postCreate(req):
     postf = postForm()
+    info = iicInfo.objects.first()
     if(req.method == "POST"):
         postf = postForm(req.POST)
         if(postf.is_valid()):
             postf.save()
         return redirect("admin-site")
-    context = {'postf' : postf}
+    context = {'postf' : postf, 'iic' : info}
     return render(req , "form1.html" , context)
 
 def postEdit(req , pk):
     post = posts.objects.get(id = pk)
     postf = postForm(instance = post)
+    info = iicInfo.objects.first()
     if(req.method == "POST"):
         postf = postForm(req.POST , instance = post)
 
         if postf.is_valid():
             postf.save()
             return redirect('admin-site')
-    context = {'postf' : postf}
+    context = {'postf' : postf, 'iic' : info}
     return render(req,"form1.html",context)
 
 def postDeletion(req , pk):

@@ -1,5 +1,5 @@
-{% extends 'main.html' %} {% load static %} {% block content %}
-
+<body>
+{% include 'nav.html' %}
 <section class="about" id="about">
   <div class="container">
     <div class="about-content">
@@ -23,7 +23,7 @@
           </div>
           <div>
             <a href="{% url 'updateform' i.id %}"><button
-                style="background: #f0ad4e; color: #fff; border-radius: 5px; padding:5px 10px; margin-right:5px">Edit</button></a>
+                style="background: #f0ad4e; color: #fff; border-radius: 5px; padding:5px 10px; margin-right:5px">✍</button></a>
             <a href="{% url 'deletePatentform' i.id %}"><button
                 style="background: #d9534f; color: #fff; border-radius: 5px; padding:5px 10px;">Delete</button></a>
           </div>
@@ -32,9 +32,6 @@
         {% endfor %}
 
         <h3>Books</h3>
-        <a href="{% url "bookform" %}" style="text-decoration: none;">
-          <button style="background: #3788d4; color: #fff; border-radius: 5px; padding:10px 20px">Add Books</button>
-        </a>
         {% for i in books %}
         <div class="about-card">
           <p>Title {{i.title}}</p>
@@ -77,4 +74,4 @@
   </div>
 </section>
 
-{% endblock %}
+{% include 'foot.html' %}

@@ -1,0 +1,506 @@
+{# templates/faculty.html #}
+{% load static %}
+<style>
+  :root {
+    --bg: #f6f8fb;
+    --panel: #ffffff;
+    --muted: #55606a;
+    --accent1: #2563eb;
+    --accent2: #06b6d4;
+    --glass: rgba(255,255,255,0.98);
+    --card-shadow: 0 10px 30px rgba(2,6,23,0.06);
+    --radius: 12px;
+    --maxw: 1150px;
+    --gap: 18px;
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;background:linear-gradient(180deg,var(--bg),#fff);color:var(--muted);-webkit-font-smoothing:antialiased}
+  .container{max-width:var(--maxw);margin:28px auto;padding:6px}
+  .page-header{text-align:center;margin-bottom:12px}
+  h1{font-size:24px;margin:6px 0;font-weight:800;background:linear-gradient(90deg,var(--accent1),var(--accent2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .subtitle,.tip{color:var(--muted);font-size:13px;margin:6px 0}
+  form{display:grid;grid-template-columns:320px 1fr;gap:var(--gap);align-items:start}
+  @media (max-width:980px){ form{grid-template-columns:1fr} }
+  .sidebar{background:var(--panel);border-radius:var(--radius);padding:14px;box-shadow:var(--card-shadow);border:1px solid rgba(0,0,0,0.04);position:sticky;top:20px;height:fit-content}
+  .avatar{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+  .avatar img{width:130px;height:130px;border-radius:12px;object-fit:cover;border:2px solid rgba(0,0,0,0.06)}
+  .meta{font-size:13px;color:var(--muted);margin-top:10px}
+  .main{display:flex;flex-direction:column;gap:14px}
+  .card{background:var(--panel);border-radius:var(--radius);padding:16px;box-shadow:var(--card-shadow);border:1px solid rgba(0,0,0,0.04)}
+  .section-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .section-title h3{margin:0;font-size:16px;color:#111;font-weight:800}
+  .section-desc{font-size:13px;color:var(--muted)}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px}
+  .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:10px}
+  @media (max-width:720px){ .grid-2,.grid-3{grid-template-columns:1fr} }
+  label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;font-weight:600}
+  .display-box{height:36px;border:1px solid rgba(0,0,0,0.06);border-radius:8px;padding:8px 12px;background:#f9fafb;font-size:14px;color:#111;font-weight:600;display:flex;align-items:center;overflow:hidden;word-break:break-word}
+  .small{font-size:13px;color:var(--muted);margin-top:6px}
+  .actions{display:flex;gap:10px;justify-content:flex-end}
+  .btn{padding:10px 16px;border-radius:10px;border:0;cursor:pointer;font-weight:700}
+  .btn.primary{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#fff;box-shadow:0 8px 20px rgba(37,99,235,0.12)}
+  .btn.ghost{background:#f1f5f9;color:var(--muted)}
+  .event-item{display:grid;grid-template-columns:1fr 140px;gap:12px;align-items:start}
+  .fade{opacity:0;transform:translateY(12px);transition:all .6s cubic-bezier(.2,.9,.2,1)}
+  .fade.in{opacity:1;transform:none}
+  .count{background:#eef6ff;color:var(--accent1);padding:4px 8px;border-radius:999px;font-weight:700;margin-left:8px}
+  .link{color:var(--accent1);text-decoration:underline}
+  .wrap{word-break:break-word;white-space:normal;max-width:100%}
+</style>
+
+<body>
+{% include 'nav.html' %}
+
+<section class="about" id="about">
+  <div class="container">
+
+    <div style="display:grid;grid-template-columns:320px 1fr;gap:18px">
+      <!-- SIDEBAR -->
+      <aside class="sidebar fade" aria-label="Profile summary">
+        <div class="avatar">
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><rect width='100%' height='100%' fill='%23f3f4f6'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='20' fill='%23888'>Upload Photo</text></svg>" alt="Profile photo">
+          <div>
+            <div style="font-weight:700;color:#111">{{ faculty.suf }} {{ faculty.name }}</div>
+            <div style="font-size:13px;color:var(--muted)">{{ faculty.email }}</div>
+            <div style="font-size:13px;color:var(--muted)">{{ faculty.dept }}</div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- MAIN -->
+      <main class="main">
+
+        <header class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <h1>{{ faculty.suf }} {{ faculty.name }}</h1>
+              <div class="section-desc">Research & publications profile</div>
+            </div>
+            <div class="small">Records overview
+              <span class="count">{{ patent|length }}</span>
+            </div>
+          </div>
+        </header>
+
+        {# BASIC DETAILS #}
+        <section id="basic" class="card fade" aria-labelledby="basic">
+          <div class="section-title">
+            <h3>Basic / Profile IDs</h3>
+            <div class="small">Identifiers & profile links</div>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <label>Google Scholar</label>
+              <div class="display-box">
+                {% if basicDetail and basicDetail.googleScholar %}
+                  <a href="{{ basicDetail.googleScholar }}" target="_blank" rel="noopener" class="link wrap">{{ basicDetail.googleScholar }}</a>
+                {% else %}
+                  &mdash;
+                {% endif %}
+              </div>
+            </div>
+            <div>
+              <label>ORCID</label>
+              <div class="display-box">{{ basicDetail.orcid|default:"—" }}</div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <label>Scopus ID</label>
+              <div class="display-box">{{ basicDetail.scopusid|default:"—" }}</div>
+            </div>
+            <div>
+              <label>ResearcherID</label>
+              <div class="display-box">{{ basicDetail.researchid|default:"—" }}</div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <label>Vidwan Portal</label>
+              <div class="display-box">
+                {% if basicDetail and basicDetail.vidwanPortal %}
+                  <a href="{{ basicDetail.vidwanPortal }}" target="_blank" rel="noopener" class="link wrap">{{ basicDetail.vidwanPortal }}</a>
+                {% else %}
+                  &mdash;
+                {% endif %}
+              </div>
+            </div>
+            <div>
+              <label>Records snapshot</label>
+              <div class="display-box">
+                Patents: {{ patent|length }} · Books: {{ books|length }} · Journals: {{ journals|length }}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {# PATENTS #}
+        <section id="patents" class="card fade" aria-labelledby="patents">
+          <div class="section-title">
+            <h3>Patents <span class="count">{{ patent|length }}</span></h3>
+            <div class="small">Patents filed / granted</div>
+          </div>
+
+          {% if patent %}
+            {% for i in patent %}
+            <div style="margin-bottom:12px; padding:12px; border-radius:8px; background:#fbfbfe; border:1px solid rgba(0,0,0,0.03)">
+              <div class="grid-2">
+                <div>
+                  <label>Patent Number</label>
+                  <div class="display-box">{{ i.patentNumber|default:"—" }}</div>
+                </div>
+                <div>
+                  <label>Area</label>
+                  <div class="display-box">{{ i.area|default:"—" }}</div>
+                </div>
+              </div>
+
+              <div class="grid-2">
+                <div>
+                  <label>Domain</label>
+                  <div class="display-box">{{ i.domain|default:"—" }}</div>
+                </div>
+                <div>
+                  <label>Title</label>
+                  <div class="display-box">{{ i.title|default:"—" }}</div>
+                </div>
+              </div>
+
+              <div class="grid-2">
+                <div>
+                  <label>Year</label>
+                  <div class="display-box">{{ i.year|default:"—" }}</div>
+                </div>
+                <div>
+                  <label>Status</label>
+                  <div class="display-box">{{ i.get_stat_display|default:"—" }}</div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          {% else %}
+            <p class="empty">No patents recorded.</p>
+          {% endif %}
+        </section>
+
+        {# COPYRIGHTS #}
+        <section id="copyrights" class="card fade" aria-labelledby="copyrights">
+          <div class="section-title">
+            <h3>Copyrights <span class="count">{{ copyrights|length }}</span></h3>
+            <div class="small">Registered / pending copyrights</div>
+          </div>
+
+          {% if copyrights %}
+            {% for i in copyrights %}
+            <div style="margin-bottom:12px; padding:12px; border-radius:8px; background:#fbfbfe; border:1px solid rgba(0,0,0,0.03)">
+              <div class="grid-2">
+                <div>
+                  <label>Copyright Number</label>
+                  <div class="display-box">{{ i.copyrightNumber|default:"—" }}</div>
+                </div>
+                <div>
+                  <label>Area</label>
+                  <div class="display-box">{{ i.area|default:"—" }}</div>
+                </div>
+              </div>
+
+              <div class="grid-2">
+                <div>
+                  <label>Domain</label>
+                  <div class="display-box">{{ i.domain|default:"—" }}</div>
+                </div>
+                <div>
+                  <label>Title</label>
+                  <div class="display-box">{{ i.title|default:"—" }}</div>
+                </div>
+              </div>
+
+              <div class="grid-2">
+                <div>
+                  <label>Year</label>
+                  <div class="display-box">{{ i.year|default:"—" }}</div>
+                </div>
+                <div>
+                  <label>Status</label>
+                  <div class="display-box">{{ i.get_stat_display|default:"—" }}</div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          {% else %}
+            <p class="empty">No copyrights recorded.</p>
+          {% endif %}
+        </section>
+
+        {# BOOKS #}
+        <section id="books" class="card fade" aria-labelledby="books">
+          <div class="section-title">
+            <h3>Books <span class="count">{{ books|length }}</span></h3>
+            <div class="small">Authored / edited books</div>
+          </div>
+
+          {% if books %}
+            {% for b in books %}
+            <div style="margin-bottom:12px; padding:12px; border-radius:8px; background:#fbfbfe; border:1px solid rgba(0,0,0,0.03)">
+              <div class="grid-2">
+                <div>
+                  <label>ISBN</label>
+                  <div class="display-box">{{ b.isbn|default:"—" }}</div>
+                </div>
+                <div>
+                  <label>Title</label>
+                  <div class="display-box">{{ b.title|default:"—" }}</div>
+                </div>
+              </div>
+
+              <div class="grid-2">
+                <div>
+                  <label>Authors</label>
+                  <div class="display-box wrap">{{ b.authors|default:"—" }}</div>
+                </div>
+                <div>
+                  <label>Publisher</label>
+                  <div class="display-box">{{ b.publisherName|default:"—" }}</div>
+                </div>
+              </div>
+
+              <div class="grid-2">
+                <div>
+                  <label>Year</label>
+                  <div class="display-box">{{ b.year|default:"—" }}</div>
+                </div>
+                <div></div>
+              </div>
+            </div>
+            {% endfor %}
+          {% else %}
+            <p class="empty">No books recorded.</p>
+          {% endif %}
+        </section>
+
+        {# BOOK CHAPTERS #}
+        <section id="chapters" class="card fade" aria-labelledby="chapters">
+          <div class="section-title">
+            <h3>Book Chapters <span class="count">{{ bookchapters|length }}</span></h3>
+            <div class="small">Chapters in edited volumes</div>
+          </div>
+
+          {% if bookchapters %}
+            {% for c in bookchapters %}
+            <div style="margin-bottom:12px; padding:12px; border-radius:8px; background:#fbfbfe; border:1px solid rgba(0,0,0,0.03)">
+              <div class="grid-2">
+                <div>
+                  <label>Title</label>
+                  <div class="display-box">{{ c.title|default:"—" }}</div>
+                </div>
+                <div>
+                  <label>Chapter</label>
+                  <div class="display-box">{{ c.chapterName|default:"—" }}</div>
+                </div>
+              </div>
+
+              <div class="grid-2">
+                <div>
+                  <label>Authors</label>
+                  <div class="display-box wrap">{{ c.authors|default:"—" }}</div>
+                </div>
+                <div>
+                  <label>ISBN</label>
+                  <div class="display-box">{{ c.isbn|default:"—" }}</div>
+                </div>
+              </div>
+
+              <div class="grid-2">
+                <div>
+                  <label>Pages</label>
+                  <div class="display-box">{{ c.pageNo|default:"—" }}</div>
+                </div>
+                <div>
+                  <label>DOI / Link</label>
+                  <div class="display-box">
+                    {% if c.doiLink %}
+                      <a href="{{ c.doiLink }}" target="_blank" rel="noopener" class="link wrap">{{ c.doiLink }}</a>
+                    {% else %}
+                      &mdash;
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid-2">
+                <div>
+                  <label>Publisher</label>
+                  <div class="display-box">{{ c.publisherName|default:"—" }}</div>
+                </div>
+                <div>
+                  <label>Year</label>
+                  <div class="display-box">{{ c.year|default:"—" }}</div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          {% else %}
+            <p class="empty">No book chapters recorded.</p>
+          {% endif %}
+        </section>
+
+        {# JOURNALS #}
+        <section id="journals" class="card fade" aria-labelledby="journals">
+          <div class="section-title">
+            <h3>Journal Articles <span class="count">{{ journals|length }}</span></h3>
+            <div class="small">Peer-reviewed articles</div>
+          </div>
+
+          {% if journals %}
+            {% for j in journals %}
+            <div style="margin-bottom:12px; padding:12px; border-radius:8px; background:#fbfbfe; border:1px solid rgba(0,0,0,0.03)">
+              <div class="grid-2">
+                <div>
+                  <label>Title</label>
+                  <div class="display-box">{{ j.title|default:"—" }}</div>
+                </div>
+                <div>
+                  <label>Journal</label>
+                  <div class="display-box">{{ j.journalName|default:"—" }}</div>
+                </div>
+              </div>
+
+              <div class="grid-3">
+                <div>
+                  <label>Authors</label>
+                  <div class="display-box wrap">{{ j.authors|default:"—" }}</div>
+                </div>
+                <div>
+                  <label>Publisher</label>
+                  <div class="display-box">{{ j.publisherName|default:"—" }}</div>
+                </div>
+                <div>
+                  <label>Year</label>
+                  <div class="display-box">{{ j.year|default:"—" }}</div>
+                </div>
+              </div>
+
+              <div class="grid-3">
+                <div>
+                  <label>Issue</label>
+                  <div class="display-box">{{ j.issue|default:"—" }}</div>
+                </div>
+                <div>
+                  <label>No.</label>
+                  <div class="display-box">{{ j.no|default:"—" }}</div>
+                </div>
+                <div>
+                  <label>Pages</label>
+                  <div class="display-box">{{ j.pageNo|default:"—" }}</div>
+                </div>
+              </div>
+
+              <div class="grid-2">
+                <div>
+                  <label>DOI / Link</label>
+                  <div class="display-box">
+                    {% if j.doiLink %}
+                      <a href="{{ j.doiLink }}" target="_blank" rel="noopener" class="link wrap">{{ j.doiLink }}</a>
+                    {% else %}
+                      &mdash;
+                    {% endif %}
+                  </div>
+                </div>
+                <div></div>
+              </div>
+            </div>
+            {% endfor %}
+          {% else %}
+            <p class="empty">No journal articles recorded.</p>
+          {% endif %}
+        </section>
+
+        {# CONFERENCES #}
+        <section id="conferences" class="card fade" aria-labelledby="conferences">
+          <div class="section-title">
+            <h3>Conference Proceedings <span class="count">{{ conferences|length }}</span></h3>
+            <div class="small">Conference / proceedings papers</div>
+          </div>
+
+          {% if conferences %}
+            {% for conf in conferences %}
+            <div style="margin-bottom:12px; padding:12px; border-radius:8px; background:#fbfbfe; border:1px solid rgba(0,0,0,0.03)">
+              <div class="grid-2">
+                <div>
+                  <label>Title</label>
+                  <div class="display-box">{{ conf.title|default:"—" }}</div>
+                </div>
+                <div>
+                  <label>Conference / Journal</label>
+                  <div class="display-box">{{ conf.journalName|default:"—" }}</div>
+                </div>
+              </div>
+
+              <div class="grid-2">
+                <div>
+                  <label>Authors</label>
+                  <div class="display-box wrap">{{ conf.authors|default:"—" }}</div>
+                </div>
+                <div>
+                  <label>ISSN</label>
+                  <div class="display-box">{{ conf.issn|default:"—" }}</div>
+                </div>
+              </div>
+
+              <div class="grid-2">
+                <div>
+                  <label>Publisher</label>
+                  <div class="display-box">{{ conf.publisherName|default:"—" }}</div>
+                </div>
+                <div>
+                  <label>Year</label>
+                  <div class="display-box">{{ conf.year|default:"—" }}</div>
+                </div>
+              </div>
+
+              <div class="grid-2">
+                <div>
+                  <label>DOI / Link</label>
+                  <div class="display-box">
+                    {% if conf.doiLink %}
+                      <a href="{{ conf.doiLink }}" target="_blank" rel="noopener" class="link wrap">{{ conf.doiLink }}</a>
+                    {% else %}
+                      &mdash;
+                    {% endif %}
+                  </div>
+                </div>
+                <div></div>
+              </div>
+            </div>
+            {% endfor %}
+          {% else %}
+            <p class="empty">No conference records recorded.</p>
+          {% endif %}
+        </section>
+
+        <!-- (Optional) actions area; kept read-only -->
+        <div class="card fade" style="display:flex;justify-content:flex-end;align-items:center">
+          <div class="actions" style="width:100%;justify-content:flex-end">
+            <button type="button" class="btn ghost" onclick="location.reload()">Refresh</button>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+</section>
+
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.fade').forEach((el, i) => {
+      setTimeout(() => el.classList.add('in'), 80 + i * 40);
+    });
+  });
+</script>
+</body>

@@ -4,31 +4,36 @@ from .forms import basicDetailsForm , patentForm
 from django.shortcuts import render, redirect
 from .models import dept , facult , suff , patent , copyright , conference , book , bookChapter , journal
 from .forms import bookForm, bookChapterForm, deptForm, facultForm, suffForm, copyrightForm, conferenceForm, journalForm
+from base.models import iicInfo
 
 # Create your views here.
 
 def rnd(req):
     dep = dept.objects.all()
-    context = {"dept" : dep}
+    info = iicInfo.objects.first()
+    context = {"dept" : dep, 'iic' : info}
     return render(req,'rd.html', context)
 
 def depart(req , pk):
     dep = dept.objects.get(id = pk)
     faculty = facult.objects.filter(dept = dep)
     suf = suff.objects.all()
-    context = {"faculty" : faculty , "suf" : suf}
+    info = iicInfo.objects.first()
+    context = {"faculty" : faculty , "suf" : suf, 'iic' : info}
     return render(req , 'depart.html' , context)
 
 def facul(req , pk):
     faculty = facult.objects.get(id = pk)
+    basic = basicDetails.objects.get(faculty = faculty)
     pat = patent.objects.filter(faculty = faculty)
     copyr = copyright.objects.filter(faculty = faculty)
     books = book.objects.filter(faculty = faculty)
     bookchapters = bookChapter.objects.filter(faculty = faculty)
     journals = journal.objects.filter(faculty = faculty)
     conferences = conference.objects.filter(faculty = faculty)
-    context = {"faculty" : faculty , "patent" : pat , "books" : books , "journals" : journals , "bookchapters" : bookchapters , "copyrights" : copyr , "conferences" : conferences}
-    return render(req , 'faculty.html' , context)
+    info = iicInfo.objects.first()
+    context = {"faculty" : faculty , "patent" : pat , "books" : books , "journals" : journals , "bookchapters" : bookchapters , "copyrights" : copyr , "conferences" : conferences, 'iic' : info , "basicDetail" : basic}
+    return render(req , 'fac.html' , context)
 
 def basicCreate(req):
     basicsf = basicDetailsForm()

@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>IIC — About (Mission, Functions, Team, Certificate)</title>
+<meta name="description" content="About IIC — Mission, Functions, Team, Certificate — static HTML conversion" />
+<style>
+  :root{
+    --bg1: #f7f8fa;
+    --accent1: #2563eb;
+    --accent2: #06b6d4;
+    --muted: #475569;
+    --card-bg: rgba(255,255,255,0.92);
+    --glass-shadow: 0 12px 36px rgba(2,6,23,0.06);
+    --maxw: 920px;
+    --radius: 20px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;color:#0f1724;background:linear-gradient(180deg,var(--bg1),#fff)}
+  a{color:inherit;text-decoration:none}
+  .page {
+    min-height:100vh;
+    padding:28px 18px 80px;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+  }
+
+  .wrap {
+    width:100%;
+    max-width:var(--maxw);
+    margin:0 auto;
+  }
+
+  /* navigation inside about */
+  .about-nav {
+    display:flex;
+    gap:10px;
+    align-items:center;
+    flex-wrap:wrap;
+    margin-bottom:22px;
+  }
+  .about-nav a {
+    display:inline-block;
+    padding:10px 14px;
+    border-radius:12px;
+    font-weight:700;
+    color:var(--muted);
+    border:1px solid rgba(15,23,36,0.04);
+    background:linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.00));
+    transition: all .18s ease;
+  }
+  .about-nav a:hover{ transform:translateY(-4px); box-shadow:var(--glass-shadow); color: #0f1724; }
+  .about-nav a.active { background: linear-gradient(90deg, var(--accent1), var(--accent2)); color: white; box-shadow:0 12px 36px rgba(37,99,235,0.12); }
+
+  /* page card */
+  .card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding:28px;
+    border:1px solid rgba(0,0,0,0.06);
+    box-shadow: var(--glass-shadow);
+  }
+  .card h1{
+    margin:0 0 12px;
+    font-size:2.4rem;
+    line-height:1.03;
+    font-weight:800;
+    background: linear-gradient(90deg,var(--accent1),var(--accent2));
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color: transparent;
+    text-align:center;
+  }
+  .card p, .card li {
+    color:var(--muted);
+    font-size:1.05rem;
+    line-height:1.6;
+  }
+
+  .glass { border-radius:18px; padding:20px; background: rgba(255,255,255,0.95); border:1px solid rgba(0,0,0,0.04); box-shadow:var(--glass-shadow); }
+
+  /* content spacing */
+  .lead { margin-bottom:20px; text-align:center; color:var(--muted); font-size:1.05rem; }
+  .content { margin-top:10px; }
+
+  .list-plain { margin:0; padding-left:1.1rem; }
+  .list-plain li{ margin:10px 0; }
+
+  /* PDF placeholder */
+  .pdf-placeholder {
+    border:2px dashed rgba(15,23,36,0.06);
+    padding:40px;
+    border-radius:12px;
+    color:var(--muted);
+    text-align:center;
+    font-size:1.05rem;
+  }
+
+  /* responsive */
+  @media (max-width:720px){
+    .card h1{ font-size:1.8rem; }
+    .page{ padding:18px 12px 60px; }
+  }
+
+  /* small entrance animation */
+  .fade { opacity:0; transform: translateY(16px); transition: all .55s cubic-bezier(.2,.9,.2,1); }
+  .fade.in { opacity:1; transform:none; }
+
+  /* breadcrumb-like small hint */
+  .hint { font-size:0.95rem; color:var(--muted); margin-bottom:12px; text-align:center; }
+</style>
+</head>
+<body>
+  <main class="page" id="app">
+    <div class="wrap">
+
+      <nav class="about-nav" aria-label="About navigation">
+        <!-- these links update the hash: #/about/mission etc. -->
+        <a href="#/about/mission" data-route="/about/mission" id="link-mission">Mission</a>
+        <a href="#/about/functions" data-route="/about/functions" id="link-functions">Vision &amp; Functions</a>
+        <a href="#/about/team" data-route="/about/team" id="link-team">IIC Team Members</a>
+        <a href="#/about/certificate" data-route="/about/certificate" id="link-certificate">Establishment Certificate</a>
+      </nav>
+
+      <div id="page-content" class="card fade" role="article" aria-live="polite">
+        <!-- content injected by JS routing -->
+      </div>
+
+    </div>
+  </main>
+
+<script>
+/*
+  Simple hash-based router for:
+  - /about or /about/mission  -> Mission
+  - /about/functions         -> Functions
+  - /about/team              -> Team
+  - /about/certificate       -> Certificate
+
+  Behaviour:
+  - Updates content container with HTML for each view
+  - Applies small entrance animation
+  - Marks active nav link
+  - Uses hash format: #/about/mission  (works if user navigates directly)
+*/
+
+(function(){
+  const contentEl = document.getElementById('page-content');
+
+  // Templates for pages (kept simple and readable)
+  const templates = {
+    mission: `
+      <h1>Mission</h1>
+      <div class="lead">The mission of the Institution's Innovation Council is to create and nurture a dynamic platform that empowers students to enhance their cognitive abilities, critical thinking, and problem-solving skills, while fostering a vibrant and inventive culture across the Institute.</div>
+      <div class="content glass">
+        <p>The IIC focuses on hands-on learning, collaborative projects, and structured mentorship to help students transform ideas into tangible outcomes. Activities include workshops, ideation sessions, incubation support, and collaboration with industry experts.</p>
+      </div>
+    `,
+    functions: `
+      <h1>Vision & Functions</h1>
+      <div class="lead">The Vision of the Institution's Innovation Council (IIC) is to transform the Institute into a leading hub of innovation, creativity, entrepreneurship, and start-up culture.</div>
+      <div class="content glass">
+        <h2 style="margin-top:0">Vision</h2>
+        <p>To transform the Institute into a leading hub of innovation, creativity, entrepreneurship, and start-up culture, where students and faculty are continuously encouraged and empowered.</p>
+
+        <h2 style="margin-top:18px">Functions</h2>
+        <ul class="list-plain">
+          <li>Build a Sustainable Innovation Ecosystem</li>
+          <li>Encourage and Recognize Innovators</li>
+          <li>Create a Strong Mentor and Knowledge Network</li>
+          <li>Foster National and Global Collaboration</li>
+          <li>Promote Visibility and Knowledge Sharing</li>
+          <li>Drive Industry-Linked Innovation</li>
+          <li>Enable Start-up Creation and Entrepreneurship Development</li>
+        </ul>
+      </div>
+    `,
+    team: `
+      <h1>IIC Team Members</h1>
+      <div class="lead">PDF document will be displayed here</div>
+      <div class="content">
+        <div class="pdf-placeholder">
+          <p>This is a placeholder for the Team PDF document.</p>
+          <p>If you have a PDF file, replace this block with an <code>&lt;iframe&gt;</code> or an embedded PDF viewer. Example (server-side):</p>
+          <pre style="font-size:0.9rem; color:#666; background:transparent; border:none;">&lt;iframe src="/static/docs/iic-team.pdf" width="100%" height="600"&gt;&lt;/iframe&gt;</pre>
+        </div>
+      </div>
+    `,
+    certificate: `
+      <h1>Establishment Certificate</h1>
+      <div class="lead">PDF document will be displayed here</div>
+      <div class="content">
+        <div class="pdf-placeholder">
+          <p>This is a placeholder for the Establishment Certificate PDF.</p>
+          <p>To embed a PDF, use an iframe or link to the file served by your server.</p>
+          <pre style="font-size:0.9rem; color:#666; background:transparent; border:none;">&lt;iframe src="/static/docs/iic-certificate.pdf" width="100%" height="600"&gt;&lt;/iframe&gt;</pre>
+        </div>
+      </div>
+    `
+  };
+
+  // Map route to template key
+  function routeToKey(route) {
+    if (!route) return 'mission';
+    // normalize: route may be "/about" or "/about/mission" etc.
+    route = route.replace(/^#/, '');
+    const parts = route.split('/').filter(Boolean); // remove empty parts
+    // expected: ["about", "mission"]
+    if (parts.length === 0) return 'mission';
+    if (parts[0] !== 'about') return 'mission';
+    if (parts.length === 1) return 'mission';
+    const key = parts[1];
+    if (['mission','functions','team','certificate'].includes(key)) return key;
+    return 'mission';
+  }
+
+  // Update active nav link
+  function updateActive(key) {
+    document.querySelectorAll('.about-nav a').forEach(a => a.classList.remove('active'));
+    const map = { mission:'#/about/mission', functions:'#/about/functions', team:'#/about/team', certificate:'#/about/certificate' };
+    const sel = Object.keys(map).find(k => k === key);
+    if (sel) {
+      const el = document.querySelector(`a[href="${map[sel]}"]`);
+      if (el) el.classList.add('active');
+    }
+  }
+
+  // Render view
+  function render(routeHash) {
+    const key = routeToKey(routeHash);
+    contentEl.innerHTML = templates[key] || templates.mission;
+
+    // small entrance animation: remove class then re-add to replay
+    contentEl.classList.remove('in');
+    // force reflow to restart transition
+    void contentEl.offsetWidth;
+    contentEl.classList.add('in');
+
+    updateActive(key);
+    // scroll to top of card for visibility
+    contentEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // Initial render on load
+  function handleHash() {
+    const hash = location.hash || '#/about/mission';
+    render(hash);
+  }
+
+  // Listen to hash changes and popstate
+  window.addEventListener('hashchange', handleHash, false);
+  window.addEventListener('popstate', handleHash, false);
+
+  // handle clicking nav links that use hash - let browser update location.hash naturally
+  document.querySelectorAll('.about-nav a').forEach(a => {
+    a.addEventListener('click', function(e){
+      // default browser hash behavior will trigger hashchange event; nothing else required.
+      // but ensure href uses desired hash (already set).
+      // no preventDefault.
+    });
+  });
+
+  // On first load
+  document.addEventListener('DOMContentLoaded', handleHash);
+})();
+</script>
+</body>
+</html>

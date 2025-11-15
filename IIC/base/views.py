@@ -4,7 +4,7 @@ from .models import posts
 from django.db.models import Q
 
 from .forms import queryForm
-from .models import querys
+from .models import querys, iicInfo
 
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -18,15 +18,42 @@ from django.contrib.auth.forms import UserCreationForm
 def home(req):
     post = posts.objects.all()
     queryf = queryForm()
+    info = iicInfo.objects.first()
     if(req.method == "POST"):
         queryf = queryForm(req.POST)
         if(queryf.is_valid()):
             queryf.save()
         return redirect("home")
-    context = {"posts" : post , 'queryf' : queryf}
+    context = {"posts" : post , 'queryf' : queryf, 'iic' : info}
     return render(req,"a1home.html" , context)
 
+def activities(req):
+    info = iicInfo.objects.first()
+    context = {'iic' : info}
+    return render(req, "activity.html" , context)
+
+def contact(req):
+    info = iicInfo.objects.first()
+    context = {'iic' : info}
+    return render(req, "contact.html" , context)
+
+def gallery(req):
+    info = iicInfo.objects.first()
+    context = {'iic' : info}
+    return render(req, "gallery.html" , context)
+
+def notice(req):
+    info = iicInfo.objects.first()
+    context = {'iic' : info}
+    return render(req, "noticeboard.html" , context)
+
+def achiev(req):
+    info = iicInfo.objects.first()
+    context = {'iic' : info}
+    return render(req, "achiecvement.html" , context)
+
 def loginFac(req):
+    info = iicInfo.objects.first()
     page = 'login'
     if(req.user.is_authenticated):
         return redirect('a1home')
@@ -46,7 +73,8 @@ def loginFac(req):
                 return redirect('home')
         else:
             messages.error(req, 'Username or Password is not correct!')
-    return render(req,"a1login.html")
+    context = {'iic' : info}
+    return render(req,"a1login.html" , context)
 
 def logoutFac(req):
     logout(req)
