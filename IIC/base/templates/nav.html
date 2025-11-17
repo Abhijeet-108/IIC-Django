@@ -51,7 +51,7 @@
       .brand{display:flex;align-items:center;gap:14px}
       .brand a{display:inline-flex;align-items:center;gap:12px}
       .logo-mark{
-        width:120px;          
+        width:120px;
         height:120px;
         border-radius:10px;
         overflow:hidden;
@@ -110,7 +110,7 @@
         position: absolute;
         left: 0;
         top: 100%;
-        margin-top: 1px;        
+        margin-top: 1px;
         min-width: 220px;
         background: #fff;
         border: 1px solid rgba(15, 23, 36, 0.06);
@@ -188,8 +188,13 @@
         </div>
 
         <!-- right: menu + auth + mobile toggle -->
-        <div class="right-area" style="margin-left:auto; align-items:center">
-          <div class="menu" id="desktopMenu" role="menubar" aria-label="Primary"></div>
+        <div class="right-area" style="margin-left: auto; align-items: center">
+          <div
+            class="menu"
+            id="desktopMenu"
+            role="menubar"
+            aria-label="Primary"
+          ></div>
 
           <div class="auth" id="authButtons" aria-live="polite"></div>
 
@@ -200,8 +205,29 @@
             aria-controls="mobilePanel"
             aria-label="Toggle menu"
           >
-            <svg id="hambIcon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
-            <svg id="closeIcon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="display:none"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            <svg
+              id="hambIcon"
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <path d="M3 7h18M3 12h18M3 17h18" />
+            </svg>
+            <svg
+              id="closeIcon"
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              style="display: none"
+            >
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
           </button>
         </div>
       </nav>
@@ -213,7 +239,7 @@
     </header>
 
     <main>
-      <div style="max-width:1200px;margin:40px auto;padding:0px"></div>
+      <div style="max-width: 1200px; margin: 40px auto; padding: 0px"></div>
     </main>
 
     <!-- KEEP JS LOGIC UNCHANGED -->
@@ -222,10 +248,9 @@
        * Navbar data
        ****************************************************************/
       const navItems = [
-        { name: "Home", path: "{% url 'home' %}" },
+        { name: "Home", path: "{% if request.user.is_superuser %}{% url 'admin-site' %}{% else %}{% url 'home' %}{% endif %}" },
         {
           name: "About",
-          path: "/#about",
           submenu: [
             { name: "IIC Team Members", path: "/about/team" },
             { name: "Establishment Certificate", path: "/about/certificate" },
@@ -234,16 +259,14 @@
         { name: "R&D Cell", path: "{% url 'research' %}" },
         {
           name: "Activities",
-          path: "/activities",
           submenu: [
             { name: "Meeting", path: "/activities" },
-            { name: "Activities", path: "/activities" },
-            { name: "Achievements", path: "/achievements" },
+            { name: "Activities", path: "{% url 'activities' %}" },
+            { name: "Achievements", path: "{% url 'achievments' %}" },
           ],
         },
         {
           name: "Innovation",
-          path: "/innovation",
           submenu: [
             { name: "IPR Cell", path: "/innovation/ipr-cell" },
             { name: "Incubators List", path: "/innovation/incubators" },
@@ -252,11 +275,10 @@
         },
         {
           name: "Connect",
-          path: "/connect",
           submenu: [
-            { name: "Gallery", path: "/gallery" },
-            { name: "Notice Board", path: "/notice-board" },
-            { name: "Contact Us", path: "/contact" },
+            { name: "Gallery", path: "{% url 'gallery' %}" },
+            { name: "Notice Board", path: "{% url 'notice' %}" },
+            { name: "Contact Us", path: "{% url 'contact' %}" },
           ],
         },
       ];
@@ -561,4 +583,3 @@
     </script>
   </body>
 </html>
-

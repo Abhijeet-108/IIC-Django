@@ -1,5 +1,5 @@
 from django.shortcuts import render , redirect
-from base.models import posts , achievement, organisation , contactOrg
+from base.models import posts , achievement, organisation , contactOrg , notice
 from base.forms import postForm , achievForm , contactOrgForm , organisationForm
 from django.contrib.auth.models import User
 from base.models import iicInfo
@@ -7,11 +7,12 @@ from base.models import iicInfo
 # Create your views here.
 
 def homepage(req):
+    notices = notice.objects.all()[:6]
     info = iicInfo.objects.first()
     if not req.user.is_superuser:
         return redirect('home')
     post = posts.objects.all()
-    context = {"posts" : post, 'iic' : info}
+    context = {"posts" : post, 'iic' : info , 'notices' : notices}
     return render(req , 'adminhome.html' , context)
 
 def postCreate(req):

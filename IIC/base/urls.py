@@ -16,7 +16,7 @@ urlpatterns = [
     path('activities/', views.activities , name = "activities"),
     path('contact/', views.contact , name = "contact"),
     path('gallery/', views.gallery , name = "gallery"),
-    path('noticeboard/', views.notice , name = "notice"),
+    path('noticeboard/', views.noticeBoard , name = "notice"),
     path('achievments/', views.achiev , name = "achievments"),
 
 

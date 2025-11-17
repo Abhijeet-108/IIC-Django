@@ -660,13 +660,10 @@
                 />
               </svg>
             </div>
-            <h3>Mission</h3>
-            <p>
-              The mission of the Institution's Innovation Council is to create
-              and nurture a dynamic platform that empowers students to enhance
-              their cognitive abilities, critical thinking, and problem-solving
-              skills.
-            </p>
+            <h3>Notice</h3>
+            {% for i in notices %}
+            <p>{{i.headline}}</p>
+            {% endfor %}
           </div>
 
           <div class="card-3d anim-up vision" id="vision-card">

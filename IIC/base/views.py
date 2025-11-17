@@ -4,7 +4,7 @@ from .models import posts
 from django.db.models import Q
 
 from .forms import queryForm
-from .models import querys, iicInfo
+from .models import querys, iicInfo , notice
 
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -16,6 +16,7 @@ from django.contrib.auth.forms import UserCreationForm
 # Create your views here.
 
 def home(req):
+    notices = notice.objects.all()[:10]
     post = posts.objects.all()
     queryf = queryForm()
     info = iicInfo.objects.first()
@@ -24,7 +25,7 @@ def home(req):
         if(queryf.is_valid()):
             queryf.save()
         return redirect("home")
-    context = {"posts" : post , 'queryf' : queryf, 'iic' : info}
+    context = {"posts" : post , 'queryf' : queryf, 'iic' : info , 'notices' : notices}
     return render(req,"a1home.html" , context)
 
 def activities(req):
@@ -42,7 +43,7 @@ def gallery(req):
     context = {'iic' : info}
     return render(req, "gallery.html" , context)
 
-def notice(req):
+def noticeBoard(req):
     info = iicInfo.objects.first()
     context = {'iic' : info}
     return render(req, "noticeboard.html" , context)
