@@ -140,24 +140,26 @@
     {% include 'nav.html' %}
 
     <section class="container" aria-labelledby="searchHeading">
-      <h2 id="searchHeading">Search results for “{{ q|escape }}”</h2>
+      <h2 id="searchHeading">Search results for “{{ query }}”</h2>
       <div class="subtitle" aria-hidden="true">{{ results|length }} result{{ results|length|pluralize }}</div>
 
       {% if results %}
         <div class="grid" role="list">
         {% for r in results %}
-            <div class="card" role="listitem" tabindex="0" aria-label="{{ r.name }}">
-              <div class="card-icon" aria-hidden="true">
-              {% if r.photo %}
-                <img src="{{ r.photo.url }}" alt="Photo of {{ r.name }}">
-              {% else %}
-                <div class="card-initials" aria-hidden="false" style="font-size: 2rem; font-weight: bold;">{{ r.name|slice:":1"|upper }}</div>
-              {% endif %}
-            </div>
+            <a href="{% url 'facul' r.id %}" aria-label="Open faculty profile {{ r.name }}">
+                <div class="card" role="listitem" tabindex="0" aria-label="{{ r.name }}">
+                    <div class="card-icon" aria-hidden="true">
+                    {% if r.photo %}
+                        <img src="{{ r.photo.url }}" alt="Photo of {{ r.name }}">
+                    {% else %}
+                        <div class="card-initials" aria-hidden="false" style="font-size: 2rem; font-weight: bold;">{{ r.name|slice:":1"|upper }}</div>
+                    {% endif %}
+                    </div>
 
-              <h3 class="name">{{ r.suf }} {{ r.name }}</h3>
-              <div class="dept-title">{% if r.dept %} {{ r.dept }}{% endif %}</div>
-            </div>
+                    <h3 class="name">{{ r.suf }} {{ r.name }}</h3>
+                    <div class="dept-title">{% if r.dept %} {{ r.dept }}{% endif %}</div>
+                </div>
+            </a>
         {% endfor %}
         </div>
       {% else %}
