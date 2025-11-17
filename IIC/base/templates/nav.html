@@ -4,7 +4,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>IIC — Navbar (logo background removed)</title>
+    <title>IIC</title>
+    <link rel="icon" sizes="128*128" href="{{iic.navLogo.url}}" />
     <meta
       name="description"
       content="Navbar with provided logo (outer background removed)"
@@ -32,7 +33,7 @@
         z-index:1000;
         transition: background 240ms ease, box-shadow 240ms ease, transform 240ms ease;
         will-change:background,box-shadow;
-        padding-bottom:6px;
+        {% comment %} padding-bottom:1px; {% endcomment %}
         backdrop-filter: blur(4px);
       }
 
