@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django import forms
-from .models import posts ,achievement , contactOrg , organisation , event, querys
+from .models import posts ,achievement , contactOrg , organisation, querys
 from django.contrib.auth.models import User
 
 
@@ -115,39 +115,6 @@ class organisationForm(ModelForm):
             'stat': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Select Status',
-                'style': 'border-radius: 10px;'
-            }),
-        }
-
-class eventForm(ModelForm):
-    class Meta:
-        model = event
-        fields = "__all__"
-        widgets = {
-            'date': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Enter Date',
-                'style': 'border-radius: 10px;'
-            }),
-            'headline': forms.Textarea(attrs={
-                'class': 'form-control',
-                'placeholder': 'Enter Headline',
-                'rows': 4,
-                'style': 'resize: none; border-radius: 10px;'
-            }),            
-            'description': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Enter Description',
-                'style': 'border-radius: 10px;'
-            }),
-            'stat': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Select Status',
-                'style': 'border-radius: 10px;'
-            }),
-            'faculty': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Select Facluties',
                 'style': 'border-radius: 10px;'
             }),
         }

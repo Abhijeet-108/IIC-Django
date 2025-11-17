@@ -15,10 +15,6 @@ urlpatterns = [
     path('achievment-update/<int:pk>' , views.achievEdit , name = "achievment-update"),
     path('achievment-delete/<int:pk>' , views.achievDeletion , name = "achievment-delete"),
 
-    path('event-create/' , views.eventCreate , name = "event-create"),
-    path('event-update/<int:pk>' , views.eventEdit , name = "event-update"),
-    path('event-delete/<int:pk>' , views.eventDeletion , name = "event-delete"),
-
     path('contactOrg-create/' , views.contactOrgCreate , name = "contactOrg-create"),
     path('contactOrg-update/<int:pk>' , views.contactOrgEdit , name = "contactOrg-update"),
     path('contactOrg-delete/<int:pk>' , views.contactOrgDeletion , name = "contactOrg-delete"),

@@ -35,6 +35,7 @@ class patent(models.Model):
     title = models.CharField(max_length=200 , blank = True , null = True)
     year = models.IntegerField(blank = True)
     stat = models.CharField(max_length = 40 , choices = status , null = True , blank = True)
+    support = models.FileField(upload_to='rnd/pdfs/', null = True , blank = True)
 
     def __str__(self):
         return str(self.patentNumber) + "  " + self.title
@@ -46,6 +47,7 @@ class book(models.Model):
     isbn = models.CharField(max_length = 30 , blank = True)
     publisherName = models.CharField(max_length = 200 , blank = True)
     year = models.IntegerField(blank = True)
+    support = models.FileField(upload_to='rnd/pdfs/', null = True , blank = True)
 
     def __str__(self):
         return self.isbn + " " + self.title
@@ -60,6 +62,7 @@ class bookChapter(models.Model):
     doiLink = models.CharField(max_length = 500 , blank = True)
     publisherName = models.CharField(max_length = 200 , blank = True)
     year = models.IntegerField(blank = True)
+    support = models.FileField(upload_to='rnd/pdfs/', null = True , blank = True)
 
     def __str__(self):
         return self.title + " " + self.chapterName
@@ -76,6 +79,7 @@ class copyright(models.Model):
     title = models.CharField(max_length=200 , blank = True , null = True)
     year = models.IntegerField(blank = True)
     stat = models.CharField(max_length = 40 , choices = status , null = True , blank = True)
+    support = models.FileField(upload_to='rnd/pdfs/', null = True , blank = True)
 
     def __str__(self):
         return self.copyrightNumber + " " + self.title
@@ -92,6 +96,7 @@ class journal(models.Model):
     pageNo = models.CharField(max_length = 20 , blank = True)
     year = models.IntegerField(blank = True)
     doiLink = models.CharField(max_length = 500 , blank = True)
+    support = models.FileField(upload_to='rnd/pdfs/', null = True , blank = True)
 
     def __str__(self):
         return self.journalName

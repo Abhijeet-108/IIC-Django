@@ -1,6 +1,6 @@
 from django.shortcuts import render , redirect
-from base.models import posts , achievement , event , organisation , contactOrg
-from base.forms import postForm , achievForm , eventForm , contactOrgForm , organisationForm
+from base.models import posts , achievement, organisation , contactOrg
+from base.forms import postForm , achievForm , contactOrgForm , organisationForm
 from django.contrib.auth.models import User
 from base.models import iicInfo
 
@@ -68,33 +68,6 @@ def achievEdit(req , pk):
 def achievDeletion(req , pk):
     achiev = achievement.objects.get(id = pk)
     achiev.delete()
-    return redirect('admin-site')
-
-def eventCreate(req):
-    eventf = eventForm()
-    if(req.method == "POST"):
-        eventf = eventForm(req.POST)
-        if(eventf.is_valid()):
-            eventf.save()
-        return redirect("admin-site")
-    context = {'eventf' : eventf}
-    return render(req , "form1.html" , context)
-
-def eventEdit(req , pk):
-    events = event.objects.get(id = pk)
-    eventf = eventForm(instance = events)
-    if(req.method == "POST"):
-        eventf = eventForm(req.POST , instance = events)
-
-        if eventf.is_valid():
-            eventf.save()
-            return redirect('admin-site')
-    context = {'eventf' : eventf}
-    return render(req,"form1.html",context)
-
-def eventDeletion(req , pk):
-    events = event.objects.get(id = pk)
-    events.delete()
     return redirect('admin-site')
 
 def contactOrgCreate(req):
