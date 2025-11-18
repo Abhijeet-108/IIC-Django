@@ -1,202 +1,165 @@
 {% load static %}
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>IIC — Gallery</title>
-    <meta
-      name="description"
-      content="Institution Innovation Council — Gallery (static HTML)"
-    />
-    <style>
-      :root {
-        --bg: #f7f8fb;
-        --muted: #475569;
-        --accent1: #2563eb;
-        --accent2: #06b6d4;
-        --card-shadow: 0 12px 40px rgba(2, 6, 23, 0.06);
-        --glass: rgba(255, 255, 255, 0.95);
-        --radius: 16px;
-        --maxw: 1200px;
-        --gap: 18px;
-      }
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>IIC</title>
+<link rel="icon" sizes="128*128" href="{{iic.navLogo.url}}" />
+<meta name="description" content="Institution Innovation Council — Gallery (static HTML)" />
+<style>
+  :root{
+    --bg: #f7f8fb;
+    --muted: #475569;
+    --accent1: #2563eb;
+    --accent2: #06b6d4;
+    --card-shadow: 0 12px 40px rgba(2,6,23,0.06);
+    --glass: rgba(255,255,255,0.95);
+    --radius: 16px;
+    --maxw: 1200px;
+    --gap: 18px;
+  }
 
-      * {
-        box-sizing: border-box;
-      }
-      html,
-      body {
-        height: 100%;
-        margin: 0;
-        font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto,
-          "Helvetica Neue", Arial;
-        background: linear-gradient(180deg, var(--bg), #fff);
-        color: var(--muted);
-      }
-      img {
-        display: block;
-        max-width: 100%;
-      }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;background:linear-gradient(180deg,var(--bg),#fff);color:var(--muted)}
+  img{display:block;max-width:100%}
 
-      .page {
-        min-height: 100vh;
-        padding: 40px 20px;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-      }
+  .page {
+    min-height:100vh;
+    padding:40px 20px;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+  }
 
-      .wrap {
-        width: 100%;
-        max-width: var(--maxw);
-      }
+  .wrap {
+    width:100%;
+    max-width:var(--maxw);
+  }
 
-      .title {
-        text-align: center;
-        margin: 0 0 18px;
-        font-size: 2.8rem;
-        font-weight: 800;
-        line-height: 1;
-        background: linear-gradient(90deg, var(--accent1), var(--accent2));
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-      .decor {
-        width: 96px;
-        height: 6px;
-        margin: 12px auto 28px;
-        border-radius: 6px;
-        background: linear-gradient(90deg, var(--accent1), #374151);
-      }
+  .title {
+    text-align:center;
+    margin:0 0 18px;
+    font-size:2.8rem;
+    font-weight:800;
+    line-height:1;
+    background: linear-gradient(90deg,var(--accent1),var(--accent2));
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  }
+  .decor { width:96px;height:6px;margin:12px auto 28px;border-radius:6px;background:linear-gradient(90deg,var(--accent1),#374151); }
 
-      /* grid */
-      .grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: var(--gap);
-      }
-      @media (min-width: 700px) {
-        .grid {
-          grid-template-columns: repeat(2, 1fr);
-        }
-      }
-      @media (min-width: 1100px) {
-        .grid {
-          grid-template-columns: repeat(3, 1fr);
-        }
-      }
+  /* grid */
+  .grid {
+    display:grid;
+    grid-template-columns:1fr;
+    gap: var(--gap);
+  }
+  @media(min-width:700px){ .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media(min-width:1100px){ .grid { grid-template-columns: repeat(3, 1fr); } }
 
-      .card {
-        background: var(--glass);
-        border-radius: var(--radius);
-        overflow: hidden;
-        box-shadow: var(--card-shadow);
-        transition: transform 0.22s cubic-bezier(0.2, 0.9, 0.2, 1),
-          box-shadow 0.22s;
-        transform-origin: center;
-        /* animation similar to fade-scale + .in (pure CSS) */
-        opacity: 0;
-        transform: translateY(12px) scale(0.98);
-        animation: fadeUpScale 0.6s cubic-bezier(0.2, 0.9, 0.2, 1) forwards;
-      }
-      .card:hover {
-        transform: translateY(-8px) scale(1.02);
-        box-shadow: 0 24px 60px rgba(2, 6, 23, 0.12);
-      }
+  .card {
+    background: var(--glass);
+    border-radius: var(--radius);
+    overflow:hidden;
+    box-shadow: var(--card-shadow);
+    transition: transform .22s cubic-bezier(.2,.9,.2,1), box-shadow .22s;
+    will-change: transform, opacity;
+    transform-origin:center;
+  }
+  .card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 24px 60px rgba(2,6,23,0.12); }
 
-      /* staggered animation delays */
-      .card:nth-child(1) {
-        animation-delay: 0.12s;
-      }
-      .card:nth-child(2) {
-        animation-delay: 0.22s;
-      }
-      .card:nth-child(3) {
-        animation-delay: 0.32s;
-      }
-      .card:nth-child(4) {
-        animation-delay: 0.42s;
-      }
-      .card:nth-child(5) {
-        animation-delay: 0.52s;
-      }
-      .card:nth-child(6) {
-        animation-delay: 0.62s;
-      }
+  .card img {
+    width:100%;
+    height:320px;
+    object-fit:cover;
+    display:block;
+  }
+  @media(max-width:520px){ .card img{ height:220px } }
 
-      .card img {
-        width: 100%;
-        height: 320px;
-        object-fit: cover;
-      }
-      @media (max-width: 520px) {
-        .card img {
-          height: 220px;
-        }
-      }
+  /* decorative caption (hidden by default; kept for accessibility) */
+  .caption {
+    padding:12px 14px;
+    font-weight:700;
+    color:#0f1724;
+    font-size:14px;
+  }
 
-      .caption {
-        padding: 12px 14px;
-        font-weight: 700;
-        color: #0f1724;
-        font-size: 14px;
-      }
+  /* entrance animations (decorative only) */
+  .fade-scale { opacity:0; transform: translateY(12px) scale(0.98); transition: all .6s cubic-bezier(.2,.9,.2,1); }
+  .fade-scale.in { opacity:1; transform: translateY(0) scale(1); }
 
-      @keyframes fadeUpScale {
-        to {
-          opacity: 1;
-          transform: translateY(0) scale(1);
-        }
-      }
-
-      .card:focus-within,
-      .card a:focus {
-        outline: 3px solid rgba(37, 99, 235, 0.12);
-        outline-offset: 4px;
-      }
-            .btn-add {
-        border: none;
-        border-radius: 999px;
-        padding: 8px 18px;
-        background: linear-gradient(90deg, #2563eb, #06b6d4);
-        color: #ffffff;
-        font-size: 0.9rem;
-        font-weight: 600;
-        cursor: pointer;
-        box-shadow: 0 10px 25px rgba(37, 99, 235, 0.25);
-      }
-
-      .btn-add:active {
-        transform: translateY(1px);
-        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
-      }
-
-    </style>
-  </head>
-  <body>
+  /* quick focus style for keyboard users */
+  .card:focus-within, .card a:focus {
+    outline: 3px solid rgba(37,99,235,0.12);
+    outline-offset: 4px;
+  }
+</style>
+</head>
+<body>
     {% include 'nav.html' %}
-    <main class="page">
-      <div class="wrap">
-        <header>
-          <h1 class="title">Gallery</h1>
-          <div class="decor" aria-hidden="true"></div>
-          {% if request.user.is_authenticated %}
-          <a href = {% url 'gallery-create' %}><button type="button" class="btn-add">+ Add</button></a>
-          {% endif %}
-        </header>
+  <main class="page" id="gallery-page">
+    <div class="wrap">
+      <header>
+        <h1 class="title">Gallery</h1>
+        <div class="decor" aria-hidden="true"></div>
+      </header>
 
-        <section class="grid" aria-label="Gallery images">
-          <!-- Static cards, same look as JS-generated ones -->
-          {% for i in images %}
-          <article class="card">
-            <img src="{{i.photo.url}}" alt="Gallery Image 1" loading="lazy" />
-            <div class="caption">Gallery Image 1</div>
-          </article>
-          {% endfor %}
-        </section>
-      </div>
-    </main>
+      <section id="galleryGrid" class="grid" aria-live="polite" aria-label="Gallery images">
+        <!-- Cards populated by JS -->
+      </section>
+    </div>
+  </main>
+
+  <script>
+    /*
+      Render gallery cards from a JS array (matches your React logic).
+      JS here is only used to create DOM from data and to add entrance animation classes with a stagger.
+      No inputs are handled here; no form or file inputs exist.
+    */
+
+    (function(){
+      // Create images array similar to your original code.
+      // Note: original timestamp-based URLs may not be valid; using stable Unsplash sample images instead.
+      const images = [
+        { id:1, url: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1200&q=80', title:'Gallery Image 1' },
+        { id:2, url: 'https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?w=1200&q=80', title:'Gallery Image 2' },
+        { id:3, url: 'https://images.unsplash.com/photo-1517816743773-6e0fd518b4a6?w=1200&q=80', title:'Gallery Image 3' },
+        { id:4, url: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=80', title:'Gallery Image 4' },
+        { id:5, url: 'https://images.unsplash.com/photo-1477244075012-5cc28286e465?w=1200&q=80', title:'Gallery Image 5' },
+        { id:6, url: 'https://images.unsplash.com/photo-1482192596544-9eb780fc7f66?w=1200&q=80', title:'Gallery Image 6' },
+      ];
+
+      const grid = document.getElementById('galleryGrid');
+
+      images.forEach((img, idx) => {
+        const article = document.createElement('article');
+        article.className = 'card fade-scale';
+        article.style.transitionDelay = (idx * 80) + 'ms';
+
+        // If you later want clickable lightbox, wrap img in <a href="...">; currently static
+        const imageEl = document.createElement('img');
+        imageEl.src = img.url;
+        imageEl.alt = img.title;
+        imageEl.loading = 'lazy';
+
+        const caption = document.createElement('div');
+        caption.className = 'caption';
+        caption.textContent = img.title;
+
+        article.appendChild(imageEl);
+        article.appendChild(caption);
+
+        grid.appendChild(article);
+      });
+
+      // Add entrance animation classes with a small stagger to mimic framer-motion
+      window.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.fade-scale').forEach((el, i) => {
+          setTimeout(() => el.classList.add('in'), 120 + i * 100);
+        });
+      });
+    })();
+  </script>
     {% include 'foot.html' %}
-  </body>
+</body>
 </html>

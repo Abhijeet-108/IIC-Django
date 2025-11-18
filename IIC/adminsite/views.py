@@ -1,6 +1,6 @@
 from django.shortcuts import render , redirect
-from base.models import posts , achievement, organisation , contactOrg , notice , meeting , gallery , iicInfo
-from base.forms import postForm , achievForm , contactOrgForm , organisationForm , meetingForm , galleryForm , noticeForm , iicInfoForm , querys
+from base.models import posts , achievement, organisation , contactOrg , notice
+from base.forms import postForm , achievForm , contactOrgForm , organisationForm
 from django.contrib.auth.models import User
 from base.models import iicInfo
 
@@ -8,19 +8,12 @@ from base.models import iicInfo
 
 def homepage(req):
     notices = notice.objects.all()[:6]
-    meets = meeting.objects.all()[:6]
     info = iicInfo.objects.first()
     if not req.user.is_superuser:
         return redirect('home')
     post = posts.objects.all()
-    context = {"posts" : post, 'iic' : info , 'notices' : notices , 'meets' : meets}
+    context = {"posts" : post, 'iic' : info , 'notices' : notices}
     return render(req , 'adminhome.html' , context)
-
-def profilePage(req):
-    info = iicInfo.objects.first()
-    query = querys.objects.all()
-    context = {'iic' : info , 'query' : query}
-    return render(req , 'adminprofile.html' , context)
 
 def postCreate(req):
     postf = postForm()
@@ -54,7 +47,7 @@ def postDeletion(req , pk):
 def achievCreate(req):
     achievf = achievForm()
     if(req.method == "POST"):
-        achievf = achievForm(req.POST , req.FILES)
+        achievf = achievForm(req.POST)
         if(achievf.is_valid()):
             achievf.save()
         return redirect("admin-site")
@@ -65,7 +58,7 @@ def achievEdit(req , pk):
     achiev = achievement.objects.get(id = pk)
     achievf = achievForm(instance = achiev)
     if(req.method == "POST"):
-        achievf = achievForm(req.POST , req.FILES , instance = achiev)
+        achievf = achievForm(req.POST , instance = achiev)
 
         if achievf.is_valid():
             achievf.save()
@@ -131,98 +124,3 @@ def organisationDeletion(req , pk):
     organisations = organisation.objects.get(id = pk)
     organisations.delete()
     return redirect('admin-site')
-
-# ---------------- Meeting ----------------
-def add_meetform(req):
-    meetform = meetingForm()
-    if req.method == 'POST':
-        meetform = meetingForm(req.POST)
-        if meetform.is_valid():
-            meetform.save()
-            return redirect('meet')
-    else:
-        meetform = meetingForm()
-    
-    return render(req, 'form1.html', {'meetf': meetform})
-
-def update_meetform(req, pk):
-    meetform = meeting.objects.get(id = pk)
-    update_meetformform = meetingForm(instance=meetform)
-    if req.method == 'POST':
-        update_meetformform = meetingForm(req.POST, instance=meetform)
-        if update_meetformform.is_valid():
-            update_meetformform.save()
-            return redirect('meet')
-        else:
-            update_meetformform = meetingForm()
-    
-    return render(req, 'form1.html', {'meetf': update_meetformform})
-    
-def delete_meetform(req, pk):
-    meetform = meeting.objects.get(id = pk)
-    meetform.delete()
-    return redirect('meet')
-
-# ---------------- Gallery ----------------
-
-def galleryCreate(req):
-    galleryf = galleryForm()
-    info = iicInfo.objects.first()
-    if(req.method == "POST"):
-        galleryf = galleryForm(req.POST , req.FILES)
-        if(galleryf.is_valid()):
-            galleryf.save()
-        return redirect("gallery")
-    context = {'galleryf' : galleryf, 'iic' : info}
-    return render(req , "form1.html" , context)
-
-def galleryDeletion(req , pk):
-    post = gallery.objects.get(id = pk)
-    post.delete()
-    return redirect('gallery')
-
-# ---------------- Notice ----------------
-
-def noticeCreate(req):
-    noticef = noticeForm()
-    info = iicInfo.objects.first()
-    if(req.method == "POST"):
-        noticef = noticeForm(req.POST , req.FILES)
-        if(noticef.is_valid()):
-            noticef.save()
-        return redirect("notice")
-    context = {'noticef' : noticef, 'iic' : info}
-    return render(req , "form1.html" , context)
-
-def noticeEdit(req , pk):
-    notices = notice.objects.get(id = pk)
-    noticef = noticef(instance = notices)
-    info = iicInfo.objects.first()
-    if(req.method == "POST"):
-        noticef = noticeForm(req.POST , req.FILES , instance = notices)
-
-        if noticef.is_valid():
-            noticef.save()
-            return redirect('notice')
-    context = {'noticef' : noticef, 'iic' : info}
-    return render(req,"form1.html",context)
-
-def noticeDeletion(req , pk):
-    post = notice.objects.get(id = pk)
-    post.delete()
-    return redirect('notice')
-
-# ---------------- IIC-Info ----------------
-
-def iicInfoEdit(req):
-    info = iicInfo.objects.first()
-    iicf = iicInfoForm(instance = info)
-    if(req.method == "POST"):
-        iicf = iicInfoForm(req.POST , req.FILES , instance = info)
-
-        if iicf.is_valid():
-            iicf.save()
-            return redirect('admin-profile')
-    context = {'iicf' : iicf, 'iic' : info}
-    return render(req,"form1.html",context)
-

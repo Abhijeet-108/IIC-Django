@@ -66,6 +66,7 @@ def basicDeletion(req , pk):
 #------------------- patent----------------------
 def add_form(req):
     form = patentForm()
+    info = iicInfo.objects.first()
     if req.method == 'POST':
         form = patentForm(req.POST)
         if form.is_valid():
@@ -74,11 +75,12 @@ def add_form(req):
     else:
         form = patentForm()
     
-    return render(req, 'form.html', {'patentf': form})
+    return render(req, 'form.html', {'form': form, 'iic' : info})
 
 def update_form(req, pk):
     form = patent.objects.get(id = pk)
     update_form = patentForm(instance=form)
+    info = iicInfo.objects.first()
     if req.method == 'POST':
         update_form = patentForm(req.POST, instance=form)
         if update_form.is_valid():
@@ -87,7 +89,7 @@ def update_form(req, pk):
         else:
             update_form = patentForm()
     
-    return render(req, 'form.html', {'patentf': update_form})
+    return render(req, 'form.html', {'form': update_form, 'iic' : info})
     
 def delete_form(req, pk):
     form = patent.objects.get(id = pk)
@@ -97,6 +99,7 @@ def delete_form(req, pk):
 # -----------------dept--------------------------
 def add_deptform(req):
     deptform = deptForm()
+    info = iicInfo.objects.first()
     if req.method == 'POST':
         deptform = deptForm(req.POST)
         if deptform.is_valid():
@@ -105,10 +108,11 @@ def add_deptform(req):
     else:
         deptform = deptForm()
     
-    return render(req, 'form.html', {'form': deptform})
+    return render(req, 'form.html', {'form': deptform, 'iic' : info})
 
 def update_deptform(req, pk):
     deptform = dept.objects.get(id = pk)
+    info = iicInfo.objects.first()
     update_deptform = deptForm(instance=deptform)
     if req.method == 'POST':
         update_deptform = deptForm(req.POST, instance=deptform)
@@ -118,7 +122,7 @@ def update_deptform(req, pk):
         else:
             update_deptform = deptForm()
     
-    return render(req, 'form.html', {'form': update_deptform})
+    return render(req, 'form.html', {'form': update_deptform, 'iic' : info})
     
 def delete_deptform(req, pk):
     deptform = dept.objects.get(id = pk)
@@ -128,6 +132,7 @@ def delete_deptform(req, pk):
 # ----------------bookForm------------------------
 def add_bookform(req):
     bookform = bookForm()
+    info = iicInfo.objects.first()
     if req.method == 'POST':
         bookform = bookForm(req.POST)
         if bookform.is_valid():
@@ -136,11 +141,12 @@ def add_bookform(req):
     else:
         bookform = bookForm()
     
-    return render(req, 'form.html', {'form': bookform})
+    return render(req, 'form.html', {'form': bookform, 'iic' : info})
 
 def update_bookform(req, pk):
     bookform = book.objects.get(id = pk)
     update_bookform = deptForm(instance=bookform)
+    info = iicInfo.objects.first()
     if req.method == 'POST':
         update_bookform = deptForm(req.POST, instance=bookform)
         if update_bookform.is_valid():
@@ -149,7 +155,7 @@ def update_bookform(req, pk):
         else:
             update_bookform = deptForm()
     
-    return render(req, 'form.html', {'form': update_bookform})
+    return render(req, 'form.html', {'form': update_bookform, 'iic' : info})
     
 def delete_bookform(req, pk):
     bookform = book.objects.get(id = pk)
@@ -159,6 +165,7 @@ def delete_bookform(req, pk):
 # ---------------- Book Chapter ----------------
 def add_bookChapterform(req):
     bookchapterform = bookChapterForm()
+    info = iicInfo.objects.first()
     if req.method == 'POST':
         bookchapterform = bookChapterForm(req.POST)
         if bookchapterform.is_valid():
@@ -167,10 +174,11 @@ def add_bookChapterform(req):
     else:
         bookchapterform = bookChapterForm()
     
-    return render(req, 'form.html', {'form': bookchapterform})
+    return render(req, 'form.html', {'form': bookchapterform, 'iic' : info})
 
 def update_bookChapterform(req, pk):
     bookchapterform = bookChapter.objects.get(id = pk)
+    info = iicInfo.objects.first()
     update_bookchapterform = bookChapterForm(instance=bookchapterform)
     if req.method == 'POST':
         update_bookchapterform = bookChapterForm(req.POST, instance=bookchapterform)
@@ -180,7 +188,7 @@ def update_bookChapterform(req, pk):
         else:
             update_bookchapterform = bookChapterForm()
     
-    return render(req, 'form.html', {'form': update_bookchapterform})
+    return render(req, 'form.html', {'form': update_bookchapterform, 'iic' : info})
     
 def delete_bookChapterform(req, pk):
     bookchapterform = bookChapter.objects.get(id = pk)
@@ -191,6 +199,7 @@ def delete_bookChapterform(req, pk):
 # ---------------- Faculty ----------------
 def add_facultform(req):
     facultform = facultForm()
+    info = iicInfo.objects.first()
     if req.method == 'POST':
         facultform = facultForm(req.POST)
         if facultform.is_valid():
@@ -199,10 +208,11 @@ def add_facultform(req):
     else:
         facultform = facultForm()
     
-    return render(req, 'form.html', {'form': facultform})
+    return render(req, 'form.html', {'form': facultform, 'iic' : info})
 
 def update_facultform(req, pk):
     facultform = facult.objects.get(id = pk)
+    info = iicInfo.objects.first()
     update_facultform = facultForm(instance=facultform)
     if req.method == 'POST':
         update_facultform = facultForm(req.POST, instance=facultform)
@@ -212,7 +222,7 @@ def update_facultform(req, pk):
         else:
             update_facultform = facultForm()
     
-    return render(req, 'form.html', {'form': update_facultform})
+    return render(req, 'form.html', {'form': update_facultform, 'iic' : info})
     
 def delete_facultform(req, pk):
     facultform = facult.objects.get(id = pk)
@@ -223,6 +233,7 @@ def delete_facultform(req, pk):
 # ---------------- Suff ----------------
 def add_suffform(req):
     suffform = suffForm()
+    info = iicInfo.objects.first()
     if req.method == 'POST':
         suffform = suffForm(req.POST)
         if suffform.is_valid():
@@ -231,11 +242,12 @@ def add_suffform(req):
     else:
         suffform = suffForm()
     
-    return render(req, 'form.html', {'form': suffform})
+    return render(req, 'form.html', {'form': suffform, 'iic' : info})
 
 def update_suffform(req, pk):
     suffform = suff.objects.get(id = pk)
     update_suffform = suffForm(instance=suffform)
+    info = iicInfo.objects.first()
     if req.method == 'POST':
         update_suffform = suffForm(req.POST, instance=suffform)
         if update_suffform.is_valid():
@@ -244,7 +256,7 @@ def update_suffform(req, pk):
         else:
             update_suffform = suffForm()
     
-    return render(req, 'form.html', {'form': update_suffform})
+    return render(req, 'form.html', {'form': update_suffform, 'iic' : info})
     
 def delete_suffform(req, pk):
     suffform = suff.objects.get(id = pk)
@@ -255,6 +267,7 @@ def delete_suffform(req, pk):
 # ---------------- Copyright ----------------
 def add_copyrightform(req):
     copyrightform = copyrightForm()
+    info = iicInfo.objects.first()
     if req.method == 'POST':
         copyrightform = copyrightForm(req.POST)
         if copyrightform.is_valid():
@@ -263,10 +276,11 @@ def add_copyrightform(req):
     else:
         copyrightform = copyrightForm()
     
-    return render(req, 'form.html', {'form': copyrightform})
+    return render(req, 'form.html', {'form': copyrightform, 'iic' : info})
 
 def update_copyrightform(req, pk):
     copyrightform = copyright.objects.get(id = pk)
+    info = iicInfo.objects.first()
     update_copyrightform = copyrightForm(instance=copyrightform)
     if req.method == 'POST':
         update_copyrightform = copyrightForm(req.POST, instance=copyrightform)
@@ -276,7 +290,7 @@ def update_copyrightform(req, pk):
         else:
             update_copyrightform = copyrightForm()
     
-    return render(req, 'form.html', {'form': update_copyrightform})
+    return render(req, 'form.html', {'form': update_copyrightform, 'iic' : info})
     
 def delete_copyrightform(req, pk):
     copyrightform = copyright.objects.get(id = pk)
@@ -287,6 +301,7 @@ def delete_copyrightform(req, pk):
 # ---------------- Conference ----------------
 def add_conferenceform(req):
     conferenceform = conferenceForm()
+    info = iicInfo.objects.first()
     if req.method == 'POST':
         conferenceform = conferenceForm(req.POST)
         if conferenceform.is_valid():
@@ -295,10 +310,11 @@ def add_conferenceform(req):
     else:
         conferenceform = conferenceForm()
     
-    return render(req, 'form.html', {'form': conferenceform})
+    return render(req, 'form.html', {'form': conferenceform, 'iic' : info})
 
 def update_conferenceform(req, pk):
     conferenceform = conference.objects.get(id = pk)
+    info = iicInfo.objects.first()
     update_conferenceform = conferenceForm(instance=conferenceform)
     if req.method == 'POST':
         update_conferenceform = conferenceForm(req.POST, instance=conferenceform)
@@ -308,7 +324,7 @@ def update_conferenceform(req, pk):
         else:
             update_conferenceform = conferenceForm()
     
-    return render(req, 'form.html', {'form': update_conferenceform})
+    return render(req, 'form.html', {'form': update_conferenceform, 'iic' : info})
     
 def delete_conferenceform(req, pk):
     conferenceform = conference.objects.get(id = pk)
@@ -319,6 +335,7 @@ def delete_conferenceform(req, pk):
 # ---------------- Journal ----------------
 def add_journalform(req):
     journalform = journalForm()
+    info = iicInfo.objects.first()
     if req.method == 'POST':
         journalform = journalForm(req.POST)
         if journalform.is_valid():
@@ -327,10 +344,11 @@ def add_journalform(req):
     else:
         journalform = journalForm()
     
-    return render(req, 'form.html', {'form': journalform})
+    return render(req, 'form.html', {'form': journalform, 'iic' : info})
 
 def update_journalform(req, pk):
     journalform = journal.objects.get(id = pk)
+    info = iicInfo.objects.first()
     update_journalform = journalForm(instance=journalform)
     if req.method == 'POST':
         update_journalform = journalForm(req.POST, instance=journalform)
@@ -340,7 +358,7 @@ def update_journalform(req, pk):
         else:
             update_journalform = journalForm()
     
-    return render(req, 'form.html', {'form': update_journalform})
+    return render(req, 'form.html', {'form': update_journalform, 'iic' : info})
     
 def delete_journalform(req, pk):
     journalform = journal.objects.get(id = pk)
