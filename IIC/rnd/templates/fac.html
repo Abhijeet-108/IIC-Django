@@ -48,12 +48,22 @@
   .link{color:var(--accent1);text-decoration:underline}
   .wrap{word-break:break-word;white-space:normal;max-width:100%}
 </style>
-
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-pap0X...replace-with-current-integrity..."
+      crossorigin="anonymous" referrerpolicy="no-referrer" />
 <body>
 {% include 'nav.html' %}
 
+
+
 <section class="about" id="about">
+  
+  
   <div class="container">
+    <button type="button" class="back-btn" onclick="history.back()" style="padding:5px; border:none; background:transparent; font-size:16px; color:var(--muted); cursor:pointer; margin-bottom:12px">
+      &#8592; Back
+    </button>
 
     <div style="display:grid;grid-template-columns:320px 1fr;gap:18px">
       <!-- SIDEBAR -->
@@ -145,42 +155,62 @@
             <div class="small">Patents filed / granted</div>
           </div>
 
+          {% if request.user.is_authenticated %}
+          <div style="text-decoration: none; padding-bottom: 20px">
+            <a href="{% url "form" %}" style="text-decoration: none; padding-bottom: 20px">
+              <button style="background: #3788d4; color: #fff; border-radius: 5px; padding:10px 20px;">Add</button>
+            </a>
+          </div>
+          {% endif %}
+
           {% if patent %}
             {% for i in patent %}
-            <div style="margin-bottom:12px; padding:12px; border-radius:8px; background:#fbfbfe; border:1px solid rgba(0,0,0,0.03)">
-              <div class="grid-2">
+              <div style=" border: 1px solid rgba(0,0,0,0.03); border-radius: 8px; padding: 12px; margin-bottom: 12px; background: #fbfbfe;">
+                {% if request.user.is_authenticated %}
                 <div>
-                  <label>Patent Number</label>
-                  <div class="display-box">{{ i.patentNumber|default:"—" }}</div>
+                  <a href="{% url 'updateform' i.id %}">
+                    <button style="background: #f0ad4e; color: #fff; border-radius: 5px; padding:5px 10px; margin-right:5px">✍</button>
+                  </a>
+                  <a href="{% url 'deletePatentform' i.id %}">
+                    <button style="background: #d9534f; color: #fff; border-radius: 5px; padding:5px 10px;">Delete</button>
+                  </a>
                 </div>
-                <div>
-                  <label>Area</label>
-                  <div class="display-box">{{ i.area|default:"—" }}</div>
-                </div>
-              </div>
+                {% endif %}
+                <div style="margin-bottom:12px; padding:12px; border-radius:8px; background:#fbfbfe; border:1px solid rgba(0,0,0,0.03)">
+                  <div class="grid-2">
+                    <div>
+                      <label>Patent Number</label>
+                      <div class="display-box">{{ i.patentNumber|default:"—" }}</div>
+                    </div>
+                    <div>
+                      <label>Area</label>
+                      <div class="display-box">{{ i.area|default:"—" }}</div>
+                    </div>
+                  </div>
 
-              <div class="grid-2">
-                <div>
-                  <label>Domain</label>
-                  <div class="display-box">{{ i.domain|default:"—" }}</div>
-                </div>
-                <div>
-                  <label>Title</label>
-                  <div class="display-box">{{ i.title|default:"—" }}</div>
-                </div>
-              </div>
+                  <div class="grid-2">
+                    <div>
+                      <label>Domain</label>
+                      <div class="display-box">{{ i.domain|default:"—" }}</div>
+                    </div>
+                    <div>
+                      <label>Title</label>
+                      <div class="display-box">{{ i.title|default:"—" }}</div>
+                    </div>
+                  </div>
 
-              <div class="grid-2">
-                <div>
-                  <label>Year</label>
-                  <div class="display-box">{{ i.year|default:"—" }}</div>
-                </div>
-                <div>
-                  <label>Status</label>
-                  <div class="display-box">{{ i.get_stat_display|default:"—" }}</div>
+                  <div class="grid-2">
+                    <div>
+                      <label>Year</label>
+                      <div class="display-box">{{ i.year|default:"—" }}</div>
+                    </div>
+                    <div>
+                      <label>Status</label>
+                      <div class="display-box">{{ i.get_stat_display|default:"—" }}</div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
             {% endfor %}
           {% else %}
             <p class="empty">No patents recorded.</p>
@@ -194,9 +224,28 @@
             <div class="small">Registered / pending copyrights</div>
           </div>
 
+          {% if request.user.is_authenticated %}
+          <div style="text-decoration: none; padding-bottom: 20px">
+            <a href="{% url "copyrightform" %}" style="text-decoration: none; padding-bottom: 20px">
+              <button style="background: #3788d4; color: #fff; border-radius: 5px; padding:10px 20px;">ADD</button>
+            </a>
+          </div>
+          {% endif %}
+
           {% if copyrights %}
             {% for i in copyrights %}
-            <div style="margin-bottom:12px; padding:12px; border-radius:8px; background:#fbfbfe; border:1px solid rgba(0,0,0,0.03)">
+            <div style=" border: 1px solid rgba(0,0,0,0.03); border-radius: 8px; padding: 12px; margin-bottom: 12px; background: #fbfbfe;">
+              {% if request.user.is_authenticated %}
+              <div>
+                <a href="{% url 'updatecopyrightform' i.id %}">
+                  <button style="background: #f0ad4e; color: #fff; border-radius: 5px; padding:5px 10px; margin-right:5px">✍</button>
+                </a>
+                <a href="{% url 'deletecopyrightform' i.id %}">
+                  <button style="background: #d9534f; color: #fff; border-radius: 5px; padding:5px 10px;">Delete</button>
+                </a>
+              </div>
+              {% endif %}
+              <div style="margin-bottom:12px; padding:12px; border-radius:8px; background:#fbfbfe; border:1px solid rgba(0,0,0,0.03)">
               <div class="grid-2">
                 <div>
                   <label>Copyright Number</label>
@@ -230,6 +279,7 @@
                 </div>
               </div>
             </div>
+          </div>
             {% endfor %}
           {% else %}
             <p class="empty">No copyrights recorded.</p>
@@ -243,8 +293,27 @@
             <div class="small">Authored / edited books</div>
           </div>
 
+          {% if request.user.is_authenticated %}
+          <div style="text-decoration: none; padding-bottom: 20px">
+            <a href="{% url "bookform" %}" style="text-decoration: none; padding-bottom: 20px">
+              <button style="background: #3788d4; color: #fff; border-radius: 5px; padding:10px 20px;">Add</button>
+            </a>
+          </div>
+          {% endif %}
+
           {% if books %}
             {% for b in books %}
+            <div style=" border: 1px solid rgba(0,0,0,0.03); border-radius: 8px; padding: 12px; margin-bottom: 12px; background: #fbfbfe;">
+              {% if request.user.is_authenticated %}
+              <div>
+                <a href="{% url 'updatebookform' b.id %}">
+                  <button style="background: #f0ad4e; color: #fff; border-radius: 5px; padding:5px 10px; margin-right:5px">✍</button>
+                </a>
+                <a href="{% url 'deletebookform' b.id %}">
+                  <button style="background: #d9534f; color: #fff; border-radius: 5px; padding:5px 10px;">Delete</button>
+                </a>
+              </div>
+              {% endif %}
             <div style="margin-bottom:12px; padding:12px; border-radius:8px; background:#fbfbfe; border:1px solid rgba(0,0,0,0.03)">
               <div class="grid-2">
                 <div>
@@ -276,6 +345,7 @@
                 <div></div>
               </div>
             </div>
+            </div>
             {% endfor %}
           {% else %}
             <p class="empty">No books recorded.</p>
@@ -289,8 +359,27 @@
             <div class="small">Chapters in edited volumes</div>
           </div>
 
+          {% if request.user.is_authenticated %}
+          <div style="text-decoration: none; padding-bottom: 20px">
+            <a href="{% url "bookChapterform" %}" style="text-decoration: none; padding-bottom: 20px">
+              <button style="background: #3788d4; color: #fff; border-radius: 5px; padding:10px 20px;">Add</button>
+            </a>
+          </div>
+          {% endif %}
+
           {% if bookchapters %}
             {% for c in bookchapters %}
+            <div style=" border: 1px solid rgba(0,0,0,0.03); border-radius: 8px; padding: 12px; margin-bottom: 12px; background: #fbfbfe;">
+              {% if request.user.is_authenticated %}
+              <div>
+                <a href="{% url 'updatebookChapterform' c.id %}">
+                  <button style="background: #f0ad4e; color: #fff; border-radius: 5px; padding:5px 10px; margin-right:5px">✍</button>
+                </a>
+                <a href="{% url 'deletebookChapterform' c.id %}">
+                  <button style="background: #d9534f; color: #fff; border-radius: 5px; padding:5px 10px;">Delete</button>
+                </a>
+              </div>
+              {% endif %}
             <div style="margin-bottom:12px; padding:12px; border-radius:8px; background:#fbfbfe; border:1px solid rgba(0,0,0,0.03)">
               <div class="grid-2">
                 <div>
@@ -342,6 +431,7 @@
                 </div>
               </div>
             </div>
+            </div>
             {% endfor %}
           {% else %}
             <p class="empty">No book chapters recorded.</p>
@@ -355,8 +445,27 @@
             <div class="small">Peer-reviewed articles</div>
           </div>
 
+          {% if request.user.is_authenticated %}
+          <div style="text-decoration: none; padding-bottom: 20px">
+            <a href="{% url "journalform" %}" style="text-decoration: none; padding-bottom: 20px">
+              <button style="background: #3788d4; color: #fff; border-radius: 5px; padding:10px 20px;">Add</button>
+            </a>
+          </div>
+          {% endif %}
+
           {% if journals %}
             {% for j in journals %}
+            <div style=" border: 1px solid rgba(0,0,0,0.03); border-radius: 8px; padding: 12px; margin-bottom: 12px; background: #fbfbfe;">
+              {% if request.user.is_authenticated %}
+              <div>
+                <a href="{% url 'updatejournalform' j.id %}">
+                  <button style="background: #f0ad4e; color: #fff; border-radius: 5px; padding:5px 10px; margin-right:5px">✍</button>
+                </a>
+                <a href="{% url 'deletejournalform' j.id %}">
+                  <button style="background: #d9534f; color: #fff; border-radius: 5px; padding:5px 10px;">Delete</button>
+                </a>
+              </div>
+              {% endif %}
             <div style="margin-bottom:12px; padding:12px; border-radius:8px; background:#fbfbfe; border:1px solid rgba(0,0,0,0.03)">
               <div class="grid-2">
                 <div>
@@ -413,6 +522,7 @@
                 <div></div>
               </div>
             </div>
+            </div>
             {% endfor %}
           {% else %}
             <p class="empty">No journal articles recorded.</p>
@@ -426,8 +536,27 @@
             <div class="small">Conference / proceedings papers</div>
           </div>
 
+          {% if request.user.is_authenticated %}
+          <div style="text-decoration: none; padding-bottom: 20px">
+            <a href="{% url "conferenceform" %}" style="text-decoration: none; padding-bottom: 20px">
+              <button style="background: #3788d4; color: #fff; border-radius: 5px; padding:10px 20px;">Add</button>
+            </a>
+          </div>
+          {% endif %}
+
           {% if conferences %}
             {% for conf in conferences %}
+            <div style=" border: 1px solid rgba(0,0,0,0.03); border-radius: 8px; padding: 12px; margin-bottom: 12px; background: #fbfbfe;">
+              {% if request.user.is_authenticated %}
+              <div>
+                <a href="{% url 'updateconferenceform' conf.id %}">
+                  <button style="background: #f0ad4e; color: #fff; border-radius: 5px; padding:5px 10px; margin-right:5px">✍</button>
+                </a>
+                <a href="{% url 'deleteconferenceform' conf.id %}">
+                  <button style="background: #d9534f; color: #fff; border-radius: 5px; padding:5px 10px;">Delete</button>
+                </a>
+              </div>
+              {% endif %}
             <div style="margin-bottom:12px; padding:12px; border-radius:8px; background:#fbfbfe; border:1px solid rgba(0,0,0,0.03)">
               <div class="grid-2">
                 <div>
@@ -484,6 +613,11 @@
 
         <!-- (Optional) actions area; kept read-only -->
         <div class="card fade" style="display:flex;justify-content:flex-end;align-items:center">
+          {% if request.user.is_authenticated %}
+          <div class="actions" style="width:100%;justify-content:flex-end">
+            <button type="button" class="btn ghost" onclick="location.reload()">Download</button>
+          </div>
+          {% endif %}
           <div class="actions" style="width:100%;justify-content:flex-end">
             <button type="button" class="btn ghost" onclick="location.reload()">Refresh</button>
           </div>

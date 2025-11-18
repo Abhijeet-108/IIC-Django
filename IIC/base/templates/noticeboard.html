@@ -1,227 +1,192 @@
 {% load static %}
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>IIC — Notice Board</title>
-    <meta
-      name="description"
-      content="Institution Innovation Council — Notice Board"
-    />
-    <style>
-      :root {
-        --bg: #f7f8fb;
-        --accent1: #2563eb;
-        --accent2: #7c3aed;
-        --muted: #475569;
-        --muted-2: #6b7280;
-        --glass: rgba(255, 255, 255, 0.95);
-        --card-shadow: 0 12px 36px rgba(2, 6, 23, 0.06);
-        --radius: 16px;
-        --maxw: 900px;
-      }
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>IIC — Notice Board</title>
+<meta name="description" content="Institution Innovation Council — Notice Board" />
+<style>
+  :root{
+    --bg: #f7f8fb;
+    --accent1: #2563eb;
+    --accent2: #7c3aed;
+    --muted: #475569;
+    --muted-2: #6b7280;
+    --glass: rgba(255,255,255,0.95);
+    --card-shadow: 0 12px 36px rgba(2,6,23,0.06);
+    --radius: 16px;
+    --maxw: 900px;
+  }
 
-      * {
-        box-sizing: border-box;
-      }
-      html,
-      body {
-        height: 100%;
-        margin: 0;
-        font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto,
-          "Helvetica Neue", Arial;
-        background: linear-gradient(180deg, var(--bg), #ffffff);
-        color: var(--muted);
-        -webkit-font-smoothing: antialiased;
-      }
-      a {
-        color: inherit;
-        text-decoration: none;
-      }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;background:linear-gradient(180deg,var(--bg),#ffffff);color:var(--muted);-webkit-font-smoothing:antialiased}
+  a{color:inherit}
 
-      .page {
-        min-height: 100vh;
-        padding: 40px 20px;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-      }
+  .page {
+    min-height:100vh;
+    padding:40px 20px;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+  }
 
-      .wrap {
-        width: 100%;
-        max-width: var(--maxw);
-      }
+  .wrap {
+    width:100%;
+    max-width:var(--maxw);
+  }
 
-      h1.title {
-        margin: 0 0 12px;
-        font-size: 2.8rem;
-        font-weight: 800;
-        text-align: center;
-        background: linear-gradient(90deg, var(--accent1), var(--accent2));
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-      .decor {
-        width: 96px;
-        height: 6px;
-        margin: 12px auto 24px;
-        border-radius: 6px;
-        background: linear-gradient(90deg, var(--accent1), #374151);
-      }
+  h1.title {
+    margin:0 0 12px;
+    font-size:2.8rem;
+    font-weight:800;
+    text-align:center;
+    background: linear-gradient(90deg,var(--accent1),var(--accent2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .decor { width:96px;height:6px;margin:12px auto 24px;border-radius:6px;background:linear-gradient(90deg,var(--accent1),#374151); }
 
-      .notices {
-        display: flex;
-        flex-direction: column;
-        gap: 18px;
-        margin-top: 16px;
-      }
+  .notices {
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+  }
 
-      .card {
-        background: var(--glass);
-        border-radius: var(--radius);
-        padding: 18px;
-        box-shadow: var(--card-shadow);
-        border: 1px solid rgba(0, 0, 0, 0.04);
-        transition: transform 0.18s ease, box-shadow 0.18s ease,
-          opacity 0.5s ease;
-        opacity: 0;
-        transform: translateY(12px);
-        animation: fadeInUp 0.6s cubic-bezier(0.2, 0.9, 0.2, 1) forwards;
-      }
-      .card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 20px 48px rgba(2, 6, 23, 0.08);
-      }
+  .card {
+    background:var(--glass);
+    border-radius:var(--radius);
+    padding:18px;
+    box-shadow:var(--card-shadow);
+    border:1px solid rgba(0,0,0,0.04);
+    transition: transform .18s ease, box-shadow .18s ease, opacity .5s ease;
+  }
+  .card:hover { transform: translateY(-6px); box-shadow: 0 20px 48px rgba(2,6,23,0.08); }
 
-      /* staggered animation like JS version */
-      .card:nth-child(1) {
-        animation-delay: 0.15s;
-      }
-      .card:nth-child(2) {
-        animation-delay: 0.3s;
-      }
-      .card:nth-child(3) {
-        animation-delay: 0.45s;
-      }
+  .card .head {
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:12px;
+    margin-bottom:8px;
+  }
+  .card h3 { margin:0; font-size:1.15rem; color:#0f1724; }
+  .meta {
+    display:flex;
+    gap:8px;
+    align-items:center;
+    color:var(--muted-2);
+    font-size:0.95rem;
+    white-space:nowrap;
+  }
 
-      .card .head {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        gap: 12px;
-        margin-bottom: 8px;
-      }
-      .card h3 {
-        margin: 0;
-        font-size: 1.15rem;
-        color: #0f1724;
-      }
-      .meta {
-        display: flex;
-        gap: 8px;
-        align-items: center;
-        color: var(--muted-2);
-        font-size: 0.95rem;
-        white-space: nowrap;
-      }
+  .meta svg { width:18px; height:18px; flex-shrink:0; color:var(--muted-2); }
 
-      .meta svg {
-        width: 18px;
-        height: 18px;
-        flex-shrink: 0;
-        color: var(--muted-2);
-      }
+  .card p { margin:0; color:var(--muted); line-height:1.6; }
 
-      .card p {
-        margin: 0;
-        color: var(--muted);
-        line-height: 1.6;
-      }
+  /* entrance animation (decorative only) */
+  .fade { opacity:0; transform: translateY(12px); transition: all .6s cubic-bezier(.2,.9,.2,1); }
+  .fade.in { opacity:1; transform:none; }
 
-      /* header animation */
-      .header {
-        opacity: 0;
-        transform: translateY(10px);
-        animation: fadeInUp 0.6s cubic-bezier(0.2, 0.9, 0.2, 1) forwards;
-        animation-delay: 0.05s;
-      }
-
-      @keyframes fadeInUp {
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      /* responsive */
-      @media (max-width: 520px) {
-        h1.title {
-          font-size: 1.9rem;
-        }
-        .card {
-          padding: 14px;
-        }
-      }
-      .btn-add {
-        border: none;
-        border-radius: 999px;
-        padding: 8px 18px;
-        background: linear-gradient(90deg, #2563eb, #06b6d4);
-        color: #ffffff;
-        font-size: 0.9rem;
-        font-weight: 600;
-        cursor: pointer;
-        box-shadow: 0 10px 25px rgba(37, 99, 235, 0.25);
-      }
-
-      .btn-add:active {
-        transform: translateY(1px);
-        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
-      }
-    </style>
-  </head>
-  <body>
+  /* responsive */
+  @media (max-width:520px){
+    h1.title { font-size:1.9rem; }
+    .card { padding:14px; }
+  }
+</style>
+</head>
+<body>
     {% include 'nav.html' %}
-    <main class="page">
-      <div class="wrap">
-        <header class="header">
-          <h1 class="title">Notice Board</h1>
-          <div class="decor" aria-hidden="true"></div>
-        {% if request.user.is_authenticated %}
-        <a href = {% url 'notice-create' %}><button type="button" class="btn-add">+ Add</button></a>
-        {% endif %}
-        </header>
+  <main class="page" id="notice-page">
+    <div class="wrap">
+      <header class="fade" id="page-header">
+        <h1 class="title">Notice Board</h1>
+        <div class="decor" aria-hidden="true"></div>
+      </header>
 
-        <section class="notices" aria-label="Notices">
-          {% for i in notices %}
-          <!-- Notice 1 -->
-          <article class="card" aria-labelledby="notice-1-title">
-            <div class="head">
-              <h3 id="notice-1-title">{{i.headline}}</h3>
-              <div class="meta">
-                <!-- calendar icon -->
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="1.6"
-                  aria-hidden="true"
-                >
-                  <rect x="3" y="4" width="18" height="18" rx="2"></rect>
-                  <path d="M16 2v4M8 2v4M3 10h18"></path>
-                </svg>
-                <span>20 Jan 2024</span>
-              </div>
+      <section class="notices" id="notices" aria-live="polite" style="margin-top:16px;">
+        <!-- Notice cards will be injected here by JS -->
+      </section>
+    </div>
+  </main>
+
+  <script>
+    // Decorative + rendering JS only (no forms)
+    (function(){
+      // Notice data (matches your React component)
+      const notices = [
+        { id: 1, title: 'Hackathon 2024 Registration Open', date: '2024-01-20', content: 'Registration for the annual IIC Hackathon 2024 is now open.' },
+        { id: 2, title: 'Innovation Workshop Scheduled', date: '2024-01-18', content: 'An innovation workshop will be conducted on February 1, 2024.' },
+        { id: 3, title: 'Patent Filing Assistance Available', date: '2024-01-15', content: 'The IIC is providing assistance for patent filing.' },
+      ];
+
+      const container = document.getElementById('notices');
+
+      // helper: format date to locale string (you can customize locale)
+      function formatDate(d) {
+        try {
+          const dt = new Date(d);
+          return dt.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+        } catch (e) {
+          return d;
+        }
+      }
+
+      // render each notice as a card
+      notices.forEach((n, i) => {
+        const card = document.createElement('article');
+        card.className = 'card fade';
+        card.style.transitionDelay = (i * 80) + 'ms';
+        card.setAttribute('role','article');
+        card.setAttribute('aria-labelledby', `notice-${n.id}-title`);
+
+        card.innerHTML = `
+          <div class="head">
+            <h3 id="notice-${n.id}-title">${escapeHtml(n.title)}</h3>
+            <div class="meta" aria-hidden="false">
+              ${calendarIconSvg()}
+              <span>${escapeHtml(formatDate(n.date))}</span>
             </div>
-            <p>{{i.description}}</p>
-          </article>
-          {% endfor %}
-        </section>
-      </div>
-    </main>
+          </div>
+          <p>${escapeHtml(n.content)}</p>
+        `;
+
+        container.appendChild(card);
+      });
+
+      // decorative entrance animation (staggered)
+      window.addEventListener('DOMContentLoaded', () => {
+        // Animate header first
+        const header = document.getElementById('page-header');
+        if (header) setTimeout(() => header.classList.add('in'), 80);
+
+        // then notice cards
+        const cards = document.querySelectorAll('.notices .fade');
+        cards.forEach((el, idx) => {
+          setTimeout(() => el.classList.add('in'), 180 + idx * 100);
+        });
+      });
+
+      // small SVG for calendar (keeps look consistent with FiCalendar)
+      function calendarIconSvg() {
+        return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" aria-hidden="true">
+          <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+          <path d="M16 2v4M8 2v4M3 10h18"></path>
+        </svg>`;
+      }
+
+      // escape text to avoid XSS (we control the data here)
+      function escapeHtml(str) {
+        return String(str)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+    })();
+  </script>
     {% include 'foot.html' %}
-  </body>
+</body>
 </html>

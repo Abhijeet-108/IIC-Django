@@ -170,6 +170,9 @@
   {% include 'nav.html' %}
 <section class="about" id="about">
   <div class="container">
+    <button type="button" class="back-btn" onclick="history.back()" style="padding:5px; border:none; background:transparent; font-size:16px; color:var(--muted); cursor:pointer; margin-bottom:12px">
+      &#8592; Back
+    </button>
     <h2 style="text-align:center;margin-bottom:14px; color: black">{{ depart }}</h2>
 
     <div class="about-content">
@@ -186,7 +189,7 @@
             </div>
 
             <h3 id="fac-name-{{ i.id }}">{{ i.suf }} {{ i.name }}</h3>
-            {# optional role/position — leave blank if not set (keeps logic same) #}
+            
             {% if i.designation %}
               <div class="role">{{ i.designation }}</div>
             {% endif %}

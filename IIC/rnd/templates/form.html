@@ -1,22 +1,223 @@
-{% extends 'main.html' %} {% load static %} {% block content %}
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>
+    {% if title %}
+      {{ title }}
+    {% else %}
+      R&amp;D Form
+    {% endif %}
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<section class="about" id="about">
-  <div class="container">
-    <div class="about-content">
-      <div class="about-text">
-        <form method="POST" action="">
-          {% csrf_token %} {{ patentf.patentNumber.label_tag }}
-          {{patentf.patentNumber }} {{patentf.area.label_tag}} {{patentf.area}}
-          {{patentf.domain.label_tag }} {{ patentf.domain }}
-          <input type="submit" value="submit" />
+  <style>
+    /* ---- Basic reset ---- */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f7fb;
+      color: #111827;
+    }
+
+    .page-wrapper {
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 16px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 1100px;
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+      padding: 28px 32px 32px;
+    }
+
+    .card-title {
+      font-size: 1.35rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    .patent-form { width: 100%; }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px 32px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #4b5563;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      padding: 10px 12px;
+      font-size: 0.95rem;
+      background: #f9fafb;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: #9ca3af;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: #6366f1;
+      background: #ffffff;
+      box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.15);
+    }
+
+    .help-text {
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+
+    .errorlist {
+      margin-top: 2px;
+      font-size: 0.78rem;
+      color: #b91c1c;
+      list-style: none;
+    }
+
+    .non-field-errors {
+      margin-bottom: 16px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: #fef2f2;
+      border: 1px solid #fee2e2;
+      color: #b91c1c;
+      font-size: 0.85rem;
+    }
+
+    .form-actions {
+      margin-top: 24px;
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: none;
+      padding: 9px 18px;
+      font-size: 0.92rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+    }
+
+    .btn:active { transform: scale(0.97); }
+
+    .primary-btn {
+      background: #4f46e5;
+      color: #ffffff;
+      box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
+    }
+
+    .primary-btn:hover { background: #4338ca; }
+
+    .secondary-btn {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .secondary-btn:hover { background: #d1d5db; }
+
+    @media (max-width: 768px) {
+      .card { padding: 20px 18px 24px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-actions { justify-content: stretch; }
+      .form-actions .btn { flex: 1; text-align: center; }
+    }
+  </style>
+</head>
+
+<body>
+   {% include 'nav.html' %}
+
+   <button type="button" class="back-btn" onclick="history.back()" style="padding:5px; border:none; background:transparent; font-size:16px; color:var(--muted); cursor:pointer; margin-bottom:12px margin-left:20px">
+      &#8592; Back
+    </button>
+  <div class="page-wrapper">
+    <div class="card">
+      <h1 class="card-title">
+        Form
+      </h1>
+
+      {% with form as f %}
+        {% if f.non_field_errors %}
+          <div class="non-field-errors">
+            {{ f.non_field_errors }}
+          </div>
+        {% endif %}
+
+        <form class="patent-form" method="post" enctype="multipart/form-data" action="">
+          {% csrf_token %}
+
+          <div class="form-grid">
+            {% for field in f %}
+              <div class="form-group">
+                <label for="{{ field.id_for_label }}">
+                  {{ field.label }}{% if field.field.required %} *{% endif %}
+                </label>
+
+                {{ field }}
+
+                {% if field.help_text %}
+                  <div class="help-text">{{ field.help_text|safe }}</div>
+                {% endif %}
+
+                {% if field.errors %}
+                  <div class="errorlist">
+                    {{ field.errors }}
+                  </div>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn secondary-btn" onclick="history.back()">
+              Cancel
+            </button>
+
+            <button type="submit" class="btn primary-btn">
+              {% if submit_label %}
+                {{ submit_label }}
+              {% else %}
+                Save
+              {% endif %}
+            </button>
+          </div>
         </form>
-        <form method="POST" action="">
-          {% csrf_token %} {{ form.as_p }}
-          <input type="submit" value="submit" />
-        </form>
-      </div>
+      {% endwith %}
     </div>
   </div>
-</section>
 
-{% endblock %}
+  {% include 'foot.html' %}
+</body>
+</html>

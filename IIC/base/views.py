@@ -3,8 +3,8 @@ from .models import posts
 
 from django.db.models import Q
 
-from .forms import queryForm 
-from .models import querys, iicInfo , notice , meeting , achievement , gallery , activity
+from .forms import queryForm
+from .models import querys, iicInfo , notice
 
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -16,8 +16,7 @@ from django.contrib.auth.forms import UserCreationForm
 # Create your views here.
 
 def home(req):
-    notices = notice.objects.all()[:6]
-    meets = meeting.objects.all()[:6]
+    notices = notice.objects.all()[:10]
     post = posts.objects.all()
     queryf = queryForm()
     info = iicInfo.objects.first()
@@ -26,7 +25,7 @@ def home(req):
         if(queryf.is_valid()):
             queryf.save()
         return redirect("home")
-    context = {"posts" : post , 'queryf' : queryf, 'iic' : info , 'notices' : notices , 'meets' : meets}
+    context = {"posts" : post , 'queryf' : queryf, 'iic' : info , 'notices' : notices}
     return render(req,"a1home.html" , context)
 
 def activities(req):
@@ -34,34 +33,25 @@ def activities(req):
     context = {'iic' : info}
     return render(req, "activity.html" , context)
 
-def meet(req):
-    meetings = meeting.objects.all()[:20]
-    info = iicInfo.objects.first()
-    context = {'iic' : info , "meetings" : meetings}
-    return render(req, "meethome.html" , context)
-
 def contact(req):
     info = iicInfo.objects.first()
     context = {'iic' : info}
     return render(req, "contact.html" , context)
 
-def galleryPage(req):
-    images = gallery.objects.all()
+def gallery(req):
     info = iicInfo.objects.first()
-    context = {'iic' : info , 'images' : images}
+    context = {'iic' : info}
     return render(req, "gallery.html" , context)
 
 def noticeBoard(req):
-    notices = notice.objects.all()[:20]
     info = iicInfo.objects.first()
-    context = {'iic' : info , 'notices' : notices}
+    context = {'iic' : info}
     return render(req, "noticeboard.html" , context)
 
 def achiev(req):
-    ach = achievement.objects.all()[:50]
     info = iicInfo.objects.first()
-    context = {'iic' : info , 'ach' : ach}
-    return render(req, "achievement.html" , context)
+    context = {'iic' : info}
+    return render(req, "achiecvement.html" , context)
 
 def loginFac(req):
     info = iicInfo.objects.first()
@@ -105,4 +95,3 @@ def queryDeletion(req , pk):
     query = querys.objects.get(id = pk)
     query.delete()
     return redirect('admin-site')
-

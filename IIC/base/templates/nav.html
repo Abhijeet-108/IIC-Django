@@ -260,7 +260,7 @@
         {
           name: "Activities",
           submenu: [
-            { name: "Meeting", path: "{% url 'meet' %}" },
+            { name: "Meeting", path: "/activities" },
             { name: "Activities", path: "{% url 'activities' %}" },
             { name: "Achievements", path: "{% url 'achievments' %}" },
           ],
@@ -377,7 +377,7 @@
 
         {% if request.user.is_authenticated %}
           const profile = document.createElement("a");
-          profile.href = "{% url 'admin-profile' %}";
+          profile.href = "/profile";
           profile.className = "btn ghost";
           profile.textContent = "Profile";
           authArea.appendChild(profile);
