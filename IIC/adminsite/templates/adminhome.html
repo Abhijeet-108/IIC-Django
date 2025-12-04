@@ -358,7 +358,7 @@
                   Join the campus idea pitch event to showcase innovative
                   creations.
                 </div>
-                <div class="notice-item-meta">Date: 17-03-2025</div>
+                <div class="notice-item-meta">Date: 24-11-2025</div>
               </div>
               {% endfor %}
             </div>
@@ -518,9 +518,6 @@
                 method="post"
                 action="/contact/"
               >
-                <!-- add {% csrf_token %} when using Django rendering -->
-                <!-- {% csrf_token %} -->
-
                 <div class="form-row">
                   <div class="form-group">
                     <label for="name">Full Name *</label>
@@ -628,10 +625,6 @@
     {% include 'foot.html' %}
 
     <script>
-      /********************************************************************
-       * Dynamic quickLinks and page interaction (existing code reused)
-       * (I left all logic unchanged — only presentation was updated above.)
-       ********************************************************************/
       const quickLinks = [
         {
           title: "R&D Cell",
@@ -823,13 +816,6 @@
           setTimeout(() => el.classList.add("in-view"), 200 + i * 140);
         });
       })();
-
-      /********************************************************************
-       * Contact form handling note:
-       * Your form posts to /contact/ — keep {% csrf_token %} inside the form
-       * when rendering with Django. The page currently includes form markup
-       * exactly as you provided (no logic changes).
-       ********************************************************************/
     </script>
   </body>
 </html>

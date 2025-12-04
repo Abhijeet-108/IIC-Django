@@ -375,11 +375,13 @@
           <!-- Card 1 -->
           <article class="card">
             <div class="card-media">
+              {% if i.photo %}
               <img
                 src="{{i.photo.url}}"
                 alt="National Innovation Award 2024"
                 loading="lazy"
               />
+              {% else %} {% endif %}
               <div class="badge type-competition">Competition</div>
               <div class="card-overlay"></div>
               <div class="card-title">{{i.title}}</div>

@@ -18,6 +18,7 @@ class facult(models.Model):
     dept = models.ForeignKey(dept , on_delete = models.CASCADE)
     suf = models.ForeignKey(suff , on_delete = models.CASCADE)
     name = models.CharField(max_length = 30 , blank = False)
+    photo = models.ImageField(blank = True , null = True)
     email = models.EmailField(blank = True)
 
     def __str__(self):
