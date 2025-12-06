@@ -618,10 +618,10 @@
         <!-- (Optional) actions area; kept read-only -->
         <div class="card fade" style="display:flex;justify-content:flex-end;align-items:center">
           {% if request.user.is_authenticated %}
-          <div class="actions" style="width:100%;justify-content:flex-end border: 1px solid rgba(0,0,0,0.03); padding: 10px; border-radius: 8px; background: #fbfbfe; box-shadow: var(--card-shadow);">
-            <a href="{% url 'faculty_pdf' faculty.pk %}" class="btn btn-primary">
+          <div class="actions" style="width:100%;">
+            <button style=" border: 1px solid rgba(0,0,0,0.03); padding: 10px; border-radius: 8px; background: #fbfbfe; box-shadow: var(--card-shadow);"><a href="{% url 'faculty_pdf' faculty.pk %}" class="btn btn-primary">
               Download Profile
-            </a>
+            </a></button>
           </div>
           {% endif %}
           <div class="actions" style="width:100%;justify-content:flex-end">
@@ -644,3 +644,4 @@
   });
 </script>
 </body>
+{% comment %} {% include 'foot.html' %} {% endcomment %}
