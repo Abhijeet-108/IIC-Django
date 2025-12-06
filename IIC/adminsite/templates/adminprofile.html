@@ -1,4 +1,5 @@
 {% load static %}
+{% if request.user.is_superuser %}
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -464,3 +465,6 @@
   {% include 'foot.html' %}
 </body>
 </html>
+{% elif request.user.is_authenticated %}
+<p>Hello Faculty</p>
+{% endif %}

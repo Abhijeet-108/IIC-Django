@@ -1,0 +1,408 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Sign Up — IIC (Light, No JavaScript)</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f6f8fb;
+        --card: #ffffff;
+        --muted: #6b7280;
+        --text: #081226;
+        --accent: #2563eb;
+        --accent-2: #06b6d4;
+        --success: #16a34a;
+        --danger: #dc2626;
+        --radius: 12px;
+        --maxw: 760px;
+        --shadow: 0 8px 30px rgba(9, 30, 66, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      .test {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-bottom: 4.75%;
+      }
+      body {
+        margin: 0;
+        font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial;
+        background: radial-gradient(
+            600px 300px at 0% 0%,
+            rgba(37, 99, 235, 0.04),
+            transparent 6%
+          ),
+          linear-gradient(180deg, var(--bg), #ffffff 60%);
+        color: var(--text);
+        align-items: center;
+        justify-content: center;
+      }
+
+      .auth-card {
+        width: 100%;
+        max-width: var(--maxw);
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: 28px;
+
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(9, 30, 66, 0.04);
+      }
+
+      .auth-header {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        margin-bottom: 6px;
+      }
+      .logo-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 800;
+        font-size: 22px;
+        box-shadow: 0 8px 18px rgba(37, 99, 235, 0.12);
+      }
+      .auth-title {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 700;
+      }
+      .auth-subtitle {
+        margin: 2px 0 0;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      form {
+        margin-top: 12px;
+        display: grid;
+        gap: 14px;
+      }
+      label {
+        display: block;
+        font-size: 13px;
+        color: var(--muted);
+        margin-bottom: 6px;
+      }
+      input[type="text"],
+      input[type="email"],
+      select,
+      input[type="file"],
+      .custom-input,
+      .note {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(9, 30, 66, 0.08);
+        font-size: 14px;
+        background: transparent;
+        color: var(--text);
+        outline: none;
+        transition: box-shadow 0.12s ease, border-color 0.12s ease;
+      }
+      input::placeholder {
+        color: #a7b0bd;
+      }
+      input:focus,
+      select:focus {
+        box-shadow: 0 4px 18px rgba(37, 99, 235, 0.08);
+        border-color: rgba(37, 99, 235, 0.45);
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      @media (max-width: 700px) {
+        .grid-2 {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* image upload block (no JS — simple file input) */
+      .image-upload {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        border: 1px dashed rgba(9, 30, 66, 0.06);
+        padding: 10px;
+        border-radius: 10px;
+        background: linear-gradient(180deg, rgba(9, 30, 66, 0.01), transparent);
+        align-items: center;
+      }
+      .img-preview {
+        width: 88px;
+        height: 88px;
+        border-radius: 12px;
+        overflow: hidden;
+        flex: 0 0 88px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f3f6fb;
+        border: 1px solid rgba(9, 30, 66, 0.04);
+      }
+      .img-preview svg {
+        width: 48px;
+        height: 48px;
+        opacity: 0.75;
+      }
+      .img-controls {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .file-input {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: 8px;
+        background: linear-gradient(90deg, var(--accent), var(--accent-2));
+        color: white;
+        font-weight: 700;
+        border: 0;
+        cursor: pointer;
+        width: max-content;
+      }
+      .img-note {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .drop-hint {
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      /* buttons */
+      .actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        margin-top: 6px;
+      }
+      .btn {
+        padding: 10px 14px;
+        border-radius: 10px;
+        border: 0;
+        cursor: pointer;
+        font-weight: 700;
+        display: inline-flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .btn.secondary {
+        background: transparent;
+        border: 1px solid rgba(9, 30, 66, 0.06);
+        color: var(--text);
+      }
+      .btn.primary {
+        background: linear-gradient(90deg, var(--accent), var(--accent-2));
+        color: white;
+        box-shadow: 0 8px 20px rgba(37, 99, 235, 0.12);
+      }
+
+      .small {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      /* form message & validation placeholders (server rendered) */
+      .field-wrap {
+        position: relative;
+      }
+      .error {
+        font-size: 12px;
+        color: var(--danger);
+        margin-top: 6px;
+      }
+      .success {
+        font-size: 12px;
+        color: var(--success);
+        margin-top: 6px;
+      }
+
+      .footer-note {
+        text-align: center;
+        color: var(--muted);
+        font-size: 13px;
+        margin-top: 12px;
+      }
+
+      /* utility */
+      .row-inline {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .other-hint {
+        font-size: 13px;
+        color: var(--muted);
+        margin-top: 6px;
+      }
+    </style>
+  </head>
+  <body>
+    {% include 'nav.html' %}
+    <div class="test">
+      <main class="auth-card" role="main" aria-labelledby="signupTitle">
+        <header class="auth-header">
+          <div class="logo-icon" aria-hidden="true">💡</div>
+          <div>
+            <h1 id="signupTitle" class="auth-title">Create your account</h1>
+            <p class="auth-subtitle">
+              Fill the details to get started — changes are saved as draft
+              automatically (server-side).
+            </p>
+          </div>
+        </header>
+
+        <!-- Note: no JavaScript. Server must handle validation, drafts, and custom departments. -->
+        <form
+          id="signupForm"
+          class="auth-form"
+          action="#"
+          method="post"
+          enctype="multipart/form-data"
+          novalidate
+        >
+          {% csrf_token %}
+          <!-- Email -->
+          <div class="field-wrap">
+            <label for="signupEmail">Email</label>
+            {{form1.email}}
+            <!-- <div class="error">Email is required</div> -->
+          </div>
+
+          <div class="grid-2">
+            <div class="field-wrap">
+              <label for="firstName">Username</label>
+              {{form.username}}
+            </div>
+
+            <div class="field-wrap">
+              <label for="lastName">Name</label>
+              {{form1.name}}
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="field-wrap">
+              <label for="collegeId">Qualification</label>
+              {{form1.qualification}}
+            </div>
+
+            <div class="field-wrap">
+              <label for="roleSelect">Suffix</label>
+              {{form1.suf}}
+            </div>
+          </div>
+
+          <div class="field-wrap">
+            <label for="departmentSelect">Department</label>
+
+            <div
+              style="
+                display: flex;
+                gap: 8px;
+                align-items: center;
+                flex-wrap: wrap;
+              "
+            >
+              {{form1.dept}}
+            </div>
+          </div>
+
+          <!-- ======================= -->
+          <!-- Password Section Added  -->
+          <!-- ======================= -->
+
+          <div class="grid-2">
+            <div class="field-wrap">
+              <label for="password">Password</label>
+              {{form.password1}}
+              <!-- <div class="error">Password is required</div> -->
+            </div>
+
+            <div class="field-wrap">
+              <label for="confirmPassword">Confirm Password</label>
+              {{form.password2}}
+              <!-- <div class="error">Passwords do not match</div> -->
+            </div>
+          </div>
+
+          <!-- Profile Image Upload -->
+          <div class="field-wrap">
+            <label for="profileImageInput">Profile Image (optional)</label>
+            <div class="image-upload" aria-label="Profile image upload area">
+              <div class="img-preview" title="No preview available (no JS)">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                >
+                  <rect width="24" height="24" fill="#f3f6fb" />
+                  <path
+                    d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5z"
+                    fill="#9aa4b2"
+                  />
+                  <path
+                    d="M4 20c0-3.313 2.687-6 6-6h4c3.313 0 6 2.687 6 6v.5H4V20z"
+                    fill="#9aa4b2"
+                  />
+                </svg>
+              </div>
+
+              <div class="img-controls">
+                {{form1.photo}}
+                <div class="img-note" id="imgHelp">
+                  PNG, JPG, WEBP. Recommended max: 2MB.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Buttons -->
+          <div class="actions">
+            <button type="reset" id="resetBtn" class="btn secondary">
+              Reset
+            </button>
+            <button type="submit" id="submitBtn" class="btn primary">
+              Create Account
+            </button>
+          </div>
+
+          <!-- Optional server messages -->
+          <!-- <div class="success">Account created</div> -->
+          <!-- <div class="error">Please fix the highlighted errors</div> -->
+        </form>
+      </main>
+    </div>
+
+    {% include 'foot.html' %}
+  </body>
+</html>

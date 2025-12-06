@@ -10,7 +10,11 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+
 # Create your views here.
+
 
 def rnd(req):
     dep = dept.objects.all()
@@ -28,7 +32,7 @@ def depart(req , pk):
 
 def facul(req , pk):
     faculty = facult.objects.get(id = pk)
-    basic = basicDetails.objects.get(faculty = faculty)
+    basic = basicDetails.objects.filter(faculty = faculty).first()
     pat = patent.objects.filter(faculty = faculty)
     copyr = copyright.objects.filter(faculty = faculty)
     books = book.objects.filter(faculty = faculty)
@@ -69,11 +73,18 @@ def basicDeletion(req , pk):
 #------------------- patent----------------------
 def add_form(req):
     form = patentForm()
+    if not req.user.is_superuser:
+        fac = facult.objects.get(user = req.user)
     info = iicInfo.objects.first()
     if req.method == 'POST':
         form = patentForm(req.POST)
         if form.is_valid():
-            form.save()
+            if req.user.is_superuser:
+                form.save()
+            else:
+                instance = form.save(commit = False)
+                instance.faculty = fac
+                instance.save()
             return redirect('research')
     else:
         form = patentForm()
@@ -135,11 +146,18 @@ def delete_deptform(req, pk):
 # ----------------bookForm------------------------
 def add_bookform(req):
     bookform = bookForm()
+    if not req.user.is_superuser:
+        fac = facult.objects.get(user = req.user)
     info = iicInfo.objects.first()
     if req.method == 'POST':
         bookform = bookForm(req.POST)
         if bookform.is_valid():
-            bookform.save()
+            if req.user.is_superuser:
+                bookform.save()
+            else:
+                instance = bookform.save(commit = False)
+                instance.faculty = fac
+                instance.save()
             return redirect('research')
     else:
         bookform = bookForm()
@@ -168,11 +186,18 @@ def delete_bookform(req, pk):
 # ---------------- Book Chapter ----------------
 def add_bookChapterform(req):
     bookchapterform = bookChapterForm()
+    if not req.user.is_superuser:
+        fac = facult.objects.get(user = req.user)
     info = iicInfo.objects.first()
     if req.method == 'POST':
         bookchapterform = bookChapterForm(req.POST)
         if bookchapterform.is_valid():
-            bookchapterform.save()
+            if req.user.is_superuser:
+                bookchapterform.save()
+            else:
+                instance = bookchapterform.save(commit = False)
+                instance.faculty = fac
+                instance.save()
             return redirect('research')
     else:
         bookchapterform = bookChapterForm()
@@ -270,11 +295,18 @@ def delete_suffform(req, pk):
 # ---------------- Copyright ----------------
 def add_copyrightform(req):
     copyrightform = copyrightForm()
+    if not req.user.is_superuser:
+        fac = facult.objects.get(user = req.user)
     info = iicInfo.objects.first()
     if req.method == 'POST':
         copyrightform = copyrightForm(req.POST)
         if copyrightform.is_valid():
-            copyrightform.save()
+            if req.user.is_superuser:
+                copyrightform.save()
+            else:
+                instance = copyrightform.save(commit = False)
+                instance.faculty = fac
+                instance.save()
             return redirect('research')
     else:
         copyrightform = copyrightForm()
@@ -304,11 +336,18 @@ def delete_copyrightform(req, pk):
 # ---------------- Conference ----------------
 def add_conferenceform(req):
     conferenceform = conferenceForm()
+    if not req.user.is_superuser:
+        fac = facult.objects.get(user = req.user)
     info = iicInfo.objects.first()
     if req.method == 'POST':
         conferenceform = conferenceForm(req.POST)
         if conferenceform.is_valid():
-            conferenceform.save()
+            if req.user.is_superuser:
+                conferenceform.save()
+            else:
+                instance = conferenceform.save(commit = False)
+                instance.faculty = fac
+                instance.save()
             return redirect('research')
     else:
         conferenceform = conferenceForm()
@@ -338,11 +377,18 @@ def delete_conferenceform(req, pk):
 # ---------------- Journal ----------------
 def add_journalform(req):
     journalform = journalForm()
+    if not req.user.is_superuser:
+        fac = facult.objects.get(user = req.user)
     info = iicInfo.objects.first()
     if req.method == 'POST':
         journalform = journalForm(req.POST)
         if journalform.is_valid():
-            journalform.save()
+            if req.user.is_superuser:
+                journalform.save()
+            else:
+                instance = journalform.save(commit = False)
+                instance.faculty = fac
+                instance.save()
             return redirect('research')
     else:
         journalform = journalForm()
@@ -369,6 +415,7 @@ def delete_journalform(req, pk):
     return redirect('research')
 
 def rndinfo(req):
+    fac = facult.objects.get(user = req.user)
     basicf = basicDetailsForm()
     patentf = patentForm()
     copyrightf = copyrightForm()
@@ -385,23 +432,43 @@ def rndinfo(req):
         bookcf = bookChapterForm(req.POST)
         conferencef = conferenceForm(req.POST)
         if basicf.is_valid():  
-            basicf.save()
+            instance = basicf.save(commit = False)
+            instance.faculty = fac
+            instance.save()
         if patentf.is_valid():
-            patentf.save()
+            instance = patentf.save(commit = False)
+            instance.faculty = fac
+            instance.save()
         if copyrightf.is_valid():
-            copyrightf.save()
+            inctsnace = copyrightf.save(commit = False)
+            inctsnace.faculty = fac
+            inctsnace.save()
         if journalf.is_valid():
-            journalf.save()
+            inctsnace = journalf.save(commit = False)
+            inctsnace.faculty = fac
+            inctsnace.save()
         if bookf.is_valid():
-            bookf.save()
+            inctsnace = bookf.save(commit = False)
+            inctsnace.faculty = fac
+            inctsnace.save()
         if bookcf.is_valid():
-            bookcf.save()
+            inctsnace = bookcf.save(commit = False)
+            inctsnace.faculty = fac
+            inctsnace.save()
         if conferencef.is_valid():
-            conferencef.save()
+            inctsnace = conferencef.save(commit = False)
+            inctsnace.faculty = fac
+            inctsnace.save()
         return redirect('home')
     else:
         basicf = basicDetailsForm()
-        patentf = patentForm()    
+        patentf = patentForm() 
+        copyrightf = copyrightForm()
+        journalf = journalForm()
+        bookf = bookForm()
+        bookcf = bookChapterForm()
+        conferencef = conferenceForm()
+   
     context = {"basicf" : basicf , "patentf" : patentf , "bookcf" : bookcf , "bookf" : bookf , "copyrightf" : copyrightf , "journalf" : journalf , "conferencef" : conferencef}
     return render(req , "rndinfo.html" , context)
 

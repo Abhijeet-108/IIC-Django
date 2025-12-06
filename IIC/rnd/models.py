@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -15,11 +16,21 @@ class suff(models.Model):
         return self.pre
 
 class facult(models.Model):
+    class qual(models.TextChoices):
+        Post_Graduate = "Post Graduate"
+        Doctorate = "Doctorate"
+
+
+    user = models.ForeignKey(User, on_delete = models.CASCADE , blank = True , null = True)
     dept = models.ForeignKey(dept , on_delete = models.CASCADE)
     suf = models.ForeignKey(suff , on_delete = models.CASCADE)
     name = models.CharField(max_length = 30 , blank = False)
     photo = models.ImageField(blank = True , null = True)
     email = models.EmailField(blank = True)
+    phone = models.CharField(max_length = 11 ,blank = True , null = True)
+    qualification = models.CharField(choices = qual , null = True , blank = True)
+    role = models.CharField(blank = True , null = True)
+    experience = models.IntegerField(max_length = 2 , null = True , blank = True)
 
     def __str__(self):
         return self.name
