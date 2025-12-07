@@ -161,7 +161,7 @@
 
           {% if request.user.is_authenticated %}
           <div style="text-decoration: none; padding-bottom: 20px">
-            <a href="{% url "form" %}" style="text-decoration: none; padding-bottom: 20px">
+            <a href="{% url "form" faculty.id %}" style="text-decoration: none; padding-bottom: 20px">
               <button style="background: #3788d4; color: #fff; border-radius: 5px; padding:10px 20px;">Add</button>
             </a>
           </div>
@@ -230,7 +230,7 @@
 
           {% if request.user.is_authenticated %}
           <div style="text-decoration: none; padding-bottom: 20px">
-            <a href="{% url "copyrightform" %}" style="text-decoration: none; padding-bottom: 20px">
+            <a href="{% url "copyrightform" faculty.id %}" style="text-decoration: none; padding-bottom: 20px">
               <button style="background: #3788d4; color: #fff; border-radius: 5px; padding:10px 20px;">ADD</button>
             </a>
           </div>
@@ -299,7 +299,7 @@
 
           {% if request.user.is_authenticated %}
           <div style="text-decoration: none; padding-bottom: 20px">
-            <a href="{% url "bookform" %}" style="text-decoration: none; padding-bottom: 20px">
+            <a href="{% url "bookform" faculty.id %}" style="text-decoration: none; padding-bottom: 20px">
               <button style="background: #3788d4; color: #fff; border-radius: 5px; padding:10px 20px;">Add</button>
             </a>
           </div>
@@ -365,7 +365,7 @@
 
           {% if request.user.is_authenticated %}
           <div style="text-decoration: none; padding-bottom: 20px">
-            <a href="{% url "bookChapterform" %}" style="text-decoration: none; padding-bottom: 20px">
+            <a href="{% url "bookChapterform" faculty.id %}" style="text-decoration: none; padding-bottom: 20px">
               <button style="background: #3788d4; color: #fff; border-radius: 5px; padding:10px 20px;">Add</button>
             </a>
           </div>
@@ -451,7 +451,7 @@
 
           {% if request.user.is_authenticated %}
           <div style="text-decoration: none; padding-bottom: 20px">
-            <a href="{% url "journalform" %}" style="text-decoration: none; padding-bottom: 20px">
+            <a href="{% url "journalform" faculty.id %}" style="text-decoration: none; padding-bottom: 20px">
               <button style="background: #3788d4; color: #fff; border-radius: 5px; padding:10px 20px;">Add</button>
             </a>
           </div>
@@ -542,7 +542,7 @@
 
           {% if request.user.is_authenticated %}
           <div style="text-decoration: none; padding-bottom: 20px">
-            <a href="{% url "conferenceform" %}" style="text-decoration: none; padding-bottom: 20px">
+            <a href="{% url "conferenceform" faculty.id %}" style="text-decoration: none; padding-bottom: 20px">
               <button style="background: #3788d4; color: #fff; border-radius: 5px; padding:10px 20px;">Add</button>
             </a>
           </div>

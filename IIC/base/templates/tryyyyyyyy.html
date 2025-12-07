@@ -1,302 +1,3 @@
-{% load static %}
-{% if request.user.is_superuser %}
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>IIC — Info & Gallery (Improved Section Separation)</title>
-
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-
-  <style>
-    :root{
-      --accent1:#2563eb; --accent2:#06b6d4; --muted:#555; --text:#111; --white:#fff;
-      --radius:14px; --maxw:1100px;
-      --section-gap:18px;
-    }
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{
-      margin:0;min-height:100vh;
-  
-      font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
-      color:var(--text);
-      background:
-        radial-gradient(900px 400px at 10% 10%, rgba(37,99,235,0.06), transparent 10%),
-        radial-gradient(700px 300px at 90% 90%, rgba(6,182,212,0.06), transparent 10%),
-        linear-gradient(180deg,#f7f8fa 0%, #ffffff 100%);
-    }
-
-    .rnd-wrap{
-      width:100%; max-width:var(--maxw);
-      display:grid; grid-template-columns: 300px 1fr; gap:26px; align-items:start;
-    }
-
-    .rnd-sidebar{
-      background:linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.01));
-      border-radius:var(--radius); padding:18px; border:1px solid rgba(0,0,0,0.08);
-      box-shadow:0 4px 12px rgba(0,0,0,0.06);
-      position:sticky; top:36px; height:fit-content;
-    }
-
-    .rnd-top-image { display:flex; flex-direction:column; align-items:center; gap:10px; margin-bottom:18px; text-align:center; }
-    .rnd-top-image img{ width:120px;height:120px;border-radius:50%;object-fit:cover;border:3px solid rgba(0,0,0,0.08); box-shadow:0 8px 22px rgba(0,0,0,0.1); }
-    .rnd-brand h3{margin:0;font-size:18px;font-weight:800}
-    .rnd-brand p{margin:0;margin-top:6px;color:var(--muted);font-size:13px}
-
-    .rnd-progress{ margin-top:8px; display:flex;flex-direction:column;gap:8px; }
-    .rnd-step-link{
-      display:flex; gap:12px; align-items:center; padding:10px; border-radius:10px; text-decoration:none;
-      color:var(--text); background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.00));
-      border:1px solid rgba(0,0,0,0.05); transition: all .18s ease;
-    }
-    .rnd-step-link:hover{ transform:translateY(-4px); box-shadow:0 8px 20px rgba(0,0,0,0.06); background: linear-gradient(90deg, rgba(37,99,235,0.06), rgba(6,182,212,0.04)); }
-    .rnd-bullet{ width:42px;height:42px;border-radius:10px; background:linear-gradient(135deg,var(--accent1),var(--accent2)); display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700 }
-    .rnd-step-text{ font-size:13px }
-    .rnd-step-sub{ font-size:12px; color:var(--muted); margin-top:4px }
-
-    .rnd-hint{ margin-top:12px; font-size:13px; color:var(--muted); line-height:1.45; padding-top:6px }
-
-    /* main wrapper card - kept subtle so sections stand out */
-    .rnd-card{ background:transparent; padding:0; border-radius:8px; }
-
-    .rnd-card h1{ font-size:22px; margin:0 0 8px; font-weight:800 }
-    .rnd-lead{ color:var(--muted); font-size:14px; margin-bottom:16px }
-
-    /* ---------- Improved section styling ---------- */
-    .rnd-section {
-      position:relative;
-      border-radius:12px;
-      padding:20px;
-      margin-bottom:var(--section-gap);
-      border:1px solid rgba(15,23,36,0.06);
-      background: linear-gradient(180deg, #fff, #fbfdff);
-      box-shadow: 0 14px 30px rgba(2,6,23,0.06);
-      overflow:visible;
-      transition: transform .18s ease, box-shadow .18s ease;
-    }
-    /* slight lift on hover */
-    .rnd-section:hover { transform: translateY(-6px); box-shadow: 0 28px 60px rgba(2,6,23,0.08); }
-
-    /* accent strip on the left of each section for stronger separation */
-    .rnd-section::before {
-      content: "";
-      position: absolute;
-      left: -8px;
-      top: 12px;
-      bottom: 12px;
-      width: 6px;
-      border-radius:6px;
-      background: linear-gradient(180deg, var(--accent1), var(--accent2));
-      box-shadow: 0 6px 18px rgba(37,99,235,0.06);
-    }
-
-    /* alternating subtle tint for sections to increase contrast (odd/even) */
-    .rnd-section:nth-of-type(odd) {
-      background: linear-gradient(180deg, #ffffff, #fcfeff);
-    }
-    .rnd-section:nth-of-type(even) {
-      background: linear-gradient(180deg, #fbfdff, #f5fbff);
-    }
-
-    /* stronger header styles inside sections */
-    .rnd-section .title { display:flex; gap:14px; align-items:flex-start; margin-bottom:12px; }
-    .rnd-section h3 { margin:0; font-size:17px; font-weight:800; color:var(--text); letter-spacing:0.1px; }
-    .rnd-section p.desc { margin:6px 0 12px; color:var(--muted); font-size:13px; }
-
-    /* thin divider under title for visual separation */
-    .rnd-section .divider {
-      height:1px; background: linear-gradient(90deg, rgba(0,0,0,0.06), rgba(0,0,0,0.02)); margin:8px 0 12px; border-radius:2px;
-    }
-
-    .rnd-badge{ width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent1),var(--accent2)); display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700 }
-
-    .info-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px }
-    .info-full{ grid-column:1/-1 }
-
-    label{ display:block; font-size:13px; color:var(--muted); margin-bottom:6px }
-    input, select, textarea {
-      width:100%; background:#fff; border:1px solid rgba(0,0,0,0.10); padding:12px; border-radius:10px; color:var(--text);
-      outline:none; font-size:14px; transition: all .12s ease;
-    }
-    textarea{ min-height:120px; resize:vertical }
-    input::placeholder, textarea::placeholder { color: rgba(0,0,0,0.32) }
-    input:focus, textarea:focus, select:focus { border-color:var(--accent1); box-shadow:0 0 0 3px rgba(37,99,235,0.08) }
-
-    .actions-row{ display:flex; gap:12px; justify-content:flex-end; align-items:center; margin-top:12px }
-    .btn{ padding:10px 16px; border-radius:10px; border:0; font-weight:700; cursor:pointer; color:#fff; background: linear-gradient(90deg,var(--accent1),var(--accent2)); }
-    .btn.ghost{ background:transparent; color:var(--accent1); border:1px solid rgba(37,99,235,0.12) }
-    .small{ font-size:12px; color:var(--muted) }
-
-    /* Gallery grid */
-    .gallery-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; margin-top:12px; }
-    .media-card{ border-radius:10px; overflow:hidden; border:1px solid rgba(0,0,0,0.06); background:#fff; display:flex; flex-direction:column; align-items:stretch; min-height:220px }
-    .media-card img{ width:100%; height:160px; object-fit:cover; display:block }
-    .media-card .meta{ padding:8px 10px; display:flex; justify-content:space-between; align-items:center; gap:8px }
-    .media-card .meta .name{ font-size:13px; color:var(--muted) }
-    .media-card form{ margin:0 } /* delete form sits inside meta */
-
-    @media (max-width:980px){
-      .rnd-wrap{ grid-template-columns: 1fr; }
-      .info-grid{ grid-template-columns: 1fr; }
-      .gallery-grid{ grid-template-columns: repeat(2, 1fr); }
-      .rnd-section::before { left: 12px; } /* avoid overflowing on mobile */
-      .rnd-section { padding-left: 20px; }
-    }
-    @media (max-width:540px){
-      .gallery-grid{ grid-template-columns: 1fr; }
-    }
-
-    /* left panel R&D non-nav button */
-    .rnd-step-button {
-      display:flex; gap:12px; align-items:center; padding:10px; border-radius:10px; cursor:pointer;
-      color:var(--text); background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.00));
-      border:1px solid rgba(0,0,0,0.05); transition: all .18s ease; text-align:left;
-      width:100%;
-      font: inherit;
-    }
-    .rnd-step-button:hover{ transform:translateY(-4px); box-shadow:0 8px 20px rgba(0,0,0,0.06); background: linear-gradient(90deg, rgba(37,99,235,0.06), rgba(6,182,212,0.04)); }
-    .rnd-step-button:active{ transform:translateY(-2px) }
-    .rnd-step-button .rnd-bullet { flex-shrink:0 }
-
-    /* subtle focus outline for keyboard users */
-    .rnd-step-link:focus, .rnd-step-button:focus { outline: 3px solid rgba(37,99,235,0.12); outline-offset:3px; border-radius:8px; }
-  </style>
-</head>
-<body>
-  {% include 'nav.html' %}
-  <div class="rnd-wrap" role="region" aria-label="IIC Info & Gallery">
-
-    <!-- Left sidebar -->
-    <aside class="rnd-sidebar" aria-label="Left navigation">
-      <div class="rnd-top-image">
-        <a href="#gallery" title="IIC Gallery">
-          <img src="{{iic.navLogo.url}}" alt="IIC logo" />
-        </a>
-
-        <div class="rnd-brand">
-          <h3>Institution Innovation Council</h3>
-          <!-- <p class="small">Navigation — click an item to jump to the section on the right.</p> -->
-        </div>
-      </div>
-
-      <nav class="rnd-progress" aria-label="Sections">
-
-        <!-- About IIC -->
-        <a class="rnd-step-link" href="#about-iic">
-          <div class="rnd-bullet">A</div>
-          <div>
-            <div class="rnd-step-text">About IIC</div>
-            <div class="rnd-step-sub">Overview & contact</div>
-          </div>
-        </a>
-
-        <a class="rnd-step-link" href="#Queries">
-          <div class="rnd-bullet">Q</div>
-          <div>
-            <div class="rnd-step-text">Queries</div>
-            <!-- <div class="rnd-step-sub">General Qye</div> -->
-          </div>
-        </a>
-
-      </nav>
-
-      <!-- <div class="rnd-hint">Tip: all forms use native POST — add server-side CSRF tokens when rendering in Django templates.</div> -->
-    </aside>
-
-    <!-- Right main content -->
-    <main class="rnd-card" role="main" aria-live="polite">
-      <h1>IIC Info & Media</h1>
-      <!-- <p class="rnd-lead">Manage gallery images and administrative notices. Each section is visually separated to make scanning and editing easier. All actions use native form submission (no JavaScript required).</p> -->
-
-      <!-- About IIC (now with Upload form/button added) -->
-      <section id="about-iic" class="rnd-section" aria-labelledby="about-iic-label">
-        <div class="title">
-          <div class="rnd-badge">A</div>
-          <div>
-            <h3 id="about-iic-label">About IIC</h3>
-            <p class="desc">Overview of Institution Innovation Council, contact info and quick details.</p>
-            <div class="actions-row" style="margin-top:12px;">
-            <a href = {% url 'info-update' %}><button class="btn">Update</button></a>
-          </div>
-       
-        <div class="divider" aria-hidden="true"></div>
-
-        <div class="info-grid">
-          
-
-          <div>
-            <label for="iic_email">Contact Email</label>
-            {{ iic.email }}
-          </div>
-
-          <div>
-            <label for="iic_phone">Phone</label>
-            {{ iic.phone }}
-          </div>
-        </div>
-      </section>
-
-        <section id="Queries" class="rnd-section" aria-labelledby="about-iic-label">
-        <div class="title">
-          <div class="rnd-badge">Q</div>
-          <div>
-            <h3 id="about-iic-label">Queries</h3>
-            <!-- <p class="desc">Overview of Institution Innovation Council, contact info and quick details.</p> -->
-          </div>
-        </div>
-        <div class="divider" aria-hidden="true"></div>
-
-        <div class="info-grid">
-          {% for i in query %}
-          <div style="border:1px solid grey; border-radius: 10px; padding:10px">
-            <div class="info-full" style="color:black;">
-              <label for="iic_overview">Message</label>
-              {{i.message}}
-            </div>
-
-          <div>
-            <label for="name">Full Name*</label>  
-            {{i.fullname}}
-          </div>
-
-          <div>
-            <label for="iic_email">Email Address</label>  
-            {{i.email}}
-          </div>
-
-          <div>
-            <label for="iic_phone">Phone</label>
-            {{i.phone}}
-          </div>
-
-          <div>
-            <label for="name">Subject*</label>  
-            {{i.subject}}
-          </div>
-          </div>
-          {% endfor %}
-        </div>
-
-        <!-- <div class="small" style="margin-top:10px;">To edit this content persistently, update the IIC info in your admin panel. Inline fields are selectable for quick replacement.</div> -->
-
-        <!-- NEW: About Upload form (native upload button similar to other right-side sections) -->
-        <form action="/about/upload/" method="post" enctype="multipart/form-data" style="margin-top:14px;">
-          <!-- Add {% csrf_token %} when rendering in Django -->
-          <!-- <label for="about_file">Upload file for About (image, PDF, or doc)</label>
-          <input id="about_file" name="about_file" type="file" accept="image/*,.pdf,.doc,.docx" />
-          <div class="small" style="margin-top:6px;">Optional: upload an image or document to attach to About IIC. Server will handle storage and display.</div> -->
-
-        </form>
-      </section>
-
-    </main>
-  </div>
-  {% include 'foot.html' %}
-</body>
-</html>
-{% elif request.user.is_authenticated %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -704,7 +405,6 @@
 </head>
 
 <body>
-    {% include 'nav.html' %}
   <main class="page">
     <h1 class="page-title">Teacher Dashboard</h1>
 
@@ -741,9 +441,9 @@
               <div class="avatar">A</div>
 
               <div>
-                <div class="profile-name">{{fac.suf}} {{fac.name}}</div>
+                <div class="profile-name">Dr. Abhishek</div>
                 <div class="profile-meta">
-                  {{fac.qualification}} · {{fac.dept}}
+                  Assistant Professor · Computer Science
                 </div>
               </div>
             </div>
@@ -753,42 +453,42 @@
 
           <div class="profile-row">
             <div class="profile-label-static">Name</div>
-            <div class="profile-value">{{fac.name}}</div>
+            <div class="profile-value">Abhishek</div>
           </div>
 
           <div class="profile-row">
             <div class="profile-label-static">Department</div>
-            <div class="profile-value">{{fac.dept}}</div>
+            <div class="profile-value">Computer Science</div>
           </div>
 
           <div class="profile-row">
             <div class="profile-label-static">Suffix</div>
-            <div class="profile-value">{{fac.suf}}</div>
+            <div class="profile-value">Dr.</div>
           </div>
 
           <div class="profile-row">
             <div class="profile-label-static">Email</div>
-            <div class="profile-value">{{fac.email}}</div>
+            <div class="profile-value">abhishek@example.com</div>
           </div>
 
           <div class="profile-row">
             <div class="profile-label-static">Phone</div>
-            <div class="profile-value">{{fac.phone}}</div>
+            <div class="profile-value">9876543210</div>
           </div>
 
           <div class="profile-row">
             <div class="profile-label-static">Qualification</div>
-            <div class="profile-value">{{fac.qualification}}</div>
+            <div class="profile-value">M.Tech, PhD</div>
           </div>
 
           <div class="profile-row">
             <div class="profile-label-static">Role</div>
-            <div class="profile-value">{{fac.role}}</div>
+            <div class="profile-value">Assistant Professor</div>
           </div>
 
           <div class="profile-row">
             <div class="profile-label-static">Experience</div>
-            <div class="profile-value">{{fac.experience}} Years</div>
+            <div class="profile-value">5 Years</div>
           </div>
         </section>
 
@@ -879,8 +579,5 @@
       });
     });
   </script>
-    {% include 'foot.html' %}
 </body>
 </html>
-
-{% endif %}

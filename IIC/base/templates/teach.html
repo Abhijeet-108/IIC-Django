@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Teacher Profile & Meeting Notification</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #f3f6fb;
+      color: #111827;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 18px 40px;
+    }
+
+    .page-title {
+      font-size: 1.7rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.3fr);
+      gap: 24px;
+    }
+
+    /* ---------- profile card ---------- */
+    .profile-card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 24px 26px;
+      box-shadow: 0 20px 45px rgba(15,23,42,0.08);
+    }
+
+    .profile-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+      gap: 12px;
+    }
+
+    .profile-header {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: #4b5563;
+      overflow: hidden;
+    }
+
+    .profile-name {
+      font-size: 1.3rem;
+      font-weight: 800;
+    }
+
+    .profile-meta {
+      font-size: 0.9rem;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    .profile-update-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 8px 18px;
+      background: linear-gradient(90deg, #2563eb, #06b6d4);
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(37,99,235,0.25);
+      white-space: nowrap;
+    }
+
+    .profile-update-btn:hover {
+      filter: brightness(0.95);
+    }
+
+    .profile-label-static {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #9ca3af;
+      margin-bottom: 2px;
+    }
+
+    .profile-value {
+      font-size: 0.95rem;
+      color: #111827;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+
+    /* ---------- meeting card ---------- */
+    .meeting-card {
+      background: #ffffff;
+      border-radius: 24px;
+      box-shadow: 0 22px 55px rgba(0,0,0,0.08);
+      padding: 26px 28px;
+    }
+
+    .meeting-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      padding-bottom: 14px;
+    }
+
+    .meeting-header-left {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .meeting-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 16px;
+      background: #e0ecff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .meeting-name {
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+
+    .badges { margin-top: 4px; }
+
+    .badge {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: #f3f4f6;
+      border: 1px solid #e5e7eb;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-right: 6px;
+    }
+
+    .badge-primary {
+      background: #111827;
+      color: #fff;
+      border-color: #111827;
+    }
+
+    .published {
+      font-size: 0.8rem;
+      color:#6b7280;
+      font-weight:600;
+      margin-bottom:6px;
+    }
+
+    .published span { color:#111827; }
+
+    .toggle-btn {
+      border: none;
+      background: #f3f4f6;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1.3rem;
+      padding: 8px 10px;
+      transition: transform 0.3s ease, background 0.2s;
+    }
+
+    .toggle-btn:hover { background: #e5e7eb; }
+    .toggle-btn.rotate { transform: rotate(180deg); }
+
+    .meeting-meta-row {
+      padding: 18px 0;
+      border-top: 1px solid #e5e7eb;
+      border-bottom: 1px solid #e5e7eb;
+      margin-bottom: 6px;
+    }
+
+    .meta-item {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+
+    .meta-item:last-child { margin-bottom: 0; }
+
+    .meta-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background: #eef2ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #1d4ed8;
+      font-size: 1.05rem;
+    }
+
+    .meta-label {
+      font-size: 0.72rem;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .meta-value {
+      font-size: 0.98rem;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    /* collapsible extra */
+    .meeting-extra {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.35s ease;
+    }
+
+    .meeting-extra.expanded {
+      max-height: 1000px;
+    }
+
+    .section-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-top: 16px;
+      margin-bottom: 6px;
+    }
+
+    .section-body {
+      color: #4b5563;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin-bottom: 14px;
+    }
+
+    .points-list {
+      padding-left: 22px;
+      margin-bottom: 20px;
+    }
+
+    .points-list li {
+      font-size: 0.95rem;
+      line-height: 1.65;
+      margin-bottom: 6px;
+      color: #374151;
+    }
+
+    .doc-card {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      padding: 14px 16px;
+      border-radius: 18px;
+      max-width: 420px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .doc-left {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .doc-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      background: #e0ebff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+    }
+
+    .doc-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .doc-subtitle {
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+
+    .doc-download-btn {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 8px 10px;
+      cursor: pointer;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <h1 class="page-title">Teacher Dashboard</h1>
+
+    <div class="layout">
+      <!-- LEFT: TEACHER PROFILE (STATIC) -->
+      <section class="profile-card">
+        <div class="profile-card-top">
+          <div class="profile-header">
+            <div class="avatar">
+              A
+            </div>
+            <div>
+              <div class="profile-name">
+                Dr. Abhishek
+              </div>
+              <div class="profile-meta">
+                Assistant Professor · Computer Science
+              </div>
+            </div>
+          </div>
+
+          <!-- Update button (top-right of card) -->
+          <button class="profile-update-btn">Update</button>
+        </div>
+
+        <!-- Static information -->
+        <div class="profile-row">
+          <div class="profile-label-static">Name</div>
+          <div class="profile-value">Abhishek</div>
+        </div>
+
+        <div class="profile-row">
+          <div class="profile-label-static">Department</div>
+          <div class="profile-value">Computer Science</div>
+        </div>
+
+        <div class="profile-row">
+          <div class="profile-label-static">Suffix</div>
+          <div class="profile-value">Dr.</div>
+        </div>
+
+        <div class="profile-row">
+          <div class="profile-label-static">Email</div>
+          <div class="profile-value">abhishek@example.com</div>
+        </div>
+
+        <div class="profile-row">
+          <div class="profile-label-static">Phone</div>
+          <div class="profile-value">9876543210</div>
+        </div>
+
+        <div class="profile-row">
+          <div class="profile-label-static">Qualification</div>
+          <div class="profile-value">M.Tech, PhD</div>
+        </div>
+
+        <div class="profile-row">
+          <div class="profile-label-static">Role</div>
+          <div class="profile-value">Assistant Professor</div>
+        </div>
+
+        <div class="profile-row">
+          <div class="profile-label-static">Experience (years)</div>
+          <div class="profile-value">5</div>
+        </div>
+
+      </section>
+
+      <!-- RIGHT: MEETING NOTIFICATION CARD -->
+      <section class="meeting-card">
+        <div class="meeting-header">
+          <div class="meeting-header-left">
+            <div class="meeting-icon">📅</div>
+            <div>
+              <h2 class="meeting-name">Industry Partnership Summit</h2>
+              <!--
+              <div class="badges">
+                <span class="badge badge-primary">Upcoming</span>
+                <span class="badge">Special Meeting</span>
+              </div>
+              -->
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div class="published">
+              Published on: <span>02 Mar 2025</span>
+            </div>
+            <button class="toggle-btn">⌄</button>
+          </div>
+        </div>
+
+        <!-- always visible meta -->
+        <div class="meeting-meta-row">
+          <div class="meta-item">
+            <div class="meta-icon">📆</div>
+            <div>
+              <div class="meta-label">Date</div>
+              <div class="meta-value">April 10, 2024</div>
+            </div>
+          </div>
+
+          <div class="meta-item">
+            <div class="meta-icon">⏰</div>
+            <div>
+              <div class="meta-label">Time</div>
+              <div class="meta-value">11:00 AM – 2:00 PM</div>
+            </div>
+          </div>
+
+          <div class="meta-item">
+            <div class="meta-icon">📍</div>
+            <div>
+              <div class="meta-label">Location</div>
+              <div class="meta-value">TMSL</div>
+            </div>
+          </div>
+
+          <!--
+          <div class="meta-item">
+            <div class="meta-icon">👥</div>
+            <div>
+              <div class="meta-label">Attendees</div>
+              <div class="meta-value">28 attendees</div>
+            </div>
+          </div>
+          -->
+        </div>
+
+        <!-- collapsible part -->
+        <div class="meeting-extra">
+          <h3 class="section-title">Meeting Overview</h3>
+          <p class="section-body">
+            Strategic meeting with industry partners to discuss collaboration
+            opportunities and joint innovation projects.
+          </p>
+
+          <h3 class="section-title">Key Discussion Points</h3>
+          <ul class="points-list">
+            <li>Discuss new partnership opportunities</li>
+            <li>Review existing collaborations</li>
+            <li>Plan joint research projects</li>
+            <li>Explore internship programs</li>
+          </ul>
+
+          <h3 class="section-title">Meeting Documents</h3>
+          <div class="doc-card">
+            <div class="doc-left">
+              <div class="doc-icon">📄</div>
+              <div>
+                <div class="doc-title">Agenda</div>
+                <div class="doc-subtitle">Industry Partnership Summit Agenda</div>
+              </div>
+            </div>
+            <button class="doc-download-btn">⬇</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    // Dynamic — works for this card and any future meeting-card you add
+    document.querySelectorAll('.meeting-card').forEach(card => {
+      const toggleBtn = card.querySelector('.toggle-btn');
+      const meetingExtra = card.querySelector('.meeting-extra');
+
+      if (!toggleBtn || !meetingExtra) return;
+
+      toggleBtn.addEventListener('click', () => {
+        meetingExtra.classList.toggle('expanded');
+        toggleBtn.classList.toggle('rotate');
+      });
+    });
+  </script>
+</body>
+</html>

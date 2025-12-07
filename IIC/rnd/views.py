@@ -71,16 +71,20 @@ def basicDeletion(req , pk):
     return redirect('admin-site')
 
 #------------------- patent----------------------
-def add_form(req):
+def add_form(req , pk):
     form = patentForm()
     if not req.user.is_superuser:
         fac = facult.objects.get(user = req.user)
+    else:
+        fac = facult.objects.get(id = pk)
     info = iicInfo.objects.first()
     if req.method == 'POST':
         form = patentForm(req.POST)
         if form.is_valid():
             if req.user.is_superuser:
-                form.save()
+                instance = form.save(commit = False)
+                instance.faculty = fac
+                instance.save()
             else:
                 instance = form.save(commit = False)
                 instance.faculty = fac
@@ -144,16 +148,20 @@ def delete_deptform(req, pk):
     return redirect('research')
 
 # ----------------bookForm------------------------
-def add_bookform(req):
+def add_bookform(req , pk):
     bookform = bookForm()
     if not req.user.is_superuser:
         fac = facult.objects.get(user = req.user)
+    else:
+        fac = facult.objects.get(id = pk)
     info = iicInfo.objects.first()
     if req.method == 'POST':
         bookform = bookForm(req.POST)
         if bookform.is_valid():
             if req.user.is_superuser:
-                bookform.save()
+                instance = bookform.save(commit = False)
+                instance.faculty = fac
+                instance.save()
             else:
                 instance = bookform.save(commit = False)
                 instance.faculty = fac
@@ -184,16 +192,20 @@ def delete_bookform(req, pk):
     return redirect('research')
 
 # ---------------- Book Chapter ----------------
-def add_bookChapterform(req):
+def add_bookChapterform(req , pk):
     bookchapterform = bookChapterForm()
     if not req.user.is_superuser:
         fac = facult.objects.get(user = req.user)
+    else:
+        fac = facult.objects.get(id = pk)
     info = iicInfo.objects.first()
     if req.method == 'POST':
         bookchapterform = bookChapterForm(req.POST)
         if bookchapterform.is_valid():
             if req.user.is_superuser:
-                bookchapterform.save()
+                instance = bookchapterform.save(commit = False)
+                instance.faculty = fac
+                instance.save()
             else:
                 instance = bookchapterform.save(commit = False)
                 instance.faculty = fac
@@ -293,16 +305,20 @@ def delete_suffform(req, pk):
 
 
 # ---------------- Copyright ----------------
-def add_copyrightform(req):
+def add_copyrightform(req , pk):
     copyrightform = copyrightForm()
     if not req.user.is_superuser:
         fac = facult.objects.get(user = req.user)
+    else:
+        fac = facult.objects.get(id = pk)
     info = iicInfo.objects.first()
     if req.method == 'POST':
         copyrightform = copyrightForm(req.POST)
         if copyrightform.is_valid():
             if req.user.is_superuser:
-                copyrightform.save()
+                instance = copyrightform.save(commit = False)
+                instance.faculty = fac
+                instance.save()
             else:
                 instance = copyrightform.save(commit = False)
                 instance.faculty = fac
@@ -334,16 +350,20 @@ def delete_copyrightform(req, pk):
 
 
 # ---------------- Conference ----------------
-def add_conferenceform(req):
+def add_conferenceform(req , pk):
     conferenceform = conferenceForm()
     if not req.user.is_superuser:
         fac = facult.objects.get(user = req.user)
+    else:
+        fac = facult.objects.get(id = pk)
     info = iicInfo.objects.first()
     if req.method == 'POST':
         conferenceform = conferenceForm(req.POST)
         if conferenceform.is_valid():
             if req.user.is_superuser:
-                conferenceform.save()
+                instance = conferenceform.save(commit = False)
+                instance.faculty = fac
+                instance.save()
             else:
                 instance = conferenceform.save(commit = False)
                 instance.faculty = fac
@@ -375,16 +395,20 @@ def delete_conferenceform(req, pk):
 
 
 # ---------------- Journal ----------------
-def add_journalform(req):
+def add_journalform(req , pk):
     journalform = journalForm()
     if not req.user.is_superuser:
         fac = facult.objects.get(user = req.user)
+    else:
+        fac = facult.objects.get(id = pk)
     info = iicInfo.objects.first()
     if req.method == 'POST':
         journalform = journalForm(req.POST)
         if journalform.is_valid():
             if req.user.is_superuser:
-                journalform.save()
+                instance = journalform.save(commit = False)
+                instance.faculty = fac
+                instance.save()
             else:
                 instance = journalform.save(commit = False)
                 instance.faculty = fac

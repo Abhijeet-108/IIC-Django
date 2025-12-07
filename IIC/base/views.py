@@ -36,13 +36,13 @@ def home(req):
 def activities(req):
     info = iicInfo.objects.first()
     context = {'iic' : info}
-    return render(req, "activity.html" , context)
+    return render(req, "acti.html" , context)
 
 def meet(req):
     meetings = meeting.objects.all()[:20]
     info = iicInfo.objects.first()
     context = {'iic' : info , "meetings" : meetings}
-    return render(req, "meethome.html" , context)
+    return render(req, "meetingdisplay.html" , context)
 
 def contact(req):
     info = iicInfo.objects.first()

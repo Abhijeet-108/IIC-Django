@@ -1,0 +1,332 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>IIC Activity Tabs (Single Page)</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI";
+        background: #f7f8fc;
+        color: #111827;
+      }
+      .page {
+        max-width: 1200px;
+        margin: 30px auto;
+        padding: 0 24px 40px;
+      }
+
+      /* ---------- TOP TABS ---------- */
+      .activity-tabs {
+        display: flex;
+        gap: 32px;
+        border-bottom: 1px solid #e5e7eb;
+        padding-bottom: 6px;
+        margin-bottom: 20px;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+      .activity-tab {
+        text-decoration: none;
+        font-size: 0.95rem;
+        color: #4b5563;
+        padding-bottom: 8px;
+        cursor: pointer;
+        position: relative;
+        user-select: none;
+      }
+      .activity-tab.active {
+        color: #111827;
+        font-weight: 600;
+      }
+      .activity-tab.active::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -1px;
+        height: 2px;
+        background: #111827;
+        border-radius: 999px;
+      }
+
+      /* ---------- CONTENT SECTIONS ---------- */
+      .activity-section {
+        display: none;
+      }
+      .activity-section.active {
+        display: block;
+      }
+
+      .add-wrap {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 14px;
+      }
+
+      .btn-add {
+        background: linear-gradient(90deg, #2563eb, #06b6d4);
+        color: #fff;
+        border: none;
+        padding: 9px 18px;
+        font-size: 0.9rem;
+        border-radius: 999px;
+        cursor: pointer;
+        font-weight: 600;
+        box-shadow: 0 10px 24px rgba(37, 99, 235, 0.25);
+      }
+
+      .activity-box {
+        background: #fff;
+        border-radius: 18px;
+        padding: 20px 22px;
+        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+        margin-top: 16px;
+      }
+
+      .activity-box-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .activity-title {
+        font-size: 1.15rem;
+        font-weight: 700;
+      }
+
+      .activity-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        border-radius: 999px;
+        padding: 7px 14px;
+        font-size: 0.85rem;
+        border: 1px solid #e5e7eb;
+        background: #f9fafb;
+        cursor: pointer;
+      }
+
+      /* Highlighted Upload Button */
+      .btn-upload {
+        background: linear-gradient(90deg, #1d4ed8, #3b82f6);
+        color: #ffffff !important;
+        border: none !important;
+        font-weight: 600;
+        box-shadow: 0 4px 14px rgba(29, 78, 216, 0.35);
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .btn-upload:hover {
+        opacity: 0.92;
+      }
+      .btn-upload:active {
+        transform: scale(0.98);
+      }
+
+      .tag {
+        padding: 4px 9px;
+        border-radius: 999px;
+        background: #eef2ff;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: #1d4ed8;
+        margin-top: 12px;
+        display: inline-block;
+      }
+
+      .file-input {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    {% include 'nav.html' %}
+    <main class="page">
+      <!-- ---------- TABS ---------- -->
+      <nav class="activity-tabs">
+        <div class="activity-tab active" data-target="sec1">
+          IIC Calendar Activity
+        </div>
+        <div class="activity-tab" data-target="sec2">MIC Driven Activity</div>
+        <div class="activity-tab" data-target="sec3">Celebration Activity</div>
+        <div class="activity-tab" data-target="sec4">Self-Driven Activity</div>
+        <div class="activity-tab" data-target="sec5">
+          My Activity Calendar - 2024-25
+        </div>
+        <div class="activity-tab" data-target="sec6">
+          My Activity Calendar - 2025-26
+        </div>
+      </nav>
+
+      <!-- ------------------------------------------------------------------ -->
+      <!--      SECTION TEMPLATE:   Add Button Outside + Box Inside           -->
+      <!-- ------------------------------------------------------------------ -->
+
+      <!-- SECTION 1 -->
+      <section id="sec1" class="activity-section active">
+        <div class="add-wrap">
+          <button class="btn-add">+ Add Activity</button>
+        </div>
+
+        <div class="activity-box">
+          <div class="activity-box-header">
+            <h2 class="activity-title">IIC Calendar Activity</h2>
+
+            <!-- FILE INPUT -->
+            <input type="file" class="file-input" id="upload1" />
+
+            <div class="activity-actions">
+              <label for="upload1" class="btn btn-upload">📤 Upload PDF</label>
+              <button class="btn">View All</button>
+              <button class="btn">Download Template</button>
+            </div>
+          </div>
+          <span class="tag">Academic Year 2024–25</span>
+        </div>
+      </section>
+
+      <!-- SECTION 2 -->
+      <section id="sec2" class="activity-section">
+        <div class="add-wrap">
+          <button class="btn-add">+ Add Activity</button>
+        </div>
+
+        <div class="activity-box">
+          <div class="activity-box-header">
+            <h2 class="activity-title">MIC Driven Activity</h2>
+
+            <input type="file" class="file-input" id="upload2" />
+
+            <div class="activity-actions">
+              <label for="upload2" class="btn btn-upload">📤 Upload PDF</label>
+              <button class="btn">Previous Reports</button>
+              <button class="btn">Download Format</button>
+            </div>
+          </div>
+          <span class="tag">All MIC Events Included</span>
+        </div>
+      </section>
+
+      <!-- SECTION 3 -->
+      <section id="sec3" class="activity-section">
+        <div class="add-wrap">
+          <button class="btn-add">+ Add Activity</button>
+        </div>
+
+        <div class="activity-box">
+          <div class="activity-box-header">
+            <h2 class="activity-title">Celebration Activity</h2>
+
+            <input type="file" class="file-input" id="upload3" />
+
+            <div class="activity-actions">
+              <label for="upload3" class="btn btn-upload"
+                >📤 Upload Poster</label
+              >
+              <button class="btn">View Schedule</button>
+              <button class="btn">Rules PDF</button>
+            </div>
+          </div>
+          <span class="tag">Celebration Events</span>
+        </div>
+      </section>
+
+      <!-- SECTION 4 -->
+      <section id="sec4" class="activity-section">
+        <div class="add-wrap">
+          <button class="btn-add">+ Add Activity</button>
+        </div>
+
+        <div class="activity-box">
+          <div class="activity-box-header">
+            <h2 class="activity-title">Self-Driven Activity</h2>
+
+            <input type="file" class="file-input" id="upload4" />
+
+            <div class="activity-actions">
+              <label for="upload4" class="btn btn-upload"
+                >📤 Upload Proof</label
+              >
+              <button class="btn">Pending Approvals</button>
+              <button class="btn">Activity Guide</button>
+            </div>
+          </div>
+          <span class="tag">Self Initiated</span>
+        </div>
+      </section>
+
+      <!-- SECTION 5 -->
+      <section id="sec5" class="activity-section">
+        <div class="add-wrap">
+          <button class="btn-add">+ Add Activity</button>
+        </div>
+
+        <div class="activity-box">
+          <div class="activity-box-header">
+            <h2 class="activity-title">My Activity Calendar - 2024–25</h2>
+
+            <input type="file" class="file-input" id="upload5" />
+
+            <div class="activity-actions">
+              <label for="upload5" class="btn btn-upload">📤 Upload Plan</label>
+              <button class="btn">Generate PDF</button>
+              <button class="btn">View Calendar</button>
+            </div>
+          </div>
+          <span class="tag">Year 2024–25</span>
+        </div>
+      </section>
+
+      <!-- SECTION 6 -->
+      <section id="sec6" class="activity-section">
+        <div class="add-wrap">
+          <button class="btn-add">+ Add Activity</button>
+        </div>
+
+        <div class="activity-box">
+          <div class="activity-box-header">
+            <h2 class="activity-title">My Activity Calendar - 2025–26</h2>
+
+            <input type="file" class="file-input" id="upload6" />
+
+            <div class="activity-actions">
+              <label for="upload6" class="btn btn-upload">📤 Upload Plan</label>
+              <button class="btn">View Timeline</button>
+              <button class="btn">Download Format</button>
+            </div>
+          </div>
+          <span class="tag">Year 2025–26</span>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      // JS ONLY FOR TABS
+      const tabs = document.querySelectorAll(".activity-tab");
+      const sections = document.querySelectorAll(".activity-section");
+
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          tabs.forEach((t) => t.classList.remove("active"));
+          tab.classList.add("active");
+          sections.forEach((sec) => sec.classList.remove("active"));
+          document.getElementById(tab.dataset.target).classList.add("active");
+        });
+      });
+    </script>
+    {% include 'foot.html' %}
+  </body>
+</html>

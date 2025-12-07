@@ -3,7 +3,7 @@ from base.models import posts , achievement, organisation , contactOrg , notice 
 from base.forms import postForm , achievForm , contactOrgForm , organisationForm , meetingForm , galleryForm , noticeForm , iicInfoForm , querys
 from django.contrib.auth.models import User
 from base.models import iicInfo
-
+from rnd.models import facult
 # Create your views here.
 
 def homepage(req):
@@ -18,8 +18,10 @@ def homepage(req):
 
 def profilePage(req):
     info = iicInfo.objects.first()
+    fac = facult.objects.get(user = req.user)
+    meet = meeting.objects.filter(faculty = fac)
     query = querys.objects.all()
-    context = {'iic' : info , 'query' : query}
+    context = {'iic' : info , 'query' : query , 'fac' : fac , 'meet' : meet}
     return render(req , 'adminprofile.html' , context)
 
 def postCreate(req):
@@ -143,7 +145,7 @@ def add_meetform(req):
     else:
         meetform = meetingForm()
     
-    return render(req, 'form1.html', {'meetf': meetform})
+    return render(req, 'meeting1.html', {'meetf': meetform})
 
 def update_meetform(req, pk):
     meetform = meeting.objects.get(id = pk)
@@ -156,7 +158,7 @@ def update_meetform(req, pk):
         else:
             update_meetformform = meetingForm()
     
-    return render(req, 'form1.html', {'meetf': update_meetformform})
+    return render(req, 'meeting11.html', {'meetf': update_meetformform})
     
 def delete_meetform(req, pk):
     meetform = meeting.objects.get(id = pk)
