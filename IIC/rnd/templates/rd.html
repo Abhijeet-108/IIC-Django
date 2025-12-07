@@ -194,12 +194,21 @@
             </div>
             <div id="searchResultsList" style="display:grid;gap:10px"></div>
           </div>
-
+          
+          
           <!-- Departments / Teachers -->
           <div id="mainPanel">
             <!-- Departments -->
             <div id="departmentsPanel">
               <h2 style="text-align:center;margin-bottom:14px;color:var(--accent-1)">Departments</h2>
+
+              {% if request.user.is_superuser %}
+              <div style="text-decoration: none; padding-bottom: 20px; text-align: right;position: relative;display: flex; justify-content: flex-end;">
+                <a href="{% url "deptform" %}" style="text-decoration: none; padding-bottom: 20px">
+                  <button style="background: #3788d4; color: #fff; border-radius: 5px; padding:10px 20px;">Add</button>
+                </a>
+              </div>
+            {% endif %}
 
               <div id="departmentsGrid" class="grid" role="list">
                 {% for i in dept %}

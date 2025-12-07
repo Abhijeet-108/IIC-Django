@@ -21,7 +21,7 @@ class achievement(models.Model):
         return self.title
     
 class meeting(models.Model):
-    date = models.DateTimeField(auto_now = True)
+    date = models.DateTimeField()
     headline = models.CharField(max_length = 100, blank = True)
     description = models.TextField()
     faculty = models.ManyToManyField(facult , blank = True , null = True)
@@ -44,8 +44,14 @@ class notice(models.Model):
         return self.headline
 
 class activity(models.Model):
-    date = models.DateTimeField(auto_now = True)
+    class cat(models.TextChoices):
+        IIC_Calender = "IIC Calender Activity"
+        MIC_Driven = "MIC_Driven Activity"
+        Celebration = "Celebration Activity"
+        Self_Driven = "Self Driven Activity"
+    date = models.DateTimeField()
     headline = models.CharField(max_length = 100, blank = True)
+    category = models.CharField(choices = cat , null = True , blank = True , max_length = 25)
     photo = models.ImageField(upload_to='image/activities/', null=True , blank = True)
     pdf_file = models.FileField(upload_to='pdfs/', null=True , blank = True)
     created = models.DateTimeField(auto_now_add=True)

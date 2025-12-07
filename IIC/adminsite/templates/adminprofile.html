@@ -1,4 +1,5 @@
 {% load static %}
+{% if request.user.is_superuser %}
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -181,29 +182,7 @@
       </div>
 
       <nav class="rnd-progress" aria-label="Sections">
-        {% comment %} <a class="rnd-step-link" href="#gallery">
-          <div class="rnd-bullet">G</div>
-          <div>
-            <div class="rnd-step-text">Gallery</div>
-            <div class="rnd-step-sub">Photos & media</div>
-          </div>
-        </a>
 
-        <a class="rnd-step-link" href="#notice-board">
-          <div class="rnd-bullet">N</div>
-          <div>
-            <div class="rnd-step-text">Notice Board</div>
-            <div class="rnd-step-sub">Announcements</div>
-          </div>
-        </a>
-
-        <a class="rnd-step-link" href="#meeting">
-          <div class="rnd-bullet">M</div>
-          <div>
-            <div class="rnd-step-text">Meeting</div>
-            <div class="rnd-step-sub">Schedule & minutes</div>
-          </div>
-        </a> {% endcomment %}
         <!-- About IIC -->
         <a class="rnd-step-link" href="#about-iic">
           <div class="rnd-bullet">A</div>
@@ -220,17 +199,6 @@
             <!-- <div class="rnd-step-sub">General Qye</div> -->
           </div>
         </a>
-{% comment %} 
-        <!-- R&D non-navigating clickable button -->
-        <button type="button" class="rnd-step-button" aria-label="R&D (non-navigating)">
-          <div class="rnd-bullet">R</div>
-          <div>
-            <div class="rnd-step-text">R&D</div>
-            <div class="rnd-step-sub">Click-only (no redirect)</div>
-          </div>
-        </button> {% endcomment %}
-
-        
 
       </nav>
 
@@ -241,142 +209,6 @@
     <main class="rnd-card" role="main" aria-live="polite">
       <h1>IIC Info & Media</h1>
       <!-- <p class="rnd-lead">Manage gallery images and administrative notices. Each section is visually separated to make scanning and editing easier. All actions use native form submission (no JavaScript required).</p> -->
-
-      {% comment %} <!-- Gallery -->
-      <section id="gallery" class="rnd-section" aria-labelledby="gallery-label">
-        <div class="title">
-          <div class="rnd-badge">G</div>
-          <div>
-            <h3 id="gallery-label">Gallery</h3>
-            <p class="desc">Upload images (multiple) and manage existing images below.</p>
-          </div>
-        </div>
-        <div class="divider" aria-hidden="true"></div>
-
-        <!-- Upload form (native) -->
-        <form action="/gallery/upload/" method="post" enctype="multipart/form-data" novalidate>
-          <!-- If using Django, include {% csrf_token %} here -->
-          <label for="gallery_files">Select image files to upload (you may choose multiple)</label>
-          <input id="gallery_files" name="images" type="file" accept="image/*" multiple required />
-          <div class="small">Allowed types: jpg, png, webp. Max filesize: configure on server.</div>
-
-          <div class="actions-row" style="margin-top:12px;">
-            <button type="submit" class="btn">Upload Images</button>
-            <button type="reset" class="btn ghost">Clear Selection</button>
-          </div>
-        </form>
-
-        <!-- Display existing images (render server-side) -->
-        <div class="gallery-grid" aria-live="polite" style="margin-top:16px;">
-          <div class="media-card">
-            <img src="/media/gallery/image1.jpg" alt="Innovation fair 2024" />
-            <div class="meta">
-              <div class="name">innovation-fair-2024.jpg</div>
-              <form action="/gallery/delete/" method="post" style="display:inline;">
-                <!-- Add {% csrf_token %} on server side -->
-                <input type="hidden" name="image_id" value="image1.jpg" />
-                <button type="submit" class="btn ghost" title="Delete image">Delete</button>
-              </form>
-            </div>
-          </div>
-
-          <div class="media-card">
-            <img src="/media/gallery/image2.jpg" alt="Startup pitch day" />
-            <div class="meta">
-              <div class="name">startup-pitch.jpg</div>
-              <form action="/gallery/delete/" method="post" style="display:inline;">
-                <input type="hidden" name="image_id" value="image2.jpg" />
-                <button type="submit" class="btn ghost" title="Delete image">Delete</button>
-              </form>
-            </div>
-          </div>
-
-          <div class="media-card">
-            <img src="/media/gallery/image3.jpg" alt="Workshop" />
-            <div class="meta">
-              <div class="name">workshop.jpg</div>
-              <form action="/gallery/delete/" method="post" style="display:inline;">
-                <input type="hidden" name="image_id" value="image3.jpg" />
-                <button type="submit" class="btn ghost" title="Delete image">Delete</button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Notice Board -->
-      <section id="notice-board" class="rnd-section" aria-labelledby="notice-label">
-        <div class="title">
-          <div class="rnd-badge">N</div>
-          <div>
-            <h3 id="notice-label">Notice Board</h3>
-            <p class="desc">Create or update notices.</p>
-          </div>
-        </div>
-        <div class="divider" aria-hidden="true"></div>
-
-        <form action="/notices/" method="post">
-          <!-- Add {% csrf_token %} in Django templates -->
-          <div class="info-grid">
-            <div class="info-full">
-              <label for="notice_title">Notice Title</label>
-              <input id="notice_title" name="notice_title" type="text" value="IIC Annual Innovation Fair — Registrations Open" onfocus="this.select()" />
-            </div>
-
-            <div>
-              <label for="notice_date">Date</label>
-              <input id="notice_date" name="notice_date" type="date" value="2025-11-20" />
-            </div>
-
-            <div class="info-full">
-              <label for="notice_desc">Notice Description</label>
-              <textarea id="notice_desc" name="notice_desc" onfocus="this.select()">Registrations are open for the Annual Innovation Fair. All student teams must register before the deadline.</textarea>
-            </div>
-          </div>
-
-          <div class="actions-row">
-            <button type="submit" class="btn">Post Notice</button>
-            <button type="reset" class="btn ghost">Reset</button>
-          </div>
-        </form>
-      </section>
-
-      <!-- Meeting -->
-      <section id="meeting" class="rnd-section" aria-labelledby="meeting-label">
-        <div class="title">
-          <div class="rnd-badge">M</div>
-          <div>
-            <h3 id="meeting-label">Meeting</h3>
-            <p class="desc">Schedule meetings.</p>
-          </div>
-        </div>
-        <div class="divider" aria-hidden="true"></div>
-
-        <form action="/meetings/schedule/" method="post">
-          <!-- Add {% csrf_token %} in Django templates -->
-          <div class="info-grid">
-            <div>
-              <label for="meeting_title">Meeting Title</label>
-              <input id="meeting_title" name="meeting_title" type="text" value="IIC Steering Committee Meeting" onfocus="this.select()" />
-            </div>
-
-            <div>
-              <label for="meeting_date">Date & Time</label>
-              <input id="meeting_date" name="meeting_date" type="datetime-local" value="2025-11-25T10:00" />
-            </div>
-
-            <div class="info-full">
-              <label for="meeting_agenda">Agenda / Notes</label>
-              <textarea id="meeting_agenda" name="meeting_agenda" onfocus="this.select()">Discuss upcoming events, funding allocation, and mentorship programs.</textarea>
-            </div>
-          </div>
-
-          <div class="actions-row">
-            <button type="submit" class="btn">Schedule Meeting</button>
-            <button type="reset" class="btn ghost">Clear</button>
-          </div>
-        </form>
-      </section> {% endcomment %}
 
       <!-- About IIC (now with Upload form/button added) -->
       <section id="about-iic" class="rnd-section" aria-labelledby="about-iic-label">
@@ -464,3 +296,591 @@
   {% include 'foot.html' %}
 </body>
 </html>
+{% elif request.user.is_authenticated %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Teacher Profile & Meeting Notification</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root{
+      --accent1:#2563eb;
+      --accent2:#06b6d4;
+      --muted:#555;
+      --text:#111827;
+      --card-border:rgba(15,23,36,0.06);
+      --card-shadow:0 14px 30px rgba(2,6,23,0.06);
+      --radius:18px;
+      --maxw:1100px;
+    }
+
+    body {
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont;
+      color: var(--text);
+      margin:0;
+      min-height:100vh;
+      background:
+        radial-gradient(900px 400px at 10% 10%, rgba(37,99,235,0.06), transparent 10%),
+        radial-gradient(700px 300px at 90% 90%, rgba(6,182,212,0.06), transparent 10%),
+        linear-gradient(180deg,#f7f8fa 0%, #ffffff 100%);
+    }
+
+    .page {
+      max-width: var(--maxw);
+      margin: 32px auto 40px;
+      padding: 0 8px 40px;
+    }
+
+    .page-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 22px;
+      letter-spacing: 0.01em;
+      text-align:center;
+    }
+
+    /* WRAPPER WITH LEFT SIDEBAR + RIGHT CONTENT */
+    .rnd-wrap{
+      width:100%;
+      max-width:var(--maxw);
+      display:grid;
+      grid-template-columns:260px 1fr;
+      gap:24px;
+      align-items:flex-start;
+      margin:0 auto;
+    }
+
+    .rnd-sidebar{
+      background:linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.01));
+      border-radius:14px;
+      padding:14px;
+      border:1px solid rgba(0,0,0,0.08);
+      box-shadow:0 4px 12px rgba(0,0,0,0.06);
+      position:sticky;
+      top:24px;
+      height:fit-content;
+    }
+
+    .rnd-top-image{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:10px;
+      margin-bottom:18px;
+      text-align:center;
+    }
+
+    .rnd-top-image img{
+      width:120px;
+      height:120px;
+      border-radius:50%;
+      object-fit:cover;
+      border:3px solid rgba(0,0,0,0.08);
+      box-shadow:0 8px 22px rgba(0,0,0,0.1);
+    }
+
+    .rnd-brand h3{
+      margin:0;
+      font-size:18px;
+      font-weight:800;
+    }
+
+    .rnd-brand p{
+      margin:0;
+      margin-top:6px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .rnd-progress{
+      margin-top:8px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .rnd-step-link{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      padding:10px;
+      border-radius:10px;
+      text-decoration:none;
+      color:var(--text);
+      background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.00));
+      border:1px solid rgba(0,0,0,0.05);
+      transition: all .18s ease;
+      font-size:0.9rem;
+    }
+
+    .rnd-step-link:hover{
+      transform:translateY(-3px);
+      box-shadow:0 8px 20px rgba(0,0,0,0.06);
+      background: linear-gradient(90deg, rgba(37,99,235,0.06), rgba(6,182,212,0.04));
+    }
+
+    .rnd-bullet{
+      width:38px;
+      height:38px;
+      border-radius:10px;
+      background:linear-gradient(135deg,var(--accent1),var(--accent2));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#fff;
+      font-weight:700;
+      font-size:0.9rem;
+    }
+
+    /* STACK LAYOUT (PROFILE UP, MEETING DOWN) ON RIGHT SIDE */
+    .layout {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    /* ---------- profile card ---------- */
+    .profile-card {
+      background: linear-gradient(180deg,#ffffff,#fbfdff);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      border:1px solid var(--card-border);
+      box-shadow: var(--card-shadow);
+    }
+
+    .profile-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 18px;
+      gap: 10px;
+    }
+
+    .profile-header {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: #e5e7eb;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:1.8rem;
+      color:#4b5563;
+      box-shadow:0 6px 16px rgba(15,23,42,0.18);
+    }
+
+    .profile-name {
+      font-size: 1.15rem;
+      font-weight: 800;
+    }
+
+    .profile-meta {
+      font-size: 0.9rem;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    .profile-update-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 8px 18px;
+      background: linear-gradient(90deg, var(--accent1), var(--accent2));
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(37,99,235,0.25);
+    }
+
+    .profile-label-static {
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      color: #9ca3af;
+      margin-bottom: 2px;
+      text-transform:uppercase;
+    }
+
+    .profile-value {
+      font-size: 0.95rem;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    /* ---------- meeting card ---------- */
+    .meeting-card {
+      background: linear-gradient(180deg,#ffffff,#fbfdff);
+      border-radius: var(--radius);
+      border:1px solid var(--card-border);
+      box-shadow: var(--card-shadow);
+      padding: 20px 22px;
+    }
+
+    .meeting-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      padding-bottom: 12px;
+    }
+
+    .meeting-header-left {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .meeting-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: linear-gradient(135deg,rgba(37,99,235,0.08),rgba(6,182,212,0.12));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:1.4rem;
+    }
+
+    .meeting-name {
+      font-size: 1.12rem;
+      font-weight: 800;
+    }
+
+    .published {
+      font-size: 0.8rem;
+      color:#6b7280;
+      font-weight:600;
+      margin-bottom:6px;
+    }
+
+    .toggle-btn {
+      border: none;
+      background: #f3f4f6;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      padding: 6px 9px;
+      box-shadow:0 4px 10px rgba(15,23,42,0.12);
+    }
+
+    .toggle-btn.rotate { transform: rotate(180deg); }
+
+    .meeting-meta-row {
+      padding: 14px 0;
+      border-top: 1px solid #e5e7eb;
+      border-bottom: 1px solid #e5e7eb;
+      margin-bottom: 6px;
+    }
+
+    .meta-item {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .meta-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background:#eef2ff;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      color:#1d4ed8;
+    }
+
+    .meta-label {
+      font-size: 0.72rem;
+      color: #9ca3af;
+      text-transform: uppercase;
+    }
+
+    .meta-value {
+      font-size: 0.96rem;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    .meeting-extra {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height .3s ease;
+    }
+
+    .meeting-extra.expanded {
+      max-height: 2000px;
+    }
+
+    .section-title {
+      margin-top: 14px;
+      font-size: 1.04rem;
+      font-weight: 700;
+    }
+
+    .section-body {
+      margin: 10px 0 14px;
+      font-size: 0.95rem;
+      color:#444;
+    }
+
+    .points-list {
+      padding-left: 20px;
+      margin-bottom:14px;
+    }
+
+    .points-list li {
+      font-size: 0.93rem;
+      margin-bottom: 5px;
+    }
+
+    /* DOC CARD + DOWNLOAD (RESTORED) */
+    .doc-card {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      padding: 12px 14px;
+      border-radius: 14px;
+      max-width: 420px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .doc-left {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .doc-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: #e0ebff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .doc-title {
+      font-size: 0.93rem;
+      font-weight: 600;
+    }
+
+    .doc-subtitle {
+      font-size: 0.78rem;
+      color: #6b7280;
+    }
+
+    .doc-download-btn {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 7px 9px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 900px) {
+      .rnd-wrap{
+        grid-template-columns:1fr;
+      }
+      .rnd-sidebar{
+        position:static;
+      }
+    }
+  </style>
+</head>
+
+<body>
+    {% include 'nav.html' %}
+  <main class="page">
+    <h1 class="page-title">Teacher Dashboard</h1>
+
+    <div class="rnd-wrap">
+      <!-- LEFT: SIDEBAR (IIC TYPE) -->
+      <aside class="rnd-sidebar">
+        <div class="rnd-top-image">
+          <img src="https://via.placeholder.com/260x260.png?text=Profile" alt="Profile" />
+          <div class="rnd-brand">
+            <h3>Teacher Dashboard</h3>
+            <p>Quick Navigation</p>
+          </div>
+        </div>
+
+        <nav class="rnd-progress">
+          <a class="rnd-step-link" href="#profile-section">
+            <div class="rnd-bullet">P</div>
+            <div><div class="rnd-step-text">Profile</div></div>
+          </a>
+
+          <a class="rnd-step-link" href="#meeting-section">
+            <div class="rnd-bullet">M</div>
+            <div><div class="rnd-step-text">Meeting</div></div>
+          </a>
+        </nav>
+      </aside>
+
+      <!-- RIGHT: MAIN CONTENT (UP/DOWN) -->
+      <div class="layout">
+        <!-- PROFILE CARD (TOP) -->
+        <section class="profile-card" id="profile-section">
+          <div class="profile-card-top">
+            <div class="profile-header">
+              <div class="avatar">A</div>
+
+              <div>
+                <div class="profile-name">{{fac.suf}} {{fac.name}}</div>
+                <div class="profile-meta">
+                  {{fac.qualification}} · {{fac.dept}}
+                </div>
+              </div>
+            </div>
+
+            <button class="profile-update-btn">Update</button>
+          </div>
+
+          <div class="profile-row">
+            <div class="profile-label-static">Name</div>
+            <div class="profile-value">{{fac.name}}</div>
+          </div>
+
+          <div class="profile-row">
+            <div class="profile-label-static">Department</div>
+            <div class="profile-value">{{fac.dept}}</div>
+          </div>
+
+          <div class="profile-row">
+            <div class="profile-label-static">Suffix</div>
+            <div class="profile-value">{{fac.suf}}</div>
+          </div>
+
+          <div class="profile-row">
+            <div class="profile-label-static">Email</div>
+            <div class="profile-value">{{fac.email}}</div>
+          </div>
+
+          <div class="profile-row">
+            <div class="profile-label-static">Phone</div>
+            <div class="profile-value">{{fac.phone}}</div>
+          </div>
+
+          <div class="profile-row">
+            <div class="profile-label-static">Qualification</div>
+            <div class="profile-value">{{fac.qualification}}</div>
+          </div>
+
+          <div class="profile-row">
+            <div class="profile-label-static">Role</div>
+            <div class="profile-value">{{fac.role}}</div>
+          </div>
+
+          <div class="profile-row">
+            <div class="profile-label-static">Experience</div>
+            <div class="profile-value">{{fac.experience}} Years</div>
+          </div>
+        </section>
+
+        <!-- MEETING CARD (BOTTOM) -->
+        <section class="meeting-card" id="meeting-section">
+          <div class="meeting-header">
+            <div class="meeting-header-left">
+              <div class="meeting-icon">📅</div>
+              <div>
+                <h2 class="meeting-name">Industry Partnership Summit</h2>
+              </div>
+            </div>
+
+            <div style="text-align:right;">
+              <div class="published">Published on: <span>02 Mar 2025</span></div>
+              <button class="toggle-btn">⌄</button>
+            </div>
+          </div>
+
+          <div class="meeting-meta-row">
+            <div class="meta-item">
+              <div class="meta-icon">📆</div>
+              <div>
+                <div class="meta-label">Date</div>
+                <div class="meta-value">April 10, 2024</div>
+              </div>
+            </div>
+
+            <div class="meta-item">
+              <div class="meta-icon">⏰</div>
+              <div>
+                <div class="meta-label">Time</div>
+                <div class="meta-value">11:00 AM – 2:00 PM</div>
+              </div>
+            </div>
+
+            <div class="meta-item">
+              <div class="meta-icon">📍</div>
+              <div>
+                <div class="meta-label">Location</div>
+                <div class="meta-value">TMSL</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="meeting-extra">
+            <h3 class="section-title">Meeting Overview</h3>
+            <p class="section-body">
+              Strategic meeting with industry partners to discuss collaboration
+              opportunities and joint innovation projects.
+            </p>
+
+            <h3 class="section-title">Key Discussion Points</h3>
+            <ul class="points-list">
+              <li>Discuss new partnership opportunities</li>
+              <li>Review existing collaborations</li>
+              <li>Plan joint research projects</li>
+              <li>Explore internship programs</li>
+            </ul>
+
+            <h3 class="section-title">Meeting Documents</h3>
+            <div class="doc-card">
+              <div class="doc-left">
+                <div class="doc-icon">📄</div>
+                <div>
+                  <div class="doc-title">Agenda</div>
+                  <div class="doc-subtitle">Industry Partnership Summit Agenda</div>
+                </div>
+              </div>
+              <button class="doc-download-btn">⬇</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    document.querySelectorAll('.meeting-card').forEach(card => {
+      const btn = card.querySelector('.toggle-btn');
+      const extra = card.querySelector('.meeting-extra');
+
+      if (!btn || !extra) return;
+
+      btn.addEventListener('click', () => {
+        extra.classList.toggle('expanded');
+        btn.classList.toggle('rotate');
+      });
+    });
+  </script>
+    {% include 'foot.html' %}
+</body>
+</html>
+
+{% endif %}

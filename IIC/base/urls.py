@@ -10,6 +10,8 @@ urlpatterns = [
     path('login/',views.loginFac , name = "login"),
     path('logout/',views.logoutFac , name = "logout"),
 
+    path('signup/',views.registerFac , name = 'signup'),
+
     path('query-create/' , views.queryCreate , name = "query-create"),
     path('query-delete/<int:pk>' , views.queryDeletion , name = "query-delete"),
     

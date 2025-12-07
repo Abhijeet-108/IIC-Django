@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Meetings — Collapsible Details</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: system-ui, sans-serif;
+        background: #f3f6fb;
+        color: #111827;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .page {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 0 18px 40px;
+      }
+
+      /* ---------- card ---------- */
+      .meeting-card {
+        background: #ffffff;
+        border-radius: 24px;
+        box-shadow: 0 22px 55px rgba(0, 0, 0, 0.08);
+        padding: 26px 28px;
+      }
+
+      /* ---------- header (always visible) ---------- */
+      .meeting-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        padding-bottom: 14px;
+      }
+
+      .meeting-header-left {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+      }
+
+      .meeting-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 16px;
+        background: #e0ecff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+      }
+
+      .meeting-name {
+        font-size: 1.3rem;
+        font-weight: 800;
+      }
+
+      .badges {
+        margin-top: 4px;
+      }
+
+      .badge {
+        padding: 5px 12px;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        background: #f3f4f6;
+        border: 1px solid #e5e7eb;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-right: 6px;
+      }
+
+      .badge-primary {
+        background: #111827;
+        color: #fff;
+        border-color: #111827;
+      }
+
+      .toggle-btn {
+        border: none;
+        background: #f3f4f6;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 1.3rem;
+        padding: 8px 10px;
+        transition: transform 0.3s ease, background 0.2s;
+      }
+
+      .toggle-btn:hover {
+        background: #e5e7eb;
+      }
+
+      .toggle-btn.rotate {
+        transform: rotate(180deg);
+      }
+
+      /* ---------- meta row (always visible) ---------- */
+      .meeting-meta-row {
+        padding: 18px 0;
+        border-top: 1px solid #e5e7eb;
+        border-bottom: 1px solid #e5e7eb;
+        margin-bottom: 6px;
+      }
+
+      .meta-item {
+        display: flex;
+        gap: 14px;
+        margin-bottom: 14px;
+        font-size: 0.95rem;
+      }
+
+      .meta-item:last-child {
+        margin-bottom: 0;
+      }
+
+      .meta-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 999px;
+        background: #eef2ff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #1d4ed8;
+        font-size: 1.05rem;
+      }
+
+      .meta-label {
+        font-size: 0.72rem;
+        color: #9ca3af;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .meta-value {
+        font-size: 0.98rem;
+        font-weight: 600;
+        margin-top: 2px;
+      }
+
+      /* ---------- collapsible part (overview, points, docs) ---------- */
+      .meeting-extra {
+        overflow: hidden;
+        max-height: 0;
+        transition: max-height 0.35s ease;
+      }
+
+      .meeting-extra.expanded {
+        max-height: 1000px; /* enough to show all content */
+      }
+
+      .section-title {
+        font-size: 1.05rem;
+        font-weight: 700;
+        margin-top: 16px;
+        margin-bottom: 6px;
+      }
+
+      .section-body {
+        color: #4b5563;
+        font-size: 0.97rem;
+        line-height: 1.7;
+        margin-bottom: 14px;
+      }
+
+      .points-list {
+        padding-left: 22px;
+        margin-bottom: 20px;
+      }
+
+      .points-list li {
+        font-size: 0.96rem;
+        line-height: 1.65;
+        margin-bottom: 6px;
+        color: #374151;
+      }
+
+      /* documents card */
+      .doc-card {
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        padding: 14px 16px;
+        border-radius: 18px;
+        max-width: 420px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 14px;
+        margin-top: 8px;
+      }
+
+      .doc-left {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+      }
+
+      .doc-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 14px;
+        background: #e0ebff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+      }
+
+      .doc-title {
+        font-size: 0.95rem;
+        font-weight: 600;
+      }
+
+      .doc-subtitle {
+        font-size: 0.8rem;
+        color: #6b7280;
+      }
+
+      .doc-download-btn {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 8px 10px;
+        cursor: pointer;
+        font-size: 0.95rem;
+      }
+
+      @media (max-width: 720px) {
+        .meeting-card {
+          padding: 22px 18px;
+        }
+        .meeting-header {
+          flex-direction: row;
+          align-items: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    {% include 'nav.html' %}
+    <main class="page">
+      {% for i in meetings %}
+      <section class="meeting-card">
+        <!-- HEADER -->
+
+        <div class="meeting-header">
+          <div class="meeting-header-left">
+            <div class="meeting-icon">📅</div>
+            <div>
+              <h2 class="meeting-name">{{i.headline}}</h2>
+              <div class="badges">
+                <!-- <span class="badge badge-primary">Upcoming</span>
+              <span class="badge">Special Meeting</span> -->
+              </div>
+            </div>
+          </div>
+
+          <!-- arrow button -->
+          <!-- <button class="toggle-btn" id="toggleBtn">⌄</button> -->
+          <div style="text-align: right">
+            <div
+              style="
+                font-size: 0.8rem;
+                color: #6b7280;
+                font-weight: 600;
+                margin-bottom: 6px;
+              "
+            >
+              Published on: <span style="color: #111827">02 Mar 2025</span>
+            </div>
+            <button class="toggle-btn" id="toggleBtn">⌄</button>
+          </div>
+        </div>
+
+        <!-- META (ALWAYS VISIBLE) -->
+        <div class="meeting-meta-row">
+          <div class="meta-item">
+            <div class="meta-icon">📆</div>
+            <div>
+              <div class="meta-label">Date</div>
+              <div class="meta-value">{{i.date.date}}</div>
+            </div>
+          </div>
+
+          <div class="meta-item">
+            <div class="meta-icon">⏰</div>
+            <div>
+              <div class="meta-label">Time</div>
+              <div class="meta-value">11:00 AM – 2:00 PM</div>
+            </div>
+          </div>
+
+          <div class="meta-item">
+            <div class="meta-icon">📍</div>
+            <div>
+              <div class="meta-label">Location</div>
+              <div class="meta-value">TMSL</div>
+            </div>
+          </div>
+
+          <!-- <div class="meta-item">
+          <div class="meta-icon">👥</div>
+          <div>
+            <div class="meta-label">Attendees</div>
+            <div class="meta-value">28 attendees</div>
+          </div>
+        </div> -->
+        </div>
+
+        <!-- EXTRA DETAILS (TOGGLED) -->
+        <div class="meeting-extra" id="meetingExtra">
+          <h3 class="section-title">Meeting Overview</h3>
+          <p class="section-body">{{i.description}}</p>
+
+          <h3 class="section-title">Key Discussion Points</h3>
+          <ul class="points-list">
+            <li>Discuss new partnership opportunities</li>
+            <li>Review existing collaborations</li>
+            <li>Plan joint research projects</li>
+            <li>Explore internship programs</li>
+          </ul>
+
+          <h3 class="section-title">Meeting Documents</h3>
+          <div class="doc-card">
+            <div class="doc-left">
+              <div class="doc-icon">📄</div>
+              <div>
+                <div class="doc-title">Agenda</div>
+                <div class="doc-subtitle">
+                  Industry Partnership Summit Agenda
+                </div>
+              </div>
+            </div>
+            <button class="doc-download-btn">⬇</button>
+          </div>
+        </div>
+      </section>
+      {% endfor %}
+    </main>
+
+    <script>
+      const toggleBtn = document.getElementById("toggleBtn");
+      const meetingExtra = document.getElementById("meetingExtra");
+
+      toggleBtn.addEventListener("click", () => {
+        meetingExtra.classList.toggle("expanded");
+        toggleBtn.classList.toggle("rotate");
+      });
+    </script>
+    {% include 'foot.html' %}
+  </body>
+</html>

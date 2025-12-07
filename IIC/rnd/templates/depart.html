@@ -165,13 +165,15 @@
 /* extra spacing after grid */
 .about-text + * { margin-bottom: 80px; }
 </style>
-
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 <body>
   {% include 'nav.html' %}
 <section class="about" id="about">
   <div class="container">
     <button type="button" class="back-btn" onclick="history.back()" style="padding:5px; border:none; background:transparent; font-size:16px; color:var(--muted); cursor:pointer; margin-bottom:12px">
-      &#8592; Back
+      <span class="material-symbols-outlined">
+      arrow_back
+      </span>
     </button>
     <h2 style="text-align:center;margin-bottom:14px; color: black">{{ depart }}</h2>
 

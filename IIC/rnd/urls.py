@@ -10,7 +10,7 @@ urlpatterns = [
     path('department/<int:pk>', views.depart , name = "depart"),
     path('faculty/<int:pk>', views.facul , name = "facul"),
     # ----------- patent -------------------
-    path('patentform/', views.add_form, name="form"),
+    path('patentform/<int:pk>', views.add_form, name="form"),
     path('patentform-update/<int:pk>', views.update_form, name="updateform"),
     path('patentform-delete/<int:pk>', views.delete_form, name="deletePatentform"),
     # ------------- dept ------------------------
@@ -19,7 +19,7 @@ urlpatterns = [
     path('deptform-delete/<int:pk>', views.delete_deptform, name="deptform"),
     
     # ------------- Book -------------------
-    path('bookform/', views.add_bookform, name="bookform"),
+    path('bookform/<int:pk>', views.add_bookform, name="bookform"),
     path('bookform-update/<int:pk>', views.update_bookform, name="updatebookform"),
     path('bookform-delete/<int:pk>', views.delete_bookform, name="deletebookform"),
     
@@ -30,7 +30,7 @@ urlpatterns = [
     path('basic-delete/<int:pk>' , views.basicDeletion , name = "basic-delete"),
 
     # ------------- Book Chapter -------------------
-    path('bookChapterform/', views.add_bookChapterform, name="bookChapterform"),
+    path('bookChapterform/<int:pk>', views.add_bookChapterform, name="bookChapterform"),
     path('bookChapterform-update/<int:pk>', views.update_bookChapterform, name="updatebookChapterform"),
     path('bookChapterform-delete/<int:pk>', views.delete_bookChapterform, name="deletebookChapterform"),
 
@@ -45,17 +45,17 @@ urlpatterns = [
     path('suffform-delete/<int:pk>', views.delete_suffform, name="deletesuffform"),
 
     # ------------- Copyright -------------------
-    path('copyrightform/', views.add_copyrightform, name="copyrightform"),
+    path('copyrightform/<int:pk>', views.add_copyrightform, name="copyrightform"),
     path('copyrightform-update/<int:pk>', views.update_copyrightform, name="updatecopyrightform"),
     path('copyrightform-delete/<int:pk>', views.delete_copyrightform, name="deletecopyrightform"),
 
     # ------------- Conference -------------------
-    path('conferenceform/', views.add_conferenceform, name="conferenceform"),
+    path('conferenceform/<int:pk>', views.add_conferenceform, name="conferenceform"),
     path('conferenceform-update/<int:pk>', views.update_conferenceform, name="updateconferenceform"),
     path('conferenceform-delete/<int:pk>', views.delete_conferenceform, name="deleteconferenceform"),
 
     # ------------- Journal -------------------
-    path('journalform/', views.add_journalform, name="journalform"),
+    path('journalform/<int:pk>', views.add_journalform, name="journalform"),
     path('journalform-update/<int:pk>', views.update_journalform, name="updatejournalform"),
     path('journalform-delete/<int:pk>', views.delete_journalform, name="deletejournalform"),
     
