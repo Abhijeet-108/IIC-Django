@@ -18,10 +18,15 @@ def homepage(req):
 
 def profilePage(req):
     info = iicInfo.objects.first()
-    fac = facult.objects.get(user = req.user)
-    meet = meeting.objects.filter(faculty = fac)
-    query = querys.objects.all()
-    context = {'iic' : info , 'query' : query , 'fac' : fac , 'meet' : meet}
+    context = {'iic' : info}
+    if (not req.user.is_superuser):
+        fac = facult.objects.get(user = req.user)
+        meet = meeting.objects.filter(faculty = fac)
+        context['fac'] = fac
+        context['meet'] = meet
+    else:
+        query = querys.objects.all()
+        context['query'] = query
     return render(req , 'adminprofile.html' , context)
 
 def postCreate(req):
