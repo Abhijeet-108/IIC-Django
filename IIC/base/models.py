@@ -13,21 +13,15 @@ class posts(models.Model):
 class achievement(models.Model):
     title = models.CharField(max_length = 100 , blank = True)
     description = models.TextField(max_length = 1000 , blank = False)
-    date = models.DateField(null=True , blank = True)
-    time = models.TimeField(null=True , blank = True)
+    date = models.DateTimeField(auto_now = True)
     photo = models.ImageField(upload_to='image/achievements/', null=True , blank = True)
     pdf_file = models.FileField(upload_to='pdfs/', null=True , blank = True)
-    
-    class status(models.TextChoices):
-        Approved = "Approved"
-        Pending = "Pending"
 
     def __str__(self):
         return self.title
     
 class meeting(models.Model):
-    date = models.DateField(null=True , blank = True)
-    time = models.TimeField(null=True , blank = True)
+    date = models.DateTimeField()
     headline = models.CharField(max_length = 100, blank = True)
     description = models.TextField()
     faculty = models.ManyToManyField(facult , blank = True , null = True)
@@ -38,8 +32,7 @@ class meeting(models.Model):
         return self.headline
     
 class notice(models.Model):
-    date = models.DateField(null=True , blank = True)
-    time = models.TimeField(null=True , blank = True)
+    date = models.DateTimeField(auto_now = True)
     headline = models.CharField(max_length = 100, blank = True)
     description = models.TextField()
     pdf_file = models.FileField(upload_to='pdfs/', null=True , blank = True)
@@ -56,8 +49,7 @@ class activity(models.Model):
         MIC_Driven = "MIC_Driven Activity"
         Celebration = "Celebration Activity"
         Self_Driven = "Self Driven Activity"
-    date = models.DateField(null=True , blank = True)
-    time = models.TimeField(null=True , blank = True)
+    date = models.DateTimeField()
     headline = models.CharField(max_length = 100, blank = True)
     category = models.CharField(choices = cat , null = True , blank = True , max_length = 25)
     photo = models.ImageField(upload_to='image/activities/', null=True , blank = True)

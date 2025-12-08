@@ -181,7 +181,7 @@
         <header>
           <h1 class="title">Gallery</h1>
           <div class="decor" aria-hidden="true"></div>
-          {% if request.user.is_authenticated %}
+          {% if request.user.is_superuser %}
           <a href = {% url 'gallery-create' %}><button type="button" class="btn-add">+ Add</button></a>
           {% endif %}
         </header>

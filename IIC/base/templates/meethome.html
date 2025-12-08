@@ -144,7 +144,7 @@
     <main class="page">
       <header class="about-header">
         <h1 class="about-title">Meetings</h1>
-        {% if request.user.is_authenticated %}
+        {% if request.user.is_superuser %}
         <a href = {% url 'meet-create' %}><button type="button" class="btn-add">+ Add</button></a>
         {% endif %}
       </header>
