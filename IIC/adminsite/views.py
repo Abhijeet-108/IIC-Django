@@ -143,7 +143,7 @@ def organisationDeletion(req , pk):
 def add_meetform(req):
     meetform = meetingForm()
     if req.method == 'POST':
-        meetform = meetingForm(req.POST)
+        meetform = meetingForm(req.POST , req.FILES)
         if meetform.is_valid():
             meetform.save()
             return redirect('meet')
@@ -156,7 +156,7 @@ def update_meetform(req, pk):
     meetform = meeting.objects.get(id = pk)
     update_meetformform = meetingForm(instance=meetform)
     if req.method == 'POST':
-        update_meetformform = meetingForm(req.POST, instance=meetform)
+        update_meetformform = meetingForm(req.POST, req.FILES , instance=meetform)
         if update_meetformform.is_valid():
             update_meetformform.save()
             return redirect('meet')

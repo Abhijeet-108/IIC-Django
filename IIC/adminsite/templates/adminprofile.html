@@ -712,7 +712,7 @@
       <!-- LEFT: SIDEBAR (IIC TYPE) -->
       <aside class="rnd-sidebar">
         <div class="rnd-top-image">
-          <img src="https://via.placeholder.com/260x260.png?text=Profile" alt="Profile" />
+          <img src={% if fac.photo %}"{{fac.photo.url}}"{% else %}"https://via.placeholder.com/260x260.png?text=Profile"{% endif %} alt="Profile" />
           <div class="rnd-brand">
             <h3>Teacher Dashboard</h3>
             <p>Quick Navigation</p>
@@ -748,7 +748,7 @@
               </div>
             </div>
 
-            <button class="profile-update-btn">Update</button>
+            <a href="{% url 'updatefacultform' fac.id %}"><button class="profile-update-btn">Update</button></a>
           </div>
 
           <div class="profile-row">
@@ -794,16 +794,18 @@
 
         <!-- MEETING CARD (BOTTOM) -->
         <section class="meeting-card" id="meeting-section">
+          {% if meet %}
+          {% for i in meet %}
           <div class="meeting-header">
             <div class="meeting-header-left">
               <div class="meeting-icon">📅</div>
               <div>
-                <h2 class="meeting-name">Industry Partnership Summit</h2>
+                <h2 class="meeting-name">{{i.headline}}</h2>
               </div>
             </div>
 
             <div style="text-align:right;">
-              <div class="published">Published on: <span>02 Mar 2025</span></div>
+              <div class="published">Published on: <span>{{i.created.date}}</span></div>
               <button class="toggle-btn">⌄</button>
             </div>
           </div>
@@ -813,7 +815,7 @@
               <div class="meta-icon">📆</div>
               <div>
                 <div class="meta-label">Date</div>
-                <div class="meta-value">April 10, 2024</div>
+                <div class="meta-value">{{i.date.date}}</div>
               </div>
             </div>
 
@@ -821,32 +823,24 @@
               <div class="meta-icon">⏰</div>
               <div>
                 <div class="meta-label">Time</div>
-                <div class="meta-value">11:00 AM – 2:00 PM</div>
+                <div class="meta-value">{{i.date.time}}</div>
               </div>
             </div>
 
-            <div class="meta-item">
-              <div class="meta-icon">📍</div>
-              <div>
-                <div class="meta-label">Location</div>
-                <div class="meta-value">TMSL</div>
-              </div>
-            </div>
+            
           </div>
 
           <div class="meeting-extra">
             <h3 class="section-title">Meeting Overview</h3>
             <p class="section-body">
-              Strategic meeting with industry partners to discuss collaboration
-              opportunities and joint innovation projects.
+              {{i.description}}
             </p>
 
-            <h3 class="section-title">Key Discussion Points</h3>
+            <h3 class="section-title">Faculty</h3>
             <ul class="points-list">
-              <li>Discuss new partnership opportunities</li>
-              <li>Review existing collaborations</li>
-              <li>Plan joint research projects</li>
-              <li>Explore internship programs</li>
+              {% for j in i.faculty.all %}
+              <li>{{j.suf}} {{j.name}}</li>
+              {% endfor %}
             </ul>
 
             <h3 class="section-title">Meeting Documents</h3>
@@ -861,6 +855,8 @@
               <button class="doc-download-btn">⬇</button>
             </div>
           </div>
+          {% endfor %}
+          {% endif %}
         </section>
       </div>
     </div>

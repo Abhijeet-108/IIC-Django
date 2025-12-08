@@ -178,7 +178,11 @@
       <!-- SECTION 1 -->
       <section id="sec1" class="activity-section active">
         <div class="add-wrap">
-          <button class="btn-add">+ Add Activity</button>
+          {% if request.user.is_superuser %}
+          <a href="{% url 'home' %}"
+            ><button class="btn-add">+ Add Activity</button></a
+          >
+          {% endif %}
         </div>
 
         <div class="activity-box">
