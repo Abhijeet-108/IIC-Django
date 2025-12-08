@@ -238,9 +238,11 @@
     {% include 'nav.html' %}
     <main class="page">
       <div class="page-header">
+        {% if request.user.is_superuser %}
         <a href="{% url 'meet-create' %}"
           ><button class="add-meeting-btn">+ Add Meeting</button></a
         >
+        {% endif %}
       </div>
       {% for i in meetings %}
       <!-- ---------------------------------------------------------- -->
@@ -264,7 +266,8 @@
                 margin-bottom: 6px;
               "
             >
-              Published on: <span style="color: #111827">02 Mar 2025</span>
+              Published on:
+              <span style="color: #111827">{{i.created.date}}</span>
             </div>
             <button class="toggle-btn">⌄</button>
           </div>
@@ -283,15 +286,7 @@
             <div class="meta-icon">⏰</div>
             <div>
               <div class="meta-label">Time</div>
-              <div class="meta-value">11:00 AM – 2:00 PM</div>
-            </div>
-          </div>
-
-          <div class="meta-item">
-            <div class="meta-icon">📍</div>
-            <div>
-              <div class="meta-label">Location</div>
-              <div class="meta-value">TMSL</div>
+              <div class="meta-value">{{i.date.time}}</div>
             </div>
           </div>
         </div>
@@ -299,14 +294,14 @@
         <div class="meeting-extra">
           <h3 class="section-title">Meeting Overview</h3>
           <p class="section-body">{{i.description}}</p>
-
-          <h3 class="section-title">Key Discussion Points</h3>
+          {% if i.faculty.all %}
+          <h3 class="section-title">Faculty</h3>
           <ul class="points-list">
-            <li>Discuss new partnership opportunities</li>
-            <li>Review existing collaborations</li>
-            <li>Plan joint research projects</li>
-            <li>Explore internship programs</li>
+            {% for j in i.faculty.all %}
+            <li>{{j.suf}} {{j.name}}</li>
+            {% endfor %}
           </ul>
+          {% endif %}
 
           <h3 class="section-title">Meeting Documents</h3>
           <div class="doc-card">

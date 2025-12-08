@@ -473,7 +473,7 @@
       <h2>Meeting</h2>
 
       <!-- Add Django action + csrf when using -->
-      <form method="POST" action="">
+      <form method="POST" action="" enctype="multipart/form-data">
         {% csrf_token %}
 
         <div class="form-group">
@@ -560,15 +560,18 @@
         {% csrf_token %}
 
         <div>
-          <label for="pdfDescription">Title (test field)</label>
+          <label for="pdfDescription">Title</label>
           {{achievf.title}}
         </div>
 
         <div>
-          <label for="pdfDescription">Description (test field)</label>
+          <label for="pdfDescription">Description</label>
           {{achievf.description}}
         </div>
-
+        <div>
+          <label for="pdfFile">Upload Image</label>
+          {{achievf.photo}}
+        </div>
         <div>
           <label for="pdfFile">Upload PDF</label>
           {{achievf.pdf_file}}
@@ -576,7 +579,6 @@
 
         <div class="upload-actions">
           <button type="submit" class="btn-add">Upload</button>
-          <div class="small-note">Allowed file type: .pdf</div>
         </div>
       </form>
     </section>
@@ -587,7 +589,7 @@
       <h2>IIC-Info</h2>
 
       <!-- Add Django action + csrf when using -->
-      <form method="POST" action="">
+      <form method="POST" action="" enctype="multipart/form-data">
         {% csrf_token %}
 
         <div class="form-group">{{iicf.as_p}}</div>

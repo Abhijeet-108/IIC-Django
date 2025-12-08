@@ -77,7 +77,7 @@ def registerFac(req):
     if(req.method == "POST"):
         count = 0
         form = UserCreationForm(req.POST)
-        form1 = facultForm(req.POST)
+        form1 = facultForm(req.POST , req.FILES)
         if(form.is_valid):
             user = form.save(commit = False)
             user.username = user.username.lower()

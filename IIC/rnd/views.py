@@ -265,7 +265,7 @@ def update_facultform(req, pk):
     info = iicInfo.objects.first()
     update_facultform = facultForm(instance=facultform)
     if req.method == 'POST':
-        update_facultform = facultForm(req.POST, instance=facultform)
+        update_facultform = facultForm(req.POST, req.FILES, instance=facultform)
         if update_facultform.is_valid():
             update_facultform.save()
             return redirect('research')
@@ -467,7 +467,7 @@ def rndinfo(req):
     conferencef = conferenceForm()
     if req.method == 'POST':
         basicf = basicDetailsForm(req.POST)
-        patentf = patentForm(req.POST)
+        patentf = patentForm(req.POST , req.FILES)
         copyrightf = copyrightForm(req.POST)
         journalf = journalForm(req.POST)
         bookf = bookForm(req.POST)
