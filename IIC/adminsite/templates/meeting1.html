@@ -110,7 +110,7 @@
         <h2>Meeting Details</h2>
 
         <!-- Django-ready -->
-        <form method="POST" action="">
+        <form method="POST" action="" enctype="multipart/form-data">
           {% csrf_token %}
 
           <div class="form-group">
@@ -134,6 +134,11 @@
           <div class="form-group">
             <label for="teachers">Assigned Teachers</label>
             {{meetf.faculty}}
+            <!-- <span class="hint">Hold CTRL (Windows) or COMMAND (Mac) to select multiple</span> -->
+          </div>
+          <div class="form-group">
+            <label for="teachers">Upload Document</label>
+            {{meetf.support}}
             <!-- <span class="hint">Hold CTRL (Windows) or COMMAND (Mac) to select multiple</span> -->
           </div>
 
