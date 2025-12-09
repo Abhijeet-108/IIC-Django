@@ -60,24 +60,26 @@ def postDeletion(req , pk):
 
 def achievCreate(req):
     achievf = achievForm()
+    info = iicInfo.objects.first()
     if(req.method == "POST"):
         achievf = achievForm(req.POST , req.FILES)
         if(achievf.is_valid()):
             achievf.save()
         return redirect("admin-site")
-    context = {'achievf' : achievf}
+    context = {'achievf' : achievf , 'iic' : info}
     return render(req , "form1.html" , context)
 
 def achievEdit(req , pk):
     achiev = achievement.objects.get(id = pk)
     achievf = achievForm(instance = achiev)
+    info = iicInfo.objects.first()
     if(req.method == "POST"):
         achievf = achievForm(req.POST , req.FILES , instance = achiev)
 
         if achievf.is_valid():
             achievf.save()
             return redirect('admin-site')
-    context = {'achievf' : achievf}
+    context = {'achievf' : achievf , 'iic' : info}
     return render(req,"form1.html",context)
 
 def achievDeletion(req , pk):

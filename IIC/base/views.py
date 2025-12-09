@@ -41,8 +41,8 @@ def activities(req):
     micact = activity.objects.filter(category = "MIC Driven Activity")
     celebact = activity.objects.filter(category = "Celebration Activity")
     selfact = activity.objects.filter(category = "Self Driven Activity")
-    previous = activity.objects.filter(created__year = previous_year)
-    current = activity.objects.filter(created__year = current_year)
+    previous = activity.objects.filter(date__year = previous_year)
+    current = activity.objects.filter(date__year = current_year)
 
     context = {'iic' : info , 'calact' : calact , 'micact' : micact , 'celebact' : celebact , 'selfact' : selfact  , 'previous' : previous , 'current' : current}
     return render(req, "acti.html" , context)
@@ -145,10 +145,11 @@ def queryCreate(req):
     context = {'queryf' : queryf}
     return render(req , "form2.html" , context)
 
-def queryDeletion(req , pk):
+def queryDeletion(req, pk):
     query = querys.objects.get(id = pk)
     query.delete()
-    return redirect('admin-site')
+    return redirect('team_members')
+
 
 #-------------------------- Team Members Page ----------------------- #
 def teamMenbers(req):
