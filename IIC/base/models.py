@@ -31,6 +31,7 @@ class meeting(models.Model):
     headline = models.CharField(max_length = 100, blank = True)
     description = models.TextField()
     faculty = models.ManyToManyField(facult , blank = True , null = True)
+    photo = models.ImageField(upload_to='meetings/pdf', null=True , blank = True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
