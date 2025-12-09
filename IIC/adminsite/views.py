@@ -1,4 +1,5 @@
 from django.shortcuts import render , redirect
+from rnd.models import suff
 from base.models import posts , achievement, organisation , contactOrg , notice , meeting , gallery , iicInfo
 from base.forms import postForm , achievForm , contactOrgForm , organisationForm , meetingForm , galleryForm , noticeForm , iicInfoForm , querys
 from django.contrib.auth.models import User
@@ -18,7 +19,9 @@ def homepage(req):
 
 def profilePage(req):
     info = iicInfo.objects.first()
-    context = {'iic' : info}
+    suf = suff.objects.all()
+    context = {'iic' : info , 'suf' : suf}
+
     if (not req.user.is_superuser):
         fac = facult.objects.get(user = req.user)
         meet = meeting.objects.filter(faculty = fac)

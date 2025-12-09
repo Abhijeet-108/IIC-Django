@@ -355,10 +355,9 @@
               <div class="notice-item">
                 <div class="notice-item-title">{{i.headline}}</div>
                 <div class="notice-item-text">
-                  Join the campus idea pitch event to showcase innovative
-                  creations.
+                  {{i.description}}
                 </div>
-                <div class="notice-item-meta">Date: 24-11-2025</div>
+                <div class="notice-item-meta"> Posted on : {{i.created.date}}</div>
               </div>
               {% endfor %}
             </div>
@@ -391,7 +390,7 @@
               <div class="notice-item">
                 <div class="notice-item-title">{{i.headline}}</div>
                 <div class="notice-item-text">{{i.description}}</div>
-                <div class="notice-item-meta">{{i.date}}</div>
+                <div class="notice-item-meta">{{i.date}} | {{i.time}}</div>
               </div>
               {% endfor %}
             </div>
