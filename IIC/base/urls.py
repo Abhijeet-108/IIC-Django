@@ -21,6 +21,28 @@ urlpatterns = [
     path('noticeboard/', views.noticeBoard , name = "notice"),
     path('achievments/', views.achiev , name = "achievments"),
     path('meetings/', views.meet , name = "meet"),
+    
+    path('team-members/', views.teamMenbers , name = "team_members"),
+    path('add_teammember/', views.addteamMembers , name = "add_teammember"),
+    path('update_teammember/<int:pk>/', views.updateteamMembers , name = "update_teammember"),
+    path('delete_teammember/<int:pk>/', views.deleteteamMembers , name = "delete_teammember"),
+    
+    path('certificate/', views.certificates , name = "certificate"),
+    path('add_certificate/', views.addcertificate , name = "add_certificate"),
+    path('update_certificate/<int:pk>/', views.updatecertificate , name = "update_certificate"),
+    path('delete_certificate/<int:pk>/', views.deletecertificate , name = "delete_certificate"),
+    
+    path('ipr/', views.iprs , name = "ipr"),
+    path('add_ipr/', views.addipr , name = "add_ipr"),  
+    path('update_ipr/<int:pk>/', views.updateipr , name = "update_ipr"),
+    path('delete_ipr/<int:pk>/', views.deleteipr , name = "delete_ipr"),
+    
+    path('incubation/', views.incubations , name = "incubation"),
+    path('add_incubation/', views.addincubation , name = "add_incubation"),  
+    path('update_incubation/<int:pk>/', views.updateincubation , name = "update_incubation"),
+    path('delete_incubation/<int:pk>/', views.deleteincubation , name = "delete_incubation"),
+    
+    
 
 
 ] + static(settings.MEDIA_URL , document_root = settings.MEDIA_ROOT)

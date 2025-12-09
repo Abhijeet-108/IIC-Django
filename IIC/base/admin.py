@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import posts , organisation , contactOrg , achievement ,querys, iicInfo , meeting , notice , gallery , activity
+from .models import posts , organisation , contactOrg , achievement ,querys, iicInfo , meeting , notice , gallery , activity, teamMember, certificate, ipr, incubation
 
 # Register your models here.
 
@@ -13,3 +13,7 @@ admin.site.register(meeting)
 admin.site.register(notice)
 admin.site.register(gallery)
 admin.site.register(activity)
+admin.site.register(teamMember)
+admin.site.register(certificate) 
+admin.site.register(ipr)
+admin.site.register(incubation)

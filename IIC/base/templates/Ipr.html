@@ -1,0 +1,302 @@
+{% load static %}
+<style>
+:root {
+  --page-bg: #ffffff;
+  --card-bg: #ffffff;
+  --text-strong: #071330;
+  --text-soft: #4b5563;
+  --muted: #6b7280;
+  --accent-blue: #2b51d6;
+
+  --card-border: rgba(15, 23, 42, 0.06);
+  --card-shadow: 0 20px 50px rgba(15, 23, 42, 0.1);
+  --card-shadow-subtle: 0 10px 30px rgba(15, 23, 42, 0.06);
+
+  --radius-lg: 18px;
+  --radius-full: 999px;
+  --transition-fast: 170ms ease-out;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, sans-serif;
+  background: var(--page-bg);
+}
+
+/* Page layout */
+.about {
+  background: var(--page-bg);
+  padding: 80px 16px 140px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Center container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ===== HEADINGS ===== */
+
+.heading {
+  text-align: center;
+  margin-bottom: 100px;
+}
+
+.heading h1 {
+  font-size: clamp(60px, 3.5vw, 100px);
+  font-weight: 800;
+  margin-bottom: 14px;
+  color: var(--text-strong);
+}
+
+.heading-underline {
+  width: 80px;
+  height: 4px;
+  margin: 0 auto 18px;
+  background: linear-gradient(90deg, #2563eb, #22c55e);
+  border-radius: var(--radius-full);
+  margin-bottom: 50px;
+}
+
+.heading h3 {
+  max-width: 640px;
+  margin: 0 auto;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+/* ===== Centered Section Titles ===== */
+
+.about h2.section-title {
+  text-align: center !important;
+  font-size: clamp(22px, 2.4vw, 30px);
+  font-weight: 700;
+  margin: 42px 0 22px;
+  letter-spacing: -0.02em;
+  color: var(--text-strong);
+  margin-bottom: 40px;
+}
+
+.about h2.section-title::before {
+  display: none;
+}
+
+/* ===== GRID ===== */
+
+.about-text {
+  display: grid;
+  gap: 5px;
+  margin-top: 8px;
+  justify-items: center; 
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+/* ===== CARDS ===== */
+
+.about-card {
+  width: 100%;
+  max-width: 320px;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 20px 18px;
+  border: 1px solid var(--card-border);
+  box-shadow: var(--card-shadow-subtle);
+  text-align: center;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  cursor: pointer;
+}
+
+.about-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--card-shadow);
+}
+
+/* Avatar */
+.card-icon {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #eef2ff;
+    display: grid;
+    position: relative;
+    place-items: center;
+    align-self: center;
+    justify-self: center;
+}
+
+.card-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-initials {
+  font-size: 42px;
+  font-weight: 800;
+  color: #1f2933;
+}
+
+/* Text */
+.about-card h3 {
+  margin: 6px 0 0;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.about-card .role {
+  margin-top: 4px;
+  font-size: 14px;
+  color: var(--text-soft);
+}
+
+.about-card .role + .role {
+  color: var(--accent-blue);
+  font-weight: 600;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+  .about {
+    padding: 60px 12px 100px;
+  }
+  .heading h3 {
+    font-size: 14px;
+  }
+}
+
+
+.admin-add-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.admin-add-link {
+  text-decoration: none;
+}
+
+.admin-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.35);
+  transition:
+    transform 150ms ease-out,
+    box-shadow 150ms ease-out,
+    filter 150ms ease-out,
+    background 150ms ease-out;
+}
+
+.admin-add-btn .material-symbols-outlined {
+  font-size: 18px;
+}
+
+.admin-add-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+  box-shadow: 0 16px 40px rgba(37, 99, 235, 0.45);
+}
+
+.admin-add-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+}
+
+.admin-add-btn:focus-visible {
+  outline: 2px solid rgba(37, 99, 235, 0.9);
+  outline-offset: 2px;
+}
+
+/* Optional: hide text on very small screens if you just want the icon */
+@media (max-width: 420px) {
+  .admin-add-text {
+    display: none;
+  }
+  .admin-add-btn {
+    padding-inline: 10px;
+  }
+}
+
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+<body>
+  {% include 'nav.html' %}
+<section class="about" id="about">
+  <div class="container">
+    <button type="button" class="back-btn" onclick="history.back()" style="padding:5px; border:none; background:transparent; font-size:16px; color:var(--muted); cursor:pointer; margin-bottom:12px">
+      <span class="material-symbols-outlined">
+      arrow_back
+      </span>
+    </button>
+    <div class="heading">
+        <h1>IPR</h1>
+        <div class="heading-underline" aria-hidden="true"></div>
+    </div>
+
+    {% if request.user.is_superuser %}
+    <div class="admin-add-wrapper">
+        <a href="{% url "add_ipr" %}" class="admin-add-link">
+            <button type="button" class="admin-add-btn">
+                <span class="material-symbols-outlined">
+                    add
+                </span>
+                <span class="admin-add-text">Add IPR</span>
+            </button>
+        </a>
+    </div>
+    {% endif %}
+
+    <div class="about-content">
+        <div class="about-text">
+            {% for i in iprs %}
+            <a aria-label="Open profile {{ i.name }}">
+                <div class="about-card" tabindex="0" role="group" aria-labelledby="fac-name-{{ i.id }}">
+                    {% if request.user.is_superuser %}
+                    <div class="admin-add-wrapper">
+                        <a href="{% url "delete_ipr" i.id %}" class="admin-add-link">
+                            <button type="button" class="admin-add-btn">
+                                <span class="material-symbols-outlined">
+                                    delete_forever
+                                </span>
+                            </button>
+                        </a>
+                    </div>
+                    {% endif %}
+                   
+
+                    <h3 id="fac-name-{{ i.id }}">{{ i.title }}</h3>
+                    <div class="description">
+                        <p style="margin-top:10px; margin-bottom:10px;">{{ i.description }}</p>
+                    </div>
+
+                    <div>
+                        <a href="{{ i.support }}" target="_blank" rel="noopener noreferrer" style="text-decoration:none; color:var(--accent-blue); font-weight:600;">
+                            View Certificate
+                        </a>
+                    </div>
+
+                </div>
+            </a>
+            {% empty %}
+            <p>No certificate added yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% include 'foot.html' %}
+</body>
