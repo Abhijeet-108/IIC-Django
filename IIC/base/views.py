@@ -148,8 +148,7 @@ def queryCreate(req):
 def queryDeletion(req, pk):
     query = querys.objects.get(id = pk)
     query.delete()
-    return redirect('team_members')
-
+    return redirect('admin-profile')
 
 #-------------------------- Team Members Page ----------------------- #
 def teamMenbers(req):

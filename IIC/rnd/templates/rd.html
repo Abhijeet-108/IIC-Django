@@ -212,20 +212,29 @@
 
               <div id="departmentsGrid" class="grid" role="list">
                 {% for i in dept %}
-                 
-                <a href="{% url 'depart' i.id %}" role="listitem" aria-label="Open department {{ i.name }}">
+                <div style="border: 1px solid rgba(0,0,0,0.03); border-radius: 8px; padding: 0; margin-bottom: 0; background: #fbfbfe; position: relative;">
+                  <a href="{% url 'depart' i.id %}" role="listitem" aria-label="Open department {{ i.name }}">
                   <div class="card" tabindex="0">
                     <div class="card-icon" aria-hidden="true">
                       <i class="fas fa-university"></i>
                     </div>
-                    <a href="{% url 'dept-delete' i.id %}">
 
-            <span class="material-symbols-outlined">delete_forever</span>
-    </a>
                     <h3 class="name">{{ i.name }}</h3>
                     <div class="dept-title">{{ i.short_description|default:'' }}</div>
                   </div>
                 </a>
+                {% if request.user.is_superuser%}
+                <div style=" position: relative; align-items: right; display: flex; justify-content: flex-end;"> 
+                  <a href="{% url 'dept-delete' i.id %}">
+                    <button style="background: #d9534f; color: #fff; border-radius: 5px; padding:5px 10px;">
+                      <span class="material-symbols-outlined">
+                      delete_forever
+                      </span>
+                    </button>
+                  </a>
+                </div>
+                {% endif %}
+                </div>
                 {% endfor %}
               </div>
             </div>

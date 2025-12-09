@@ -1,5 +1,6 @@
 {% load static %}
 {% if request.user.is_superuser %}
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -10,105 +11,76 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
   <style>
+    /* --------------------------------------------------
+       Theme variables & global resets
+       -------------------------------------------------- */
     :root{
-      --accent1:#2563eb; --accent2:#06b6d4; --muted:#555; --text:#111; --white:#fff;
-      --radius:14px; --maxw:1100px;
-      --section-gap:18px;
+      --accent1:#2563eb; --accent2:#06b6d4; --muted:#616a75; --text:#0f1724; --white:#fff;
+      --radius:14px; --maxw:1100px; --section-gap:18px; --card-shadow: 0 14px 30px rgba(2,6,23,0.06);
+      --glass: rgba(255,255,255,0.72);
     }
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
     body{
-      margin:0;min-height:100vh;
-  
-      font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
-      color:var(--text);
+      margin:0; min-height:100vh; font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial; color:var(--text);
       background:
         radial-gradient(900px 400px at 10% 10%, rgba(37,99,235,0.06), transparent 10%),
         radial-gradient(700px 300px at 90% 90%, rgba(6,182,212,0.06), transparent 10%),
         linear-gradient(180deg,#f7f8fa 0%, #ffffff 100%);
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
     }
 
-    .rnd-wrap{
-      width:100%; max-width:var(--maxw);
-      display:grid; grid-template-columns: 300px 1fr; gap:26px; align-items:start;
-    }
+    /* page layout */
+    .container{ width:100%; max-width:var(--maxw); margin:32px auto; padding:0 16px; }
+    .rnd-wrap{ display:grid; grid-template-columns: 300px 1fr; gap:26px; align-items:start; }
 
+    /* sidebar */
     .rnd-sidebar{
-      background:linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.01));
-      border-radius:var(--radius); padding:18px; border:1px solid rgba(0,0,0,0.08);
-      box-shadow:0 4px 12px rgba(0,0,0,0.06);
+      background:linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0.6));
+      backdrop-filter: blur(6px);
+      border-radius:var(--radius); padding:18px; border:1px solid rgba(15,23,36,0.04);
+      box-shadow:0 8px 28px rgba(2,6,23,0.06);
       position:sticky; top:36px; height:fit-content;
     }
 
-    .rnd-top-image { display:flex; flex-direction:column; align-items:center; gap:10px; margin-bottom:18px; text-align:center; }
-    .rnd-top-image img{ width:120px;height:120px;border-radius:50%;object-fit:cover;border:3px solid rgba(0,0,0,0.08); box-shadow:0 8px 22px rgba(0,0,0,0.1); }
+    .rnd-top-image { display:flex; flex-direction:column; align-items:center; gap:8px; margin-bottom:12px; text-align:center; }
+    .rnd-top-image img{ width:120px;height:120px;border-radius:50%;object-fit:cover;border:3px solid rgba(0,0,0,0.06); box-shadow:0 10px 28px rgba(2,6,23,0.06); }
     .rnd-brand h3{margin:0;font-size:18px;font-weight:800}
     .rnd-brand p{margin:0;margin-top:6px;color:var(--muted);font-size:13px}
 
     .rnd-progress{ margin-top:8px; display:flex;flex-direction:column;gap:8px; }
     .rnd-step-link{
-      display:flex; gap:12px; align-items:center; padding:10px; border-radius:10px; text-decoration:none;
-      color:var(--text); background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.00));
-      border:1px solid rgba(0,0,0,0.05); transition: all .18s ease;
+      display:flex; gap:12px; align-items:center; padding:10px; border-radius:10px; text-decoration:none; color:var(--text);
+      background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.00)); border:1px solid rgba(0,0,0,0.04);
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
     }
-    .rnd-step-link:hover{ transform:translateY(-4px); box-shadow:0 8px 20px rgba(0,0,0,0.06); background: linear-gradient(90deg, rgba(37,99,235,0.06), rgba(6,182,212,0.04)); }
-    .rnd-bullet{ width:42px;height:42px;border-radius:10px; background:linear-gradient(135deg,var(--accent1),var(--accent2)); display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700 }
+    .rnd-step-link:focus, .rnd-step-link:hover{ transform:translateY(-4px); box-shadow:0 12px 30px rgba(2,6,23,0.06); background: linear-gradient(90deg, rgba(37,99,235,0.06), rgba(6,182,212,0.04)); }
+
+    .rnd-bullet{ width:44px;height:44px;border-radius:10px; background:linear-gradient(135deg,var(--accent1),var(--accent2)); display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700 }
     .rnd-step-text{ font-size:13px }
     .rnd-step-sub{ font-size:12px; color:var(--muted); margin-top:4px }
 
-    .rnd-hint{ margin-top:12px; font-size:13px; color:var(--muted); line-height:1.45; padding-top:6px }
-
-    /* main wrapper card - kept subtle so sections stand out */
+    /* main card area */
     .rnd-card{ background:transparent; padding:0; border-radius:8px; }
-
     .rnd-card h1{ font-size:22px; margin:0 0 8px; font-weight:800 }
     .rnd-lead{ color:var(--muted); font-size:14px; margin-bottom:16px }
 
-    /* ---------- Improved section styling ---------- */
+    /* ---------- section styling (kept semantically identical) ---------- */
     .rnd-section {
-      position:relative;
-      border-radius:12px;
-      padding:20px;
-      margin-bottom:var(--section-gap);
-      border:1px solid rgba(15,23,36,0.06);
-      background: linear-gradient(180deg, #fff, #fbfdff);
-      box-shadow: 0 14px 30px rgba(2,6,23,0.06);
-      overflow:visible;
-      transition: transform .18s ease, box-shadow .18s ease;
+      position:relative; border-radius:12px; padding:20px; margin-bottom:var(--section-gap);
+      border:1px solid rgba(15,23,36,0.06); background: linear-gradient(180deg, #fff, #fbfdff);
+      box-shadow: var(--card-shadow); overflow:visible; transition: transform .18s ease, box-shadow .18s ease;
     }
-    /* slight lift on hover */
     .rnd-section:hover { transform: translateY(-6px); box-shadow: 0 28px 60px rgba(2,6,23,0.08); }
 
-    /* accent strip on the left of each section for stronger separation */
-    .rnd-section::before {
-      content: "";
-      position: absolute;
-      left: -8px;
-      top: 12px;
-      bottom: 12px;
-      width: 6px;
-      border-radius:6px;
-      background: linear-gradient(180deg, var(--accent1), var(--accent2));
-      box-shadow: 0 6px 18px rgba(37,99,235,0.06);
-    }
+    .rnd-section::before { content: ""; position: absolute; left: -8px; top: 12px; bottom: 12px; width: 6px; border-radius:6px; background: linear-gradient(180deg, var(--accent1), var(--accent2)); box-shadow: 0 6px 18px rgba(37,99,235,0.06); }
+    .rnd-section:nth-of-type(odd) { background: linear-gradient(180deg, #ffffff, #fcfeff); }
+    .rnd-section:nth-of-type(even) { background: linear-gradient(180deg, #fbfdff, #f5fbff); }
 
-    /* alternating subtle tint for sections to increase contrast (odd/even) */
-    .rnd-section:nth-of-type(odd) {
-      background: linear-gradient(180deg, #ffffff, #fcfeff);
-    }
-    .rnd-section:nth-of-type(even) {
-      background: linear-gradient(180deg, #fbfdff, #f5fbff);
-    }
-
-    /* stronger header styles inside sections */
     .rnd-section .title { display:flex; gap:14px; align-items:flex-start; margin-bottom:12px; }
     .rnd-section h3 { margin:0; font-size:17px; font-weight:800; color:var(--text); letter-spacing:0.1px; }
     .rnd-section p.desc { margin:6px 0 12px; color:var(--muted); font-size:13px; }
-
-    /* thin divider under title for visual separation */
-    .rnd-section .divider {
-      height:1px; background: linear-gradient(90deg, rgba(0,0,0,0.06), rgba(0,0,0,0.02)); margin:8px 0 12px; border-radius:2px;
-    }
+    .rnd-section .divider { height:1px; background: linear-gradient(90deg, rgba(0,0,0,0.06), rgba(0,0,0,0.02)); margin:8px 0 12px; border-radius:2px; }
 
     .rnd-badge{ width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent1),var(--accent2)); display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700 }
 
@@ -116,186 +88,194 @@
     .info-full{ grid-column:1/-1 }
 
     label{ display:block; font-size:13px; color:var(--muted); margin-bottom:6px }
-    input, select, textarea {
-      width:100%; background:#fff; border:1px solid rgba(0,0,0,0.10); padding:12px; border-radius:10px; color:var(--text);
-      outline:none; font-size:14px; transition: all .12s ease;
-    }
-    textarea{ min-height:120px; resize:vertical }
-    input::placeholder, textarea::placeholder { color: rgba(0,0,0,0.32) }
-    input:focus, textarea:focus, select:focus { border-color:var(--accent1); box-shadow:0 0 0 3px rgba(37,99,235,0.08) }
+    .static-val{ background:transparent; padding:10px; border-radius:8px; font-size:14px; color:var(--text) }
 
     .actions-row{ display:flex; gap:12px; justify-content:flex-end; align-items:center; margin-top:12px }
-    .btn{ padding:10px 16px; border-radius:10px; border:0; font-weight:700; cursor:pointer; color:#fff; background: linear-gradient(90deg,var(--accent1),var(--accent2)); }
+    .btn{ padding:10px 16px; border-radius:10px; border:0; font-weight:700; cursor:pointer; color:#fff; background: linear-gradient(90deg,var(--accent1),var(--accent2)); box-shadow: 0 8px 22px rgba(37,99,235,0.14); }
     .btn.ghost{ background:transparent; color:var(--accent1); border:1px solid rgba(37,99,235,0.12) }
     .small{ font-size:12px; color:var(--muted) }
 
-    /* Gallery grid */
+    /* gallery layout */
     .gallery-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; margin-top:12px; }
     .media-card{ border-radius:10px; overflow:hidden; border:1px solid rgba(0,0,0,0.06); background:#fff; display:flex; flex-direction:column; align-items:stretch; min-height:220px }
     .media-card img{ width:100%; height:160px; object-fit:cover; display:block }
     .media-card .meta{ padding:8px 10px; display:flex; justify-content:space-between; align-items:center; gap:8px }
-    .media-card .meta .name{ font-size:13px; color:var(--muted) }
-    .media-card form{ margin:0 } /* delete form sits inside meta */
 
     @media (max-width:980px){
       .rnd-wrap{ grid-template-columns: 1fr; }
       .info-grid{ grid-template-columns: 1fr; }
       .gallery-grid{ grid-template-columns: repeat(2, 1fr); }
-      .rnd-section::before { left: 12px; } /* avoid overflowing on mobile */
+      .rnd-section::before { left: 12px; }
       .rnd-section { padding-left: 20px; }
     }
-    @media (max-width:540px){
-      .gallery-grid{ grid-template-columns: 1fr; }
-    }
+    @media (max-width:540px){ .gallery-grid{ grid-template-columns: 1fr; } }
 
-    /* left panel R&D non-nav button */
-    .rnd-step-button {
-      display:flex; gap:12px; align-items:center; padding:10px; border-radius:10px; cursor:pointer;
-      color:var(--text); background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.00));
-      border:1px solid rgba(0,0,0,0.05); transition: all .18s ease; text-align:left;
-      width:100%;
-      font: inherit;
-    }
-    .rnd-step-button:hover{ transform:translateY(-4px); box-shadow:0 8px 20px rgba(0,0,0,0.06); background: linear-gradient(90deg, rgba(37,99,235,0.06), rgba(6,182,212,0.04)); }
-    .rnd-step-button:active{ transform:translateY(-2px) }
-    .rnd-step-button .rnd-bullet { flex-shrink:0 }
-
-    /* subtle focus outline for keyboard users */
+    /* subtle focus outlines for accessibility */
     .rnd-step-link:focus, .rnd-step-button:focus { outline: 3px solid rgba(37,99,235,0.12); outline-offset:3px; border-radius:8px; }
+
   </style>
 </head>
 <body>
   {% include 'nav.html' %}
-  <div class="rnd-wrap" role="region" aria-label="IIC Info & Gallery">
+  <div class="container">
+    <div class="rnd-wrap" role="region" aria-label="IIC Info & Gallery">
 
-    <!-- Left sidebar -->
-    <aside class="rnd-sidebar" aria-label="Left navigation">
-      <div class="rnd-top-image">
-        <a href="#gallery" title="IIC Gallery">
-          <img src="{{iic.navLogo.url}}" alt="IIC logo" />
-        </a>
+      <!-- Left sidebar -->
+      <aside class="rnd-sidebar" aria-label="Left navigation">
+        <div class="rnd-top-image">
+          <a href="#gallery" title="IIC Gallery">
+            <img src="{{iic.navLogo.url}}" alt="IIC logo" />
+          </a>
 
-        <div class="rnd-brand">
-          <h3>Institution Innovation Council</h3>
-          <!-- <p class="small">Navigation — click an item to jump to the section on the right.</p> -->
+          <div class="rnd-brand">
+            <h3>Institution Innovation Council</h3>
+          </div>
         </div>
-      </div>
 
-      <nav class="rnd-progress" aria-label="Sections">
+        <nav class="rnd-progress" aria-label="Sections">
+
+          <!-- About IIC -->
+          <a class="rnd-step-link" href="#about-iic">
+            <div class="rnd-bullet">A</div>
+            <div>
+              <div class="rnd-step-text">About IIC</div>
+              <div class="rnd-step-sub">Overview & contact</div>
+            </div>
+          </a>
+
+          <a class="rnd-step-link" href="#Queries">
+            <div class="rnd-bullet">Q</div>
+            <div>
+              <div class="rnd-step-text">Queries</div>
+            </div>
+          </a>
+
+        </nav>
+
+      </aside>
+
+      <!-- Right main content -->
+      <main class="rnd-card" role="main" aria-live="polite">
+        <h1>IIC Info & Media</h1>
 
         <!-- About IIC -->
-        <a class="rnd-step-link" href="#about-iic">
-          <div class="rnd-bullet">A</div>
-          <div>
-            <div class="rnd-step-text">About IIC</div>
-            <div class="rnd-step-sub">Overview & contact</div>
-          </div>
-        </a>
-
-        <a class="rnd-step-link" href="#Queries">
-          <div class="rnd-bullet">Q</div>
-          <div>
-            <div class="rnd-step-text">Queries</div>
-            <!-- <div class="rnd-step-sub">General Qye</div> -->
-          </div>
-        </a>
-
-      </nav>
-
-      <!-- <div class="rnd-hint">Tip: all forms use native POST — add server-side CSRF tokens when rendering in Django templates.</div> -->
-    </aside>
-
-    <!-- Right main content -->
-    <main class="rnd-card" role="main" aria-live="polite">
-      <h1>IIC Info & Media</h1>
-      <!-- <p class="rnd-lead">Manage gallery images and administrative notices. Each section is visually separated to make scanning and editing easier. All actions use native form submission (no JavaScript required).</p> -->
-
-      <!-- About IIC (now with Upload form/button added) -->
-      <section id="about-iic" class="rnd-section" aria-labelledby="about-iic-label">
-        <div class="title">
-          <div class="rnd-badge">A</div>
-          <div>
-            <h3 id="about-iic-label">About IIC</h3>
-            <p class="desc">Overview of Institution Innovation Council, contact info and quick details.</p>
-            <div class="actions-row" style="margin-top:12px;">
-            <a href = {% url 'info-update' %}><button class="btn">Update</button></a>
-          </div>
-       
-        <div class="divider" aria-hidden="true"></div>
-
-        <div class="info-grid">
-          
-
-          <div>
-            <label for="iic_email">Contact Email</label>
-            {{ iic.email }}
+        <section id="about-iic" class="rnd-section" aria-labelledby="about-iic-label">
+          <div class="title">
+            <div class="rnd-badge">A</div>
+            <div>
+              <h3 id="about-iic-label">About IIC</h3>
+              <p class="desc">Overview of Institution Innovation Council, contact info and quick details.</p>
+            </div>
           </div>
 
-          <div>
-            <label for="iic_phone">Phone</label>
-            {{ iic.phone }}
-          </div>
-        </div>
-      </section>
+          <div class="divider" aria-hidden="true"></div>
 
-        <section id="Queries" class="rnd-section" aria-labelledby="about-iic-label">
-        <div class="title">
-          <div class="rnd-badge">Q</div>
-          <div>
-            <h3 id="about-iic-label">Queries</h3>
-            <!-- <p class="desc">Overview of Institution Innovation Council, contact info and quick details.</p> -->
-          </div>
-        </div>
-        <div class="divider" aria-hidden="true"></div>
-
-        <div class="info-grid">
-          {% for i in query %}
-          <div style="border:1px solid grey; border-radius: 10px; padding:10px">
-            <div class="info-full" style="color:black;">
-              <label for="iic_overview">Message</label>
-              {{i.message}}
+          <div class="info-grid">
+            <div>
+              <label for="iic_email">Contact Email</label>
+              <div class="static-val">{{ iic.email }}</div>
             </div>
 
-          <div>
-            <label for="name">Full Name*</label>  
-            {{i.fullname}}
+            <div>
+              <label for="iic_phone">Phone</label>
+              <div class="static-val">{{ iic.phone }}</div>
+            </div>
+
+            <div class="info-full">
+              <div class="actions-row">
+                <a href = {% url 'info-update' %}><button class="btn" type="button">Update</button></a>
+              </div>
+            </div>
           </div>
 
-          <div>
-            <label for="iic_email">Email Address</label>  
-            {{i.email}}
+          <!-- native upload form preserved (kept commented for server-side CSRF insertion) -->
+          <form action="/about/upload/" method="post" enctype="multipart/form-data" style="margin-top:14px;">
+            <!-- Add {% csrf_token %} when rendering in Django -->
+          </form>
+        </section>
+
+        <!-- Queries -->
+        <section id="Queries" class="rnd-section" aria-labelledby="queries-label">
+          <div class="title">
+            <div class="rnd-badge">Q</div>
+            <div>
+              <h3 id="queries-label">Queries</h3>
+            </div>
           </div>
 
-          <div>
-            <label for="iic_phone">Phone</label>
-            {{i.phone}}
+          <div class="divider" aria-hidden="true"></div>
+
+          <div class="info-grid">
+            {% for i in query %}
+            <div style="border: 1px solid rgba(0,0,0,0.03); border-radius: 8px; padding: 0; margin-bottom: 0; background: #fbfbfe; position: relative;">
+            
+            <div style="border:1px solid rgba(0,0,0,0.06); border-radius: 10px; padding:12px; background:linear-gradient(180deg,#fff,#fbfdff);">
+
+              <div class="info-full" style="color:var(--text);">
+                <label>Message</label>
+                <div class="static-val">{{i.message}}</div>
+              </div>
+
+              <div>
+                <label for="name">Full Name</label>
+                <div class="static-val">{{i.fullname}}</div>
+              </div>
+
+              <div>
+                <label>Email Address</label>
+                <div class="static-val">{{i.email}}</div>
+              </div>
+
+              <div>
+                <label>Phone</label>
+                <div class="static-val">{{i.phone}}</div>
+              </div>
+
+              <div>
+                <label>Subject</label>
+                <div class="static-val">{{i.subject}}</div>
+              </div>
+
+            </div>
+            {% if request.user.is_superuser%}
+            <div style=" position: relative; align-items: right; display: flex; justify-content: flex-end;"> 
+              <a href="{% url 'query-delete' i.id %}">
+                <button style="
+                  display:inline-flex;
+                  align-items:center;
+                  gap:8px;
+                  padding:8px 14px;
+                  border-radius:999px;
+                  border:none;
+                  background: linear-gradient(135deg,#2563eb,#1d4ed8);
+                  color:#fff;
+                  font-size:14px;
+                  font-weight:600;
+                  letter-spacing:0.02em;
+                  cursor:pointer;
+                  box-shadow: 0 10px 28px rgba(37,99,235,0.22);
+                  transition: transform 140ms ease-out, box-shadow 140ms ease-out, filter 140ms ease-out;
+                ">
+                  <span class="material-symbols-outlined">
+                  delete_forever
+                  </span>
+                  <span class="sr-only">Delete query </span>
+                </button>
+              </a>
+            </div>
+            {% endif %}
+            </div>
+            {% endfor %}
           </div>
+        </section>
 
-          <div>
-            <label for="name">Subject*</label>  
-            {{i.subject}}
-          </div>
-          </div>
-          {% endfor %}
-        </div>
-
-        <!-- <div class="small" style="margin-top:10px;">To edit this content persistently, update the IIC info in your admin panel. Inline fields are selectable for quick replacement.</div> -->
-
-        <!-- NEW: About Upload form (native upload button similar to other right-side sections) -->
-        <form action="/about/upload/" method="post" enctype="multipart/form-data" style="margin-top:14px;">
-          <!-- Add {% csrf_token %} when rendering in Django -->
-          <!-- <label for="about_file">Upload file for About (image, PDF, or doc)</label>
-          <input id="about_file" name="about_file" type="file" accept="image/*,.pdf,.doc,.docx" />
-          <div class="small" style="margin-top:6px;">Optional: upload an image or document to attach to About IIC. Server will handle storage and display.</div> -->
-
-        </form>
-      </section>
-
-    </main>
+      </main>
+    </div>
   </div>
   {% include 'foot.html' %}
 </body>
 </html>
+
 {% elif request.user.is_authenticated %}
 <!doctype html>
 <html lang="en">
@@ -306,404 +286,63 @@
 
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root{ --accent1:#2563eb; --accent2:#06b6d4; --muted:#555; --text:#111827; --card-border:rgba(15,23,36,0.06); --card-shadow:0 14px 30px rgba(2,6,23,0.06); --radius:18px; --maxw:1100px; }
+    body { font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont; color: var(--text); margin:0; min-height:100vh; background: radial-gradient(900px 400px at 10% 10%, rgba(37,99,235,0.06), transparent 10%), radial-gradient(700px 300px at 90% 90%, rgba(6,182,212,0.06), transparent 10%), linear-gradient(180deg,#f7f8fa 0%, #ffffff 100%); }
 
-    :root{
-      --accent1:#2563eb;
-      --accent2:#06b6d4;
-      --muted:#555;
-      --text:#111827;
-      --card-border:rgba(15,23,36,0.06);
-      --card-shadow:0 14px 30px rgba(2,6,23,0.06);
-      --radius:18px;
-      --maxw:1100px;
-    }
+    .page { max-width: var(--maxw); margin: 32px auto 40px; padding: 0 16px 40px; }
+    .page-title { font-size: 1.6rem; font-weight: 800; margin-bottom: 22px; letter-spacing: 0.01em; text-align:center; }
 
-    body {
-      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont;
-      color: var(--text);
-      margin:0;
-      min-height:100vh;
-      background:
-        radial-gradient(900px 400px at 10% 10%, rgba(37,99,235,0.06), transparent 10%),
-        radial-gradient(700px 300px at 90% 90%, rgba(6,182,212,0.06), transparent 10%),
-        linear-gradient(180deg,#f7f8fa 0%, #ffffff 100%);
-    }
+    .rnd-wrap{ display:grid; grid-template-columns:260px 1fr; gap:24px; align-items:flex-start; }
+    .rnd-sidebar{ background:linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0.6)); border-radius:14px; padding:14px; border:1px solid rgba(0,0,0,0.06); box-shadow:0 8px 28px rgba(2,6,23,0.06); position:sticky; top:24px; height:fit-content; }
 
-    .page {
-      max-width: var(--maxw);
-      margin: 32px auto 40px;
-      padding: 0 8px 40px;
-    }
+    .rnd-top-image{ display:flex; flex-direction:column; align-items:center; gap:10px; margin-bottom:18px; text-align:center; }
+    .rnd-top-image img{ width:120px; height:120px; border-radius:50%; object-fit:cover; border:3px solid rgba(0,0,0,0.06); box-shadow:0 8px 22px rgba(0,0,0,0.1); }
+    .rnd-brand h3{ margin:0; font-size:18px; font-weight:800; }
+    .rnd-brand p{ margin:0; margin-top:6px; color:var(--muted); font-size:13px; }
 
-    .page-title {
-      font-size: 1.6rem;
-      font-weight: 800;
-      margin-bottom: 22px;
-      letter-spacing: 0.01em;
-      text-align:center;
-    }
+    /* profile + meeting layout */
+    .layout { display: flex; flex-direction: column; gap: 22px; }
 
-    /* WRAPPER WITH LEFT SIDEBAR + RIGHT CONTENT */
-    .rnd-wrap{
-      width:100%;
-      max-width:var(--maxw);
-      display:grid;
-      grid-template-columns:260px 1fr;
-      gap:24px;
-      align-items:flex-start;
-      margin:0 auto;
-    }
+    .card { background: linear-gradient(180deg,#ffffff,#fbfdff); border-radius: var(--radius); padding: 20px 22px; border:1px solid var(--card-border); box-shadow: var(--card-shadow); }
 
-    .rnd-sidebar{
-      background:linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.01));
-      border-radius:14px;
-      padding:14px;
-      border:1px solid rgba(0,0,0,0.08);
-      box-shadow:0 4px 12px rgba(0,0,0,0.06);
-      position:sticky;
-      top:24px;
-      height:fit-content;
-    }
+    .profile-card-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:18px; gap:10px; }
+    .profile-header { display:flex; gap:14px; align-items:center; }
+    .avatar{ width:64px; height:64px; border-radius:50%; background:#e5e7eb; display:flex; align-items:center; justify-content:center; font-size:1.8rem; color:#4b5563; box-shadow:0 6px 16px rgba(15,23,42,0.18); }
 
-    .rnd-top-image{
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap:10px;
-      margin-bottom:18px;
-      text-align:center;
-    }
+    .profile-name{ font-size:1.15rem; font-weight:800 }
+    .profile-meta{ font-size:0.9rem; color:#6b7280; margin-top:4px }
+    .profile-update-btn{ border:none; border-radius:999px; padding:8px 18px; background: linear-gradient(90deg, var(--accent1), var(--accent2)); color:#fff; font-size:0.85rem; font-weight:600; cursor:pointer; box-shadow:0 10px 24px rgba(37,99,235,0.25); }
 
-    .rnd-top-image img{
-      width:120px;
-      height:120px;
-      border-radius:50%;
-      object-fit:cover;
-      border:3px solid rgba(0,0,0,0.08);
-      box-shadow:0 8px 22px rgba(0,0,0,0.1);
-    }
+    .profile-label-static{ font-size:0.75rem; letter-spacing:0.08em; color:#9ca3af; margin-bottom:2px; text-transform:uppercase }
+    .profile-value{ font-size:0.95rem; font-weight:500; margin-bottom:8px }
 
-    .rnd-brand h3{
-      margin:0;
-      font-size:18px;
-      font-weight:800;
-    }
+    .meeting-card { margin-bottom: 8px; }
+    .meeting-header { display:flex; justify-content:space-between; align-items:center; gap:18px; padding-bottom:12px }
+    .meeting-icon{ width:46px; height:46px; border-radius:14px; background: linear-gradient(135deg,rgba(37,99,235,0.08),rgba(6,182,212,0.12)); display:flex; align-items:center; justify-content:center; font-size:1.4rem; }
+    .meeting-name{ font-size:1.12rem; font-weight:800 }
+    .published{ font-size:0.8rem; color:#6b7280; font-weight:600; margin-bottom:6px }
 
-    .rnd-brand p{
-      margin:0;
-      margin-top:6px;
-      color:var(--muted);
-      font-size:13px;
-    }
+    .toggle-btn{ border:none; background:#f3f4f6; border-radius:10px; cursor:pointer; font-size:1.2rem; padding:6px 9px; box-shadow:0 4px 10px rgba(15,23,42,0.12); }
+    .toggle-btn.rotate{ transform: rotate(180deg) }
 
-    .rnd-progress{
-      margin-top:8px;
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
+    .meeting-meta-row{ padding:14px 0; border-top:1px solid #e5e7eb; border-bottom:1px solid #e5e7eb; margin-bottom:6px }
+    .meta-item{ display:flex; gap:12px; margin-bottom:10px }
+    .meta-icon{ width:32px; height:32px; border-radius:999px; background:#eef2ff; display:flex; justify-content:center; align-items:center; color:#1d4ed8 }
+    .meta-label{ font-size:0.72rem; color:#9ca3af; text-transform:uppercase }
+    .meta-value{ font-size:0.96rem; font-weight:600; margin-top:2px }
 
-    .rnd-step-link{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      padding:10px;
-      border-radius:10px;
-      text-decoration:none;
-      color:var(--text);
-      background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.00));
-      border:1px solid rgba(0,0,0,0.05);
-      transition: all .18s ease;
-      font-size:0.9rem;
-    }
+    .meeting-extra{ overflow:hidden; max-height:0; transition:max-height .3s ease }
+    .meeting-extra.expanded{ max-height:2000px }
 
-    .rnd-step-link:hover{
-      transform:translateY(-3px);
-      box-shadow:0 8px 20px rgba(0,0,0,0.06);
-      background: linear-gradient(90deg, rgba(37,99,235,0.06), rgba(6,182,212,0.04));
-    }
+    .section-title{ margin-top:14px; font-size:1.04rem; font-weight:700 }
+    .section-body{ margin:10px 0 14px; font-size:0.95rem; color:#444 }
 
-    .rnd-bullet{
-      width:38px;
-      height:38px;
-      border-radius:10px;
-      background:linear-gradient(135deg,var(--accent1),var(--accent2));
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:#fff;
-      font-weight:700;
-      font-size:0.9rem;
-    }
+    .doc-card{ background:#f9fafb; border:1px solid #e5e7eb; padding:12px 14px; border-radius:14px; max-width:420px; display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:6px }
 
-    /* STACK LAYOUT (PROFILE UP, MEETING DOWN) ON RIGHT SIDE */
-    .layout {
-      display: flex;
-      flex-direction: column;
-      gap: 22px;
-    }
+    @media (max-width:900px){ .rnd-wrap{ grid-template-columns:1fr } .rnd-sidebar{ position:static } }
 
-    /* ---------- profile card ---------- */
-    .profile-card {
-      background: linear-gradient(180deg,#ffffff,#fbfdff);
-      border-radius: var(--radius);
-      padding: 20px 22px;
-      border:1px solid var(--card-border);
-      box-shadow: var(--card-shadow);
-    }
-
-    .profile-card-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 18px;
-      gap: 10px;
-    }
-
-    .profile-header {
-      display: flex;
-      gap: 14px;
-      align-items: center;
-    }
-
-    .avatar {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      background: #e5e7eb;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:1.8rem;
-      color:#4b5563;
-      box-shadow:0 6px 16px rgba(15,23,42,0.18);
-    }
-
-    .profile-name {
-      font-size: 1.15rem;
-      font-weight: 800;
-    }
-
-    .profile-meta {
-      font-size: 0.9rem;
-      color: #6b7280;
-      margin-top: 4px;
-    }
-
-    .profile-update-btn {
-      border: none;
-      border-radius: 999px;
-      padding: 8px 18px;
-      background: linear-gradient(90deg, var(--accent1), var(--accent2));
-      color: #fff;
-      font-size: 0.85rem;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 10px 24px rgba(37,99,235,0.25);
-    }
-
-    .profile-label-static {
-      font-size: 0.75rem;
-      letter-spacing: 0.08em;
-      color: #9ca3af;
-      margin-bottom: 2px;
-      text-transform:uppercase;
-    }
-
-    .profile-value {
-      font-size: 0.95rem;
-      font-weight: 500;
-      margin-bottom: 8px;
-    }
-
-    /* ---------- meeting card ---------- */
-    .meeting-card {
-      background: linear-gradient(180deg,#ffffff,#fbfdff);
-      border-radius: var(--radius);
-      border:1px solid var(--card-border);
-      box-shadow: var(--card-shadow);
-      padding: 20px 22px;
-      margin-bottom: 14px;
-    }
-
-    .meeting-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 18px;
-      padding-bottom: 12px;
-    }
-
-    .meeting-header-left {
-      display: flex;
-      gap: 14px;
-      align-items: center;
-    }
-
-    .meeting-icon {
-      width: 46px;
-      height: 46px;
-      border-radius: 14px;
-      background: linear-gradient(135deg,rgba(37,99,235,0.08),rgba(6,182,212,0.12));
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:1.4rem;
-    }
-
-    .meeting-name {
-      font-size: 1.12rem;
-      font-weight: 800;
-    }
-
-    .published {
-      font-size: 0.8rem;
-      color:#6b7280;
-      font-weight:600;
-      margin-bottom:6px;
-    }
-
-    .toggle-btn {
-      border: none;
-      background: #f3f4f6;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 1.2rem;
-      padding: 6px 9px;
-      box-shadow:0 4px 10px rgba(15,23,42,0.12);
-    }
-
-    .toggle-btn.rotate { transform: rotate(180deg); }
-
-    .meeting-meta-row {
-      padding: 14px 0;
-      border-top: 1px solid #e5e7eb;
-      border-bottom: 1px solid #e5e7eb;
-      margin-bottom: 6px;
-    }
-
-    .meta-item {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 10px;
-    }
-
-    .meta-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 999px;
-      background:#eef2ff;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      color:#1d4ed8;
-    }
-
-    .meta-label {
-      font-size: 0.72rem;
-      color: #9ca3af;
-      text-transform: uppercase;
-    }
-
-    .meta-value {
-      font-size: 0.96rem;
-      font-weight: 600;
-      margin-top: 2px;
-    }
-
-    .meeting-extra {
-      overflow: hidden;
-      max-height: 0;
-      transition: max-height .3s ease;
-    }
-
-    .meeting-extra.expanded {
-      max-height: 2000px;
-    }
-
-    .section-title {
-      margin-top: 14px;
-      font-size: 1.04rem;
-      font-weight: 700;
-    }
-
-    .section-body {
-      margin: 10px 0 14px;
-      font-size: 0.95rem;
-      color:#444;
-    }
-
-    .points-list {
-      padding-left: 20px;
-      margin-bottom:14px;
-    }
-
-    .points-list li {
-      font-size: 0.93rem;
-      margin-bottom: 5px;
-    }
-
-    /* DOC CARD + DOWNLOAD (RESTORED) */
-    .doc-card {
-      background: #f9fafb;
-      border: 1px solid #e5e7eb;
-      padding: 12px 14px;
-      border-radius: 14px;
-      max-width: 420px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-top: 6px;
-    }
-
-    .doc-left {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .doc-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 12px;
-      background: #e0ebff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-    }
-
-    .doc-title {
-      font-size: 0.93rem;
-      font-weight: 600;
-    }
-
-    .doc-subtitle {
-      font-size: 0.78rem;
-      color: #6b7280;
-    }
-
-    .doc-download-btn {
-      background: #ffffff;
-      border: 1px solid #e5e7eb;
-      border-radius: 10px;
-      padding: 7px 9px;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
-
-    @media (max-width: 900px) {
-      .rnd-wrap{
-        grid-template-columns:1fr;
-      }
-      .rnd-sidebar{
-        position:static;
-      }
-    }
   </style>
 </head>
-
 <body>
   {% include 'nav.html' %}
   <main class="page">
@@ -736,22 +375,18 @@
       <!-- RIGHT: MAIN CONTENT (UP/DOWN) -->
       <div class="layout">
         <!-- PROFILE CARD (TOP) -->
-        <section class="profile-card" id="profile-section">
+        <section class="card" id="profile-section">
           <div class="profile-card-top">
             <div class="profile-header">
               <div class="avatar">A</div>
 
               <div>
                 <div class="profile-name">{{fac.suf}} {{fac.name}}</div>
-                <div class="profile-meta">
-                  {{fac.qualification}} · {{fac.dept}}
-                </div>
+                <div class="profile-meta">{{fac.qualification}} · {{fac.dept}}</div>
               </div>
             </div>
 
-            <a href="{% url 'updatefacultform' fac.id %}">
-              <button class="profile-update-btn">Update</button>
-            </a>
+            <a href="{% url 'updatefacultform' fac.id %}"><button class="profile-update-btn">Update</button></a>
           </div>
 
           <div class="profile-row">
@@ -799,9 +434,9 @@
         <section id="meeting-section">
           {% if meet %}
             {% for i in meet %}
-            <article class="meeting-card">
+            <article class="card meeting-card">
               <div class="meeting-header">
-                <div class="meeting-header-left">
+                <div class="meeting-header-left" style="display:flex;gap:14px;align-items:center;">
                   <div class="meeting-icon">📅</div>
                   <div>
                     <h2 class="meeting-name">{{i.headline}}</h2>
@@ -809,9 +444,7 @@
                 </div>
 
                 <div style="text-align:right;">
-                  <div class="published">
-                    Published on: <span>{{i.created.date}}</span>
-                  </div>
+                  <div class="published">Published on: <span>{{i.created.date}}</span></div>
                   <button class="toggle-btn">⌄</button>
                 </div>
               </div>
@@ -835,10 +468,9 @@
               </div>
 
               <div class="meeting-extra">
+                
                 <h3 class="section-title">Meeting Overview</h3>
-                <p class="section-body">
-                  {{i.description}}
-                </p>
+                <p class="section-body">{{i.description}}</p>
 
                 <h3 class="section-title">Faculty</h3>
                 <ul class="points-list">
@@ -862,9 +494,7 @@
             </article>
             {% endfor %}
           {% else %}
-            <p style="font-size:0.95rem;color:#6b7280;">
-              No meetings scheduled.
-            </p>
+            <p style="font-size:0.95rem;color:#6b7280;">No meetings scheduled.</p>
           {% endif %}
         </section>
       </div>
@@ -876,13 +506,8 @@
     document.querySelectorAll('.meeting-card').forEach(card => {
       const btn = card.querySelector('.toggle-btn');
       const extra = card.querySelector('.meeting-extra');
-
       if (!btn || !extra) return;
-
-      btn.addEventListener('click', () => {
-        extra.classList.toggle('expanded');
-        btn.classList.toggle('rotate');
-      });
+      btn.addEventListener('click', () => { extra.classList.toggle('expanded'); btn.classList.toggle('rotate'); });
     });
   </script>
   {% include 'foot.html' %}
