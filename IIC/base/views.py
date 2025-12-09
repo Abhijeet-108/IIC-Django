@@ -5,7 +5,7 @@ from django.db.models import Q
 
 from .forms import queryForm , teamMembersForm, certificateForm, iprForm , incubationForm , activityFrom
 from rnd.forms import facultForm
-from .models import querys, iicInfo , notice , meeting , achievement , gallery , activity, teamMember , ipr , incubation, certificate
+from .models import querys, iicInfo , notice , meeting , achievement , gallery , activity, teamMember , certificate , ipr , incubation
 
 from django.contrib import messages
 from django.contrib.auth import authenticate , login , logout
@@ -38,9 +38,9 @@ def activities(req):
     previous_year = timezone.now().year - 1
     info = iicInfo.objects.first()
     calact = activity.objects.filter(category = "IIC Calender Activity")
-    micact = activity.objects.filter(category = "MIC_Driven Activity")
+    micact = activity.objects.filter(category = "MIC Driven Activity")
     celebact = activity.objects.filter(category = "Celebration Activity")
-    selfact = activity.objects.filter(category = "Self_Driven Activity")
+    selfact = activity.objects.filter(category = "Self Driven Activity")
     previous = activity.objects.filter(created__year = previous_year)
     current = activity.objects.filter(created__year = current_year)
 
@@ -151,13 +151,13 @@ def queryDeletion(req , pk):
     return redirect('admin-site')
 
 #-------------------------- Team Members Page ----------------------- #
-def teamMenbers(req):
-    teamMembers = teamMember.objects.all()
+def teamMenbersPage(req):
+    teammembers = teamMember.objects.all()
     info = iicInfo.objects.first()
-    administrative = teamMember.objects.filter(Q(role="Convenor") | Q(role="Co-Convenor") | Q(role="Convenor of External Affairs") | Q(role="Hult Prize Campus Director & Operations Head") | Q(role="Chief Financial & Strategic Advisor"))
-    heads_cohead = teamMember.objects.filter(Q(role="Head of Tech Wing") | Q(role="Co-Head of Tech Wing")|Q(role="Head of Graphics Wing") | Q(role="Co-Head of Graphics Wing")|Q(role="Head of Startup Wing") | Q(role="Co-Head of Startup Wing")|Q(role="Head of Public Relations And Outreach wing") | Q(role="Co-Head of Public Relations And Outreach wing")|Q(role="Head of Management and Resource wing") | Q(role="Co-Head of Management and Resource wing")|Q(role="Head of Social Media Wing") | Q(role="Co-Head of Social Media Wing")|Q(role="Head of Sponsorship Wing") | Q(role="Co-Head of Sponsorship Wing")|Q(role="Head of Content Wing") | Q(role="Co-Head of Content Wing"))
-    context = {'iic' : info , 'teamMembers' : teamMembers, 'administrative' : administrative , 'heads_cohead' : heads_cohead}
-    return render(req, "teamForm.html" , context)
+    administrative = teammembers.objects.filter(Q(role="Convenor") | Q(role="Co-Convenor") | Q(role="Convenor_External") | Q(role="Faculty Advisor"))
+    
+    context = {'iic' : info , 'teammembers' : teammembers}
+    return render(req, "teamMembers.html" , context)
 
 
 
@@ -166,12 +166,12 @@ def addteamMembers(req):
     addteamMembersf = teamMembersForm()
     info = iicInfo.objects.first()
     if(req.method == "POST"):
-        addteamMembersf = teamMembersForm(req.POST, req.FILES)
+        addteamMembersf = teamMembersForm(req.POST)
         if(addteamMembersf.is_valid()):
             addteamMembersf.save()
-        return redirect("team_members")
+        return redirect("admin-site")
     
-    return render(req , "Form3.html" , {'Form' : addteamMembersf, 'page' : page, 'iic' : info})
+    return render(req , "form2.html" , {'form' : addteamMembersf, 'page' : page, 'iic' : info})
 
 def updateteamMembers(req , pk):
     page = 'Update Team Members'
@@ -185,32 +185,24 @@ def updateteamMembers(req , pk):
         else:
             updateteamMembersf = teamMembersForm()
     
-    return render(req , "Form3.html" , {'Form' : updateteamMembersf, 'page' : page})
+    return render(req , "form2.html" , {'form' : updateteamMembersf, 'page' : page})
 
-def deleteteamMembers(req, pk):
-    teammember = teamMember.objects.get(id = pk)
+def deleteteamMembers(pk):
+    teammember = User.objects.get(id = pk)
     teammember.delete()
-    return redirect('team_members')
+    return redirect('admin-site')
 
 # --------------------------Certificate------------------------------ #
-
-def certificates(req):
-    cert = certificate.objects.all()
-    info = iicInfo.objects.first()
-    context = {'iic' : info , 'certificates' : cert}
-    return render(req, "certificate.html" , context)
-
 def addcertificate(req):
     page = 'Add Certificate'
     certificatef = certificateForm()
-    info = iicInfo.objects.first()
     if(req.method == "POST"):
         certificatef = certificateForm(req.POST , req.FILES)
         if(certificatef.is_valid()):
             certificatef.save()
-        return redirect("certificate")
+        return redirect("admin-site")
     
-    return render(req , "Form3.html" , {'Form' : certificatef, 'page' : page, 'iic' : info})
+    return render(req , "form2.html" , {'form' : certificatef, 'page' : page})
 
 def updatecertificate(req , pk):
     page = 'Update Certificate'
@@ -224,32 +216,24 @@ def updatecertificate(req , pk):
         else:
             updatecertificatef = certificateForm()
     
-    return render(req , "Form3.html" , {'Form' : updatecertificatef, 'page' : page})
+    return render(req , "form2.html" , {'form' : updatecertificatef, 'page' : page})
 
-def deletecertificate(req, pk):
-    certificatee = certificate.objects.get(id = pk)
+def deletecertificate(pk):
+    certificatee = gallery.objects.get(id = pk)
     certificatee.delete()
-    return redirect('certificate')
+    return redirect('admin-site')
 
 # -------------------------- IPR ------------------------------ #
-
-def iprs(req):
-    iprs = ipr.objects.all()
-    info = iicInfo.objects.first()
-    context = {'iic' : info , 'iprs' : iprs}
-    return render(req, "ipr.html" , context)
-
 def addipr(req):
     page = 'Add IPR'
     iprf = iprForm()
-    info = iicInfo.objects.first()
     if(req.method == "POST"):
         iprf = iprForm(req.POST , req.FILES)
         if(iprf.is_valid()):
             iprf.save()
-        return redirect("ipr")
+        return redirect("admin-site")
     
-    return render(req , "Form3.html" , {'Form' : iprf, 'page' : page, 'iic' : info})
+    return render(req , "form2.html" , {'form' : iprf, 'page' : page})
 
 def updateipr(req , pk):
     page = 'Update IPR'
@@ -259,36 +243,28 @@ def updateipr(req , pk):
         updateiprf = iprForm(req.POST , req.FILES , instance = ipre)
         if(updateiprf.is_valid()):
             updateiprf.save()
-            return redirect("ipr")
+            return redirect("admin-site")
         else:
             updateiprf = iprForm()
     
     return render(req , "form2.html" , {'form' : updateiprf, 'page' : page})
 
-def deleteipr(req, pk):
+def deleteipr(pk):
     ipre = ipr.objects.get(id = pk)
     ipre.delete()
-    return redirect('ipr')
+    return redirect('admin-site')
 
 # -------------------------- Incubation ------------------------------ #
-
-def incubations(req):
-    incubations = incubation.objects.all()
-    info = iicInfo.objects.first()
-    context = {'iic' : info , 'incubations' : incubations}
-    return render(req, "incubator.html" , context)
-
 def addincubation(req):
     page = 'Add Incubation'
     incubationf = incubationForm()
-    info = iicInfo.objects.first()
     if(req.method == "POST"):
         incubationf = incubationForm(req.POST , req.FILES)
         if(incubationf.is_valid()):
             incubationf.save()
         return redirect("admin-site")
     
-    return render(req , "Form3.html" , {'Form' : incubationf, 'page' : page, 'iic' : info})
+    return render(req , "form2.html" , {'form' : incubationf, 'page' : page})
 
 def updateincubation(req , pk):
     page = 'Update Incubation'
@@ -302,9 +278,9 @@ def updateincubation(req , pk):
         else:
             updateincubationf = incubationForm()
     
-    return render(req , "Form3.html" , {'Form' : updateincubationf, 'page' : page})
+    return render(req , "form2.html" , {'form' : updateincubationf, 'page' : page})
 
-def deleteincubation(req, pk):
+def deleteincubation(pk):
     incubatione = incubation.objects.get(id = pk)
     incubatione.delete()
     return redirect('admin-site')
