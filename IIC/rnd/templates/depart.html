@@ -27,22 +27,13 @@
 }
 
 /* container */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-  box-sizing: border-box;
-}
+.container{ max-width:var(--max-width); margin:0 auto; padding:28px 20px 80px; }
 
-/* heading */
-.about h2.section-title,
-.about h2 {
-  font-size: clamp(26px, 3.2vw, 44px);
-  font-weight: 800;
-  color: var(--text-strong);
-  margin: 0 0 20px;
-  text-align: center;
-}
+  /* Heading */
+  .heading{ text-align:center; margin-bottom:20px; }
+  h1{ font-size:clamp(24px,3.6vw,44px); margin:0 0 8px; font-weight:800; letter-spacing:-0.02em; color:var(--text-strong); }
+  .heading-underline{ width:88px; height:6px; border-radius:999px; margin:10px auto 0; background:var(--accent-grad); box-shadow: 0 6px 20px rgba(37,99,235,0.12); }
+
 
 /* grid: center wide cards */
 .about-content { display:block; }
@@ -169,18 +160,23 @@
 <body>
   {% include 'nav.html' %}
 <section class="about" id="about">
+  <button type="button" class="back-btn" onclick="history.back()" style="padding:5px; border:none; background:transparent; font-size:16px; color:var(--muted); cursor:pointer; margin-bottom:12px">
+    <span class="material-symbols-outlined">
+    arrow_back
+    </span>
+  </button>
+  <div class="container" id="root">
+  <div class="heading">
+    <h1>FACULTY {{ depart }}</h1>
+    <div class="heading-underline" aria-hidden="true"></div>
+  </div>
+
   <div class="container">
-    <button type="button" class="back-btn" onclick="history.back()" style="padding:5px; border:none; background:transparent; font-size:16px; color:var(--muted); cursor:pointer; margin-bottom:12px">
-      <span class="material-symbols-outlined">
-      arrow_back
-      </span>
-    </button>
-    <h2 style="text-align:center;margin-bottom:14px; color: black">{{ depart }}</h2>
 
     <div class="about-content">
       <div class="about-text">
         {% for i in faculty %}
-       
+       <div style="border: 1px solid rgba(0,0,0,0.03); border-radius: 8px; padding: 0; margin-bottom: 0; background: #fbfbfe; position: relative;">
         <a href="{% url 'facul' i.id %}" aria-label="Open faculty profile {{ i.name }}">
           <div class="about-card" tabindex="0" role="group" aria-labelledby="fac-name-{{ i.id }}">
             <div class="card-icon" aria-hidden="true">
@@ -198,10 +194,18 @@
             {% endif %}
           </div>
         </a>
-        <a href="{% url 'deletefacultform' i.id %}">
-
-            <span class="material-symbols-outlined">delete_forever</span>
-    </a>
+        {% if request.user.is_superuser%}
+        <div style=" position: relative; align-items: right; display: flex; justify-content: flex-end;"> 
+          <a href="{% url 'dept-delete' i.id %}">
+            <button style="background: #d9534f; color: #fff; border-radius: 5px; padding:5px 10px;">
+              <span class="material-symbols-outlined">
+              delete_forever
+              </span>
+            </button>
+          </a>
+        </div>
+        {% endif %}
+        </div>
         {% endfor %}
       </div>
     </div>

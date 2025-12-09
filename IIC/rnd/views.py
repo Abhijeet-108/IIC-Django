@@ -27,7 +27,7 @@ def depart(req , pk):
     faculty = facult.objects.filter(dept = dep)
     suf = suff.objects.all()
     info = iicInfo.objects.first()
-    context = {"faculty" : faculty , "suf" : suf, 'iic' : info}
+    context = {"depart": dep,"faculty" : faculty , "suf" : suf, 'iic' : info}
     return render(req , 'depart.html' , context)
 
 def facul(req , pk):
@@ -117,6 +117,8 @@ def delete_form(req, pk):
     return redirect('research')
 
 # -----------------dept--------------------------
+
+
 def add_deptform(req):
     page = "Add Department"
     deptform = deptForm()
