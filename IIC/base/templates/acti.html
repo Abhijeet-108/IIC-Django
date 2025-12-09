@@ -150,18 +150,23 @@
       .file-input {
         display: none;
       }
+      .btn-gap{
+        padding-bottom:4%;
+      }
     </style>
   </head>
   <body>
     {% include 'nav.html' %}
     <main class="page">
       <!-- ---------- TABS ---------- -->
+       <div class = "btn-gap">
       <div class="add-wrap">
         {% if request.user.is_superuser %}
         <a href="{% url 'activity-create' %}"
           ><button class="btn-add">+ Add Activity</button></a
         >
         {% endif %}
+      </div>
       </div>
       <nav class="activity-tabs">
         <div class="activity-tab active" data-target="sec1">
@@ -183,8 +188,8 @@
       <!-- ------------------------------------------------------------------ -->
 
       <!-- SECTION 1 -->
-      {% if calact %} {% for i in calact %}
       <section id="sec1" class="activity-section active">
+      {% if calact %} {% for i in calact %}
         <div class="activity-box">
           <div class="activity-box-header">
             <h2 class="activity-title">{{i.headline}}</h2>
@@ -203,14 +208,19 @@
               <button class="btn">Download Template</button>
             </div>
           </div>
-          <span class="tag">{{i.created.date}}</span>
+          {% if i.date %}
+          <span class="tag">{{i.date}}</span>
+          {% endif %}
+          {% if i.time %}
+          <span class="tag">{{i.time}}</span>
+          {% endif %}
         </div>
-      </section>
       {% endfor %} {% endif %}
+      </section>
 
       <!-- SECTION 2 -->
-      {% if micact %} {% for i in micact %}
       <section id="sec2" class="activity-section">
+      {% if micact %} {% for i in micact %}
         <div class="activity-box">
           <div class="activity-box-header">
             <h2 class="activity-title">{{i.headline}}</h2>
@@ -227,13 +237,18 @@
               <button class="btn">Download Format</button>
             </div>
           </div>
-          <span class="tag">{{i.created.date}}</span>
+          {% if i.date %}
+          <span class="tag">{{i.date}}</span>
+          {% endif %}
+          {% if i.time %}
+          <span class="tag">{{i.time}}</span>
+          {% endif %}
         </div>
-      </section>
       {% endfor %} {% endif %}
+      </section>
       <!-- SECTION 3 -->
-      {% if celebact %} {% for i in celebact %}
       <section id="sec3" class="activity-section">
+      {% if celebact %} {% for i in celebact %}
         <div class="activity-box">
           <div class="activity-box-header">
             <h2 class="activity-title">{{i.headline}}</h2>
@@ -250,13 +265,19 @@
               <button class="btn">Rules PDF</button>
             </div>
           </div>
-          <span class="tag">{{i.created.date}}</span>
+          {% if i.date %}
+          <span class="tag">{{i.date}}</span>
+          {% endif %}
+          {% if i.time %}
+          <span class="tag">{{i.time}}</span>
+          {% endif %}
         </div>
-      </section>
       {% endfor %} {% endif %}
+      </section>
+
       <!-- SECTION 4 -->
-      {% if selfact %} {% for i in selfact %}
       <section id="sec4" class="activity-section">
+      {% if selfact %} {% for i in selfact %}
         <div class="activity-box">
           <div class="activity-box-header">
             <h2 class="activity-title">{{i.headline}}</h2>
@@ -273,14 +294,19 @@
               <button class="btn">Activity Guide</button>
             </div>
           </div>
-          <span class="tag">{{i.created.date}}</span>
+          {% if i.date %}
+          <span class="tag">{{i.date}}</span>
+          {% endif %}
+          {% if i.time %}
+          <span class="tag">{{i.time}}</span>
+          {% endif %}
         </div>
-      </section>
       {% endfor %} {% endif %}
+      </section>
 
       <!-- SECTION 5 -->
-      {% if previous %} {% for i in previous %}
       <section id="sec5" class="activity-section">
+      {% if previous %} {% for i in previous %}
         <div class="activity-box">
           <div class="activity-box-header">
             <h2 class="activity-title">{{i.headline}}</h2>
@@ -297,13 +323,18 @@
               <button class="btn">View Calendar</button>
             </div>
           </div>
-          <span class="tag">{{i.created.date}}</span>
+          {% if i.date %}
+          <span class="tag">{{i.date}}</span>
+          {% endif %}
+          {% if i.time %}
+          <span class="tag">{{i.time}}</span>
+          {% endif %}
         </div>
-      </section>
       {% endfor %} {% endif %}
+      </section>
       <!-- SECTION 6 -->
-      {% if current %} {% for i in current %}
       <section id="sec6" class="activity-section">
+      {% if current %} {% for i in current %}
         <div class="activity-box">
           <div class="activity-box-header">
             <h2 class="activity-title">{{i.headline}}</h2>
@@ -320,10 +351,15 @@
               <button class="btn">Download Format</button>
             </div>
           </div>
-          <span class="tag">{{i.created.date}}</span>
+          {% if i.date %}
+          <span class="tag">{{i.date}}</span>
+          {% endif %}
+          {% if i.time %}
+          <span class="tag">{{i.time}}</span>
+          {% endif %}
         </div>
-      </section>
       {% endfor %} {% endif %}
+      </section>
     </main>
 
     <script>

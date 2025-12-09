@@ -26,6 +26,21 @@ class activityFrom(ModelForm):
     class Meta:
         model = activity
         fields = "__all__"
+        widgets = {
+                'date': forms.DateInput(attrs={
+                'type' : 'date',
+                'class': 'form-control',
+                'placeholder': 'YYYY-MM-DD',
+                'style': 'resize: none; border-radius: 10px;'
+            }), 
+            'time': forms.TimeInput(attrs={
+                'type' : 'time',
+                'class': 'form-control',
+                'placeholder': 'HH:MM',
+                
+                'style': 'resize: none; border-radius: 10px;'
+            }), 
+        }
 
 class achievForm(ModelForm):
     class Meta:
@@ -42,6 +57,19 @@ class achievForm(ModelForm):
                 'placeholder': 'Enter achievement description...',
                 'rows': 4,
                 'style': 'resize: none; border-radius: 10px;'
+            }), 
+            'date': forms.DateInput(attrs={
+                'type' : 'date',
+                'class': 'form-control',
+                'placeholder': 'YYYY-MM-DD',
+                'style': 'resize: none; border-radius: 10px;'
+            }), 
+            'time': forms.TimeInput(attrs={
+                'type' : 'time',
+                'class': 'form-control',
+                'placeholder': 'HH:MM',
+                
+                'style': 'resize: none; border-radius: 10px;'
             }),            
         }
         exclude = ["stat"]
@@ -55,6 +83,21 @@ class meetingForm(ModelForm):
     class Meta:
         model = meeting
         fields = "__all__"
+        widgets = {
+                'date': forms.DateInput(attrs={
+                'type' : 'date',
+                'class': 'form-control',
+                'placeholder': 'YYYY-MM-DD',
+                'style': 'resize: none; border-radius: 10px;'
+            }), 
+            'time': forms.TimeInput(attrs={
+                'type' : 'time',
+                'class': 'form-control',
+                'placeholder': 'HH:MM',
+                
+                'style': 'resize: none; border-radius: 10px;'
+            }), 
+        }
 
 class galleryForm(ModelForm):
     class Meta:
