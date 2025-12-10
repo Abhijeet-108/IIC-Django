@@ -28,6 +28,7 @@ urlpatterns = [
 
 
     path('achievment-create/' , views.achievCreate , name = "achievment-create"),
+    path('achievment-approve/<int:pk>' , views.approveAchi , name = "achievment-approve"),
     path('achievment-update/<int:pk>' , views.achievEdit , name = "achievment-update"),
     path('achievment-delete/<int:pk>' , views.achievDeletion , name = "achievment-delete"),
 

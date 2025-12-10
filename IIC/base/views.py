@@ -71,7 +71,7 @@ def noticeBoard(req):
     return render(req, "noticeboard.html" , context)
 
 def achiev(req):
-    ach = achievement.objects.all()[:50]
+    ach = achievement.objects.filter(stat = "Approved")[:50]
     info = iicInfo.objects.first()
     context = {'iic' : info , 'ach' : ach}
     return render(req, "achievement.html" , context)
@@ -181,7 +181,7 @@ def updateteamMembers(req , pk):
         updateteamMembersf = teamMembersForm(req.POST , instance = teammember)
         if(updateteamMembersf.is_valid()):
             updateteamMembersf.save()
-            return redirect("admin-site")
+            return redirect("team_members")
         else:
             updateteamMembersf = teamMembersForm()
     
@@ -220,7 +220,7 @@ def updatecertificate(req , pk):
         updatecertificatef = certificateForm(req.POST , req.FILES , instance = certificatee)
         if(updatecertificatef.is_valid()):
             updatecertificatef.save()
-            return redirect("admin-site")
+            return redirect("certificate")
         else:
             updatecertificatef = certificateForm()
     
@@ -286,7 +286,7 @@ def addincubation(req):
         incubationf = incubationForm(req.POST , req.FILES)
         if(incubationf.is_valid()):
             incubationf.save()
-        return redirect("admin-site")
+        return redirect("incubation")
     
     return render(req , "Form3.html" , {'Form' : incubationf, 'page' : page, 'iic' : info})
 
@@ -298,7 +298,7 @@ def updateincubation(req , pk):
         updateincubationf = incubationForm(req.POST , req.FILES , instance = incubatione)
         if(updateincubationf.is_valid()):
             updateincubationf.save()
-            return redirect("admin-site")
+            return redirect("incubation")
         else:
             updateincubationf = incubationForm()
     

@@ -20,7 +20,8 @@ def homepage(req):
 def profilePage(req):
     info = iicInfo.objects.first()
     suf = suff.objects.all()
-    context = {'iic' : info , 'suf' : suf}
+    achi = achievement.objects.filter(stat = "Pending") 
+    context = {'iic' : info , 'suf' : suf , 'achi' : achi}
 
     if (not req.user.is_superuser):
         fac = facult.objects.get(user = req.user)
@@ -67,10 +68,21 @@ def achievCreate(req):
     if(req.method == "POST"):
         achievf = achievForm(req.POST , req.FILES)
         if(achievf.is_valid()):
-            achievf.save()
-        return redirect("admin-site")
+            if(req.user.is_authenticated):
+                instance = achievf.save(commit = False)
+                instance.stat = "Approved"
+                instance.save()
+            else:
+                achievf.save()
+        return redirect("achievments")
     context = {'achievf' : achievf , 'iic' : info}
     return render(req , "form1.html" , context)
+
+def approveAchi(req , pk):
+    achi = achievement.objects.get(id=pk)
+    achi.stat = "Approved"
+    achi.save()
+    return redirect('admin-profile')
 
 def achievEdit(req , pk):
     achiev = achievement.objects.get(id = pk)
@@ -81,14 +93,14 @@ def achievEdit(req , pk):
 
         if achievf.is_valid():
             achievf.save()
-            return redirect('admin-site')
+            return redirect('achievments')
     context = {'achievf' : achievf , 'iic' : info}
     return render(req,"form1.html",context)
 
 def achievDeletion(req , pk):
     achiev = achievement.objects.get(id = pk)
     achiev.delete()
-    return redirect('admin-site')
+    return redirect('achievments')
 
 def contactOrgCreate(req):
     contactf = contactOrgForm()
@@ -96,7 +108,7 @@ def contactOrgCreate(req):
         contactf = contactOrgForm(req.POST)
         if(contactf.is_valid()):
             contactf.save()
-        return redirect("admin-site")
+        return redirect("achievments")
     context = {'contactf' : contactf}
     return render(req , "form1.html" , context)
 
