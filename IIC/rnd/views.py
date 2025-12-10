@@ -49,21 +49,29 @@ def basicCreate(req):
         basicsf = basicDetails(req.POST)
         if(basicsf.is_valid()):
             basicsf.save()
-        return redirect("admin-site")
+            return redirect("facul")
+        else:
+            form = patentForm()
     context = {'basicsf' : basicsf}
     return render(req , "form.html" , context)
 
 def basicEdit(req , pk):
-    basic = basicDetails.objects.get(id = pk)
-    basicf = basicDetailsForm(instance = basic)
-    if(req.method == "POST"):
-        basicf = basicDetailsForm(req.POST , instance = basic)
+    fid = facult.objects.get(id = pk)
+    print(fid)
+    if (basicDetails.objects.filter(faculty = fid) != None):
+        basic = basicDetails.objects.get(faculty = fid)
+    
+        basicf = basicDetailsForm(instance = basic)
+        if(req.method == "POST"):
+            basicf = basicDetailsForm(req.POST , instance = basic)
 
-        if basicf.is_valid():
-            basicf.save()
-            return redirect('admin-site')
-    context = {'form' : basicf}
-    return render(req,"form.html",context)
+            if basicf.is_valid():
+                basicf.save()
+                return redirect('research')
+        context = {'form' : basicf}
+        return render(req,"form.html",context)
+    else:
+        return redirect("basic-create")
 
 def basicDeletion(req , pk):
     basic = basicDetails.objects.get(id = pk)
@@ -91,8 +99,8 @@ def add_form(req , pk):
                 instance.faculty = fac
                 instance.save()
             return redirect('research')
-    else:
-        form = patentForm()
+        else:
+            form = patentForm()
     
     return render(req, 'form.html', {'form': form, 'iic' : info, 'page': page})
 
@@ -128,8 +136,8 @@ def add_deptform(req):
         if deptform.is_valid():
             deptform.save()
             return redirect('research')
-    else:
-        deptform = deptForm()
+        else:
+            deptform = deptForm()
     
     return render(req, 'form.html', {'form': deptform, 'iic' : info, 'page': page})
 
@@ -174,8 +182,8 @@ def add_bookform(req , pk):
                 instance.faculty = fac
                 instance.save()
             return redirect('research')
-    else:
-        bookform = bookForm()
+        else:
+            bookform = bookForm()
     
     return render(req, 'form.html', {'form': bookform, 'iic' : info, 'page': page})
 
@@ -220,8 +228,8 @@ def add_bookChapterform(req , pk):
                 instance.faculty = fac
                 instance.save()
             return redirect('research')
-    else:
-        bookchapterform = bookChapterForm()
+        else:
+            bookchapterform = bookChapterForm()
     
     return render(req, 'form.html', {'form': bookchapterform, 'iic' : info, 'page': page})
 
@@ -256,8 +264,8 @@ def add_facultform(req):
         if facultform.is_valid():
             facultform.save()
             return redirect('research')
-    else:
-        facultform = facultForm()
+        else:
+            facultform = facultForm()
     
     return render(req, 'form.html', {'form': facultform, 'iic' : info, 'page': page})
 
@@ -294,8 +302,8 @@ def add_suffform(req):
         if suffform.is_valid():
             suffform.save()
             return redirect('research')
-    else:
-        suffform = suffForm()
+        else:
+            suffform = suffForm()
     
     return render(req, 'form.html', {'form': suffform, 'iic' : info, 'page': page})
 
@@ -341,8 +349,8 @@ def add_copyrightform(req , pk):
                 instance.faculty = fac
                 instance.save()
             return redirect('research')
-    else:
-        copyrightform = copyrightForm()
+        else:
+            copyrightform = copyrightForm()
     
     return render(req, 'form.html', {'form': copyrightform, 'iic' : info, 'page': page})
 
@@ -388,8 +396,8 @@ def add_conferenceform(req , pk):
                 instance.faculty = fac
                 instance.save()
             return redirect('research')
-    else:
-        conferenceform = conferenceForm()
+        else:
+            conferenceform = conferenceForm()
     
     return render(req, 'form.html', {'form': conferenceform, 'iic' : info, 'page': page})
 
@@ -435,8 +443,8 @@ def add_journalform(req , pk):
                 instance.faculty = fac
                 instance.save()
             return redirect('research')
-    else:
-        journalform = journalForm()
+        else:
+            journalform = journalForm()
     
     return render(req, 'form.html', {'form': journalform, 'iic' : info, 'page': page})
 
@@ -481,40 +489,47 @@ def rndinfo(req):
             instance = basicf.save(commit = False)
             instance.faculty = fac
             instance.save()
+        else:
+            basicf = basicDetailsForm()
         if patentf.is_valid():
             instance = patentf.save(commit = False)
             instance.faculty = fac
             instance.save()
+        else:
+            patentf = patentForm()
         if copyrightf.is_valid():
             inctsnace = copyrightf.save(commit = False)
             inctsnace.faculty = fac
             inctsnace.save()
+        else:
+            copyrightf = copyrightForm()
         if journalf.is_valid():
             inctsnace = journalf.save(commit = False)
             inctsnace.faculty = fac
             inctsnace.save()
+        else:
+            journalf = journalForm()
         if bookf.is_valid():
             inctsnace = bookf.save(commit = False)
             inctsnace.faculty = fac
             inctsnace.save()
+        else:
+            bookf = bookForm()
         if bookcf.is_valid():
             inctsnace = bookcf.save(commit = False)
             inctsnace.faculty = fac
             inctsnace.save()
+        else:
+            bookcf = bookChapterForm()
         if conferencef.is_valid():
             inctsnace = conferencef.save(commit = False)
             inctsnace.faculty = fac
             inctsnace.save()
+        else:
+            conferencef = conferenceForm()
         return redirect('home')
-    else:
-        basicf = basicDetailsForm()
-        patentf = patentForm() 
-        copyrightf = copyrightForm()
-        journalf = journalForm()
-        bookf = bookForm()
-        bookcf = bookChapterForm()
-        conferencef = conferenceForm()
-   
+
+    
     context = {"basicf" : basicf , "patentf" : patentf , "bookcf" : bookcf , "bookf" : bookf , "copyrightf" : copyrightf , "journalf" : journalf , "conferencef" : conferencef}
     return render(req , "rndinfo.html" , context)
 
