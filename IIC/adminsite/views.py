@@ -102,6 +102,11 @@ def achievDeletion(req , pk):
     achiev.delete()
     return redirect('achievments')
 
+def achievDeletionProf(req , pk):
+    achiev = achievement.objects.get(id = pk)
+    achiev.delete()
+    return redirect('admin-profile')
+
 def contactOrgCreate(req):
     contactf = contactOrgForm()
     if(req.method == "POST"):

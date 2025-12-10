@@ -21,6 +21,12 @@ class achievement(models.Model):
     stat = models.CharField(choices = status , default = status.Pending , null = True , blank = True)
     photo = models.ImageField(upload_to='image/achievements/', null=True , blank = True)
     pdf_file = models.FileField(upload_to='pdfs/', null=True , blank = True)
+    created = models.DateTimeField(auto_now_add=True , null = True)
+    updated = models.DateTimeField(auto_now=True , null = True)
+
+
+    class Meta:
+        ordering = ['-created']
 
     def __str__(self):
         return self.title
@@ -71,6 +77,8 @@ class activity(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        ordering = ['-created']
 
     def __str__(self):
         return self.headline
