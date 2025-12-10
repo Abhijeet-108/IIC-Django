@@ -88,7 +88,17 @@
     .info-full{ grid-column:1/-1 }
 
     label{ display:block; font-size:13px; color:var(--muted); margin-bottom:6px }
-    .static-val{ background:transparent; padding:10px; border-radius:8px; font-size:14px; color:var(--text) }
+    .static-val{
+      background: transparent;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 14px;
+      color: var(--text);
+
+      white-space: normal !important;
+      word-break: break-all !important;
+      overflow-wrap: anywhere !important;
+    }
 
     .actions-row{ display:flex; gap:12px; justify-content:flex-end; align-items:center; margin-top:12px }
     .btn{ padding:10px 16px; border-radius:10px; border:0; font-weight:700; cursor:pointer; color:#fff; background: linear-gradient(90deg,var(--accent1),var(--accent2)); box-shadow: 0 8px 22px rgba(37,99,235,0.14); }

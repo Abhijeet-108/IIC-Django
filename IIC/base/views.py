@@ -307,7 +307,7 @@ def updateincubation(req , pk):
 def deleteincubation(req, pk):
     incubatione = incubation.objects.get(id = pk)
     incubatione.delete()
-    return redirect('admin-site')
+    return redirect('incubation')
 
 
 # ------------------------------ Activity -----------------------------

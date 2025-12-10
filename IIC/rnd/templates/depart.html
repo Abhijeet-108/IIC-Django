@@ -196,7 +196,7 @@
         </a>
         {% if request.user.is_superuser%}
         <div style=" position: relative; align-items: right; display: flex; justify-content: flex-end;"> 
-          <a href="{% url 'dept-delete' i.id %}">
+          <a href="{% url 'deletefacultform' i.id %}">
             <button style="background: #d9534f; color: #fff; border-radius: 5px; padding:5px 10px;">
               <span class="material-symbols-outlined">
               delete_forever
