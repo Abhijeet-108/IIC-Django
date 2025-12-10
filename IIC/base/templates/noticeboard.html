@@ -214,6 +214,8 @@
                   <path d="M16 2v4M8 2v4M3 10h18"></path>
                 </svg>
                 <span>{{i.created.date}}</span>
+                {% if request.user.is_superuser %}
+                
                  <a href="{% url 'notice-delete' i.id %}">
         <button style="
             position: absolute;
@@ -228,6 +230,7 @@
             box-shadow: 0 3px 8px rgba(0,0,0,0.3);
         ">
             <span class="material-symbols-outlined">delete_forever</span>
+        {% endif %}
         </button>
     </a>
               </div>

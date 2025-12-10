@@ -361,12 +361,14 @@ body{
                     <h3 id="fac-name-{{ i.id }}">{{ i.date }}</h3>
 
 
-
+                    {% if i.support %}
                     <div>
                         <a href="{{ i.support.url }}" target="_blank" rel="noopener noreferrer" style="text-decoration:none; color:var(--accent-blue); font-weight:600;">
                             View Certificate
                         </a>
                     </div>
+                     {% else %}
+                      {% endif %}
                 </div>
             </a>
             {% empty %}

@@ -389,7 +389,7 @@
             <div class="card-body">
               <div class="meta">
                 <div style="display: flex; align-items: center; gap: 6px">
-                  
+                  {% if request.user.is_superuser %}
                   <span><a href="{% url 'achievment-delete' i.id %}">
         <button style="
             position: absolute;
@@ -404,7 +404,8 @@
             box-shadow: 0 3px 8px rgba(0,0,0,0.3);
         ">
             <span class="material-symbols-outlined">delete_forever</span>
-        </button>
+          {% endif %}
+          </button>
     </a></span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 6px">

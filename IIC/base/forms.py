@@ -26,6 +26,7 @@ class activityFrom(ModelForm):
     class Meta:
         model = activity
         fields = "__all__"
+        exclude = ["photo"]
         widgets = {
                 'date': forms.DateInput(attrs={
                 'type' : 'date',

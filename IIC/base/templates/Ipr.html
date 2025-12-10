@@ -283,12 +283,13 @@ body {
                     <div class="description">
                         <p style="margin-top:10px; margin-bottom:10px;">{{ i.description }}</p>
                     </div>
-
+                    {% if i.support %}
                     <div>
                         <a href="{{ i.support.url }}" target="_blank" rel="noopener noreferrer" style="text-decoration:none; color:var(--accent-blue); font-weight:600;">
                             View Certificate
                         </a>
                     </div>
+                    {% endif %}
 
                 </div>
             </a>
