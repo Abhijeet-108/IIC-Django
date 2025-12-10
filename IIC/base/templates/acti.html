@@ -150,12 +150,96 @@
       .file-input {
         display: none;
       }
+      .btn-gap{
+        padding-bottom:4%;
+      }
+
+
+      .admin-add-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.admin-add-link {
+  text-decoration: none;
+}
+
+.admin-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.35);
+  transition:
+    transform 150ms ease-out,
+    box-shadow 150ms ease-out,
+    filter 150ms ease-out,
+    background 150ms ease-out;
+}
+
+.admin-add-btn .material-symbols-outlined {
+  font-size: 18px;
+}
+
+.admin-add-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+  box-shadow: 0 16px 40px rgba(37, 99, 235, 0.45);
+}
+
+.admin-add-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+}
+
+.admin-add-btn:focus-visible {
+  outline: 2px solid rgba(37, 99, 235, 0.9);
+  outline-offset: 2px;
+}
+
+.doc-download-btn {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 8px 10px;
+        cursor: pointer;
+        font-size: 0.95rem;
+      }
+
+/* Optional: hide text on very small screens if you just want the icon */
+@media (max-width: 420px) {
+  .admin-add-text {
+    display: none;
+  }
+  .admin-add-btn {
+    padding-inline: 10px;
+  }
+}
     </style>
   </head>
   <body>
     {% include 'nav.html' %}
     <main class="page">
       <!-- ---------- TABS ---------- -->
+       <div class = "btn-gap">
+      <div class="add-wrap">
+        {% if request.user.is_superuser %}
+        <a href="{% url 'activity-create' %}"
+          ><button class="btn-add">+ Add Activity</button></a
+        >
+        {% endif %}
+      </div>
+      </div>
       <nav class="activity-tabs">
         <div class="activity-tab active" data-target="sec1">
           IIC Calendar Activity
@@ -164,10 +248,10 @@
         <div class="activity-tab" data-target="sec3">Celebration Activity</div>
         <div class="activity-tab" data-target="sec4">Self-Driven Activity</div>
         <div class="activity-tab" data-target="sec5">
-          My Activity Calendar - 2024-25
+          Activity Calendar - Previous Year
         </div>
         <div class="activity-tab" data-target="sec6">
-          My Activity Calendar - 2025-26
+          Activity Calendar - Current Year
         </div>
       </nav>
 
@@ -177,139 +261,212 @@
 
       <!-- SECTION 1 -->
       <section id="sec1" class="activity-section active">
-        <div class="add-wrap">
-          <button class="btn-add">+ Add Activity</button>
-        </div>
-
+      {% if calact %} {% for i in calact %}
         <div class="activity-box">
           <div class="activity-box-header">
-            <h2 class="activity-title">IIC Calendar Activity</h2>
+            <h2 class="activity-title">{{i.headline}}</h2>
 
             <!-- FILE INPUT -->
-            <input type="file" class="file-input" id="upload1" />
 
             <div class="activity-actions">
-              <label for="upload1" class="btn btn-upload">📤 Upload PDF</label>
-              <button class="btn">View All</button>
-              <button class="btn">Download Template</button>
+              {% if request.user.is_superuser %}
+              <a href="{% url 'activity-update' i.id %}"
+                ><label for="upload1" class="btn btn-upload">Edit</label></a
+              >
+              <a href="{% url 'activity-delete' i.id %}"
+                ><button class="btn">Delete</button></a
+              >
+              {% endif %}
+               <button class="doc-download-btn">
+                {% if i.pdf_file %}
+                <a href="{{ i.pdf_file.url }}" target="_blank" rel="noopener noreferrer"  style="text-decoration:none; color:var(--accent-blue); font-weight:600;"> View Certificate</a>
+                {% else %}
+                  <p>No support file</p>
+                {% endif %}
+              </button>
             </div>
           </div>
-          <span class="tag">Academic Year 2024–25</span>
+          {% if i.date %}
+          <span class="tag">{{i.date}}</span>
+          {% endif %}
+          {% if i.time %}
+          <span class="tag">{{i.time}}</span>
+          {% endif %}
         </div>
+      {% endfor %} {% endif %}
       </section>
 
       <!-- SECTION 2 -->
       <section id="sec2" class="activity-section">
-        <div class="add-wrap">
-          <button class="btn-add">+ Add Activity</button>
-        </div>
-
+      {% if micact %} {% for i in micact %}
         <div class="activity-box">
           <div class="activity-box-header">
-            <h2 class="activity-title">MIC Driven Activity</h2>
-
-            <input type="file" class="file-input" id="upload2" />
+            <h2 class="activity-title">{{i.headline}}</h2>
 
             <div class="activity-actions">
-              <label for="upload2" class="btn btn-upload">📤 Upload PDF</label>
-              <button class="btn">Previous Reports</button>
-              <button class="btn">Download Format</button>
+              {% if request.user.is_superuser %}
+              <a href="{% url 'activity-update' i.id %}"
+                ><label for="upload1" class="btn btn-upload">Edit</label></a
+              >
+              <a href="{% url 'activity-delete' i.id %}"
+                ><button class="btn">Delete</button></a
+              >
+              {% endif %}
+              <button class="doc-download-btn">
+                {% if i.pdf_file %}
+                <a href="{{ i.pdf_file.url }}" target="_blank" rel="noopener noreferrer"  style="text-decoration:none; color:var(--accent-blue); font-weight:600;"> View Certificate</a>
+                {% else %}
+                  <p>No support file</p>
+                {% endif %}
+              </button>
             </div>
           </div>
-          <span class="tag">All MIC Events Included</span>
+          {% if i.date %}
+          <span class="tag">{{i.date}}</span>
+          {% endif %}
+          {% if i.time %}
+          <span class="tag">{{i.time}}</span>
+          {% endif %}
         </div>
+      {% endfor %} {% endif %}
       </section>
-
       <!-- SECTION 3 -->
       <section id="sec3" class="activity-section">
-        <div class="add-wrap">
-          <button class="btn-add">+ Add Activity</button>
-        </div>
-
+      {% if celebact %} {% for i in celebact %}
         <div class="activity-box">
           <div class="activity-box-header">
-            <h2 class="activity-title">Celebration Activity</h2>
-
-            <input type="file" class="file-input" id="upload3" />
+            <h2 class="activity-title">{{i.headline}}</h2>
 
             <div class="activity-actions">
-              <label for="upload3" class="btn btn-upload"
-                >📤 Upload Poster</label
+              {% if request.user.is_superuser %}
+              <a href="{% url 'activity-update' i.id %}"
+                ><label for="upload1" class="btn btn-upload">Edit</label></a
               >
-              <button class="btn">View Schedule</button>
-              <button class="btn">Rules PDF</button>
+              <a href="{% url 'activity-delete' i.id %}"
+                ><button class="btn">Delete</button></a
+              >
+              {% endif %}
+              <button class="doc-download-btn">
+                {% if i.pdf_file %}
+                <a href="{{ i.pdf_file.url }}" target="_blank" rel="noopener noreferrer"  style="text-decoration:none; color:var(--accent-blue); font-weight:600;"> View Certificate</a>
+                {% else %}
+                  <p>No support file</p>
+                {% endif %}
+              </button>
             </div>
           </div>
-          <span class="tag">Celebration Events</span>
+          {% if i.date %}
+          <span class="tag">{{i.date}}</span>
+          {% endif %}
+          {% if i.time %}
+          <span class="tag">{{i.time}}</span>
+          {% endif %}
         </div>
+      {% endfor %} {% endif %}
       </section>
 
       <!-- SECTION 4 -->
       <section id="sec4" class="activity-section">
-        <div class="add-wrap">
-          <button class="btn-add">+ Add Activity</button>
-        </div>
-
+      {% if selfact %} {% for i in selfact %}
         <div class="activity-box">
           <div class="activity-box-header">
-            <h2 class="activity-title">Self-Driven Activity</h2>
-
-            <input type="file" class="file-input" id="upload4" />
+            <h2 class="activity-title">{{i.headline}}</h2>
 
             <div class="activity-actions">
-              <label for="upload4" class="btn btn-upload"
-                >📤 Upload Proof</label
+              {% if request.user.is_superuser %}
+              <a href="{% url 'activity-update' i.id %}"
+                ><label for="upload1" class="btn btn-upload">Edit</label></a
               >
-              <button class="btn">Pending Approvals</button>
-              <button class="btn">Activity Guide</button>
+              <a href="{% url 'activity-delete' i.id %}"
+                ><button class="btn">Delete</button></a
+              >
+              {% endif %}
+              <button class="doc-download-btn">
+                {% if i.pdf_file %}
+                <a href="{{ i.pdf_file.url }}" target="_blank" rel="noopener noreferrer"  style="text-decoration:none; color:var(--accent-blue); font-weight:600;"> View Certificate</a>
+                {% else %}
+                  <p>No support file</p>
+                {% endif %}
+              </button>
             </div>
           </div>
-          <span class="tag">Self Initiated</span>
+          {% if i.date %}
+          <span class="tag">{{i.date}}</span>
+          {% endif %}
+          {% if i.time %}
+          <span class="tag">{{i.time}}</span>
+          {% endif %}
         </div>
+      {% endfor %} {% endif %}
       </section>
 
       <!-- SECTION 5 -->
       <section id="sec5" class="activity-section">
-        <div class="add-wrap">
-          <button class="btn-add">+ Add Activity</button>
-        </div>
-
+      {% if previous %} {% for i in previous %}
         <div class="activity-box">
           <div class="activity-box-header">
-            <h2 class="activity-title">My Activity Calendar - 2024–25</h2>
-
-            <input type="file" class="file-input" id="upload5" />
+            <h2 class="activity-title">{{i.headline}}</h2>
 
             <div class="activity-actions">
-              <label for="upload5" class="btn btn-upload">📤 Upload Plan</label>
-              <button class="btn">Generate PDF</button>
-              <button class="btn">View Calendar</button>
+              {% if request.user.is_superuser %}
+              <a href="{% url 'activity-update' i.id %}"
+                ><label for="upload1" class="btn btn-upload">Edit</label></a
+              >
+              <a href="{% url 'activity-delete' i.id %}"
+                ><button class="btn">Delete</button></a
+              >
+              {% endif %}
+              <button class="doc-download-btn">
+                {% if i.pdf_file %}
+                <a href="{{ i.pdf_file.url }}" target="_blank" rel="noopener noreferrer"  style="text-decoration:none; color:var(--accent-blue); font-weight:600;"> View Certificate</a>
+                {% else %}
+                  <p>No support file</p>
+                {% endif %}
+              </button>
             </div>
           </div>
-          <span class="tag">Year 2024–25</span>
+          {% if i.date %}
+          <span class="tag">{{i.date}}</span>
+          {% endif %}
+          {% if i.time %}
+          <span class="tag">{{i.time}}</span>
+          {% endif %}
         </div>
+      {% endfor %} {% endif %}
       </section>
-
       <!-- SECTION 6 -->
       <section id="sec6" class="activity-section">
-        <div class="add-wrap">
-          <button class="btn-add">+ Add Activity</button>
-        </div>
-
+      {% if current %} {% for i in current %}
         <div class="activity-box">
           <div class="activity-box-header">
-            <h2 class="activity-title">My Activity Calendar - 2025–26</h2>
-
-            <input type="file" class="file-input" id="upload6" />
+            <h2 class="activity-title">{{i.headline}}</h2>
 
             <div class="activity-actions">
-              <label for="upload6" class="btn btn-upload">📤 Upload Plan</label>
-              <button class="btn">View Timeline</button>
-              <button class="btn">Download Format</button>
+              {% if request.user.is_superuser %}
+              <a href="{% url 'activity-update' i.id %}"
+                ><label for="upload1" class="btn btn-upload">Edit</label></a
+              >
+              <a href="{% url 'activity-delete' i.id %}"
+                ><button class="btn">Delete</button></a
+              >
+              {% endif %}
+              <button class="doc-download-btn">
+                {% if i.pdf_file %}
+                <a href="{{ i.pdf_file.url }}" target="_blank" rel="noopener noreferrer"  style="text-decoration:none; color:var(--accent-blue); font-weight:600;"> View Certificate</a>
+                {% else %}
+                  <p>No support file</p>
+                {% endif %}
+              </button>
             </div>
           </div>
-          <span class="tag">Year 2025–26</span>
+          {% if i.date %}
+          <span class="tag">{{i.date}}</span>
+          {% endif %}
+          {% if i.time %}
+          <span class="tag">{{i.time}}</span>
+          {% endif %}
         </div>
+      {% endfor %} {% endif %}
       </section>
     </main>
 

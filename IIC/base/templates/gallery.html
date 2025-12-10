@@ -69,6 +69,9 @@
         border-radius: 6px;
         background: linear-gradient(90deg, var(--accent1), #374151);
       }
+      .add-gap{
+        padding-bottom:3%;
+      }
 
       /* grid */
       .grid {
@@ -159,6 +162,7 @@
         border: none;
         border-radius: 999px;
         padding: 8px 18px;
+      
         background: linear-gradient(90deg, #2563eb, #06b6d4);
         color: #ffffff;
         font-size: 0.9rem;
@@ -171,8 +175,9 @@
         transform: translateY(1px);
         box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
       }
-
+      
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
   </head>
   <body>
     {% include 'nav.html' %}
@@ -181,18 +186,49 @@
         <header>
           <h1 class="title">Gallery</h1>
           <div class="decor" aria-hidden="true"></div>
-          {% if request.user.is_authenticated %}
+          {% if request.user.is_superuser %}
+          <div class = "add-gap">
           <a href = {% url 'gallery-create' %}><button type="button" class="btn-add">+ Add</button></a>
+          </div>
           {% endif %}
         </header>
 
         <section class="grid" aria-label="Gallery images">
           <!-- Static cards, same look as JS-generated ones -->
           {% for i in images %}
-          <article class="card">
-            <img src="{{i.photo.url}}" alt="Gallery Image 1" loading="lazy" />
+<article class="card" style="position: relative;   
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    object-fit: contain;   
+">
+      <img src="{{i.photo.url}}" alt="Gallery Image" loading="lazy"
+            style="
+            object-fit: contain;   
+            border-radius: 10px;
+         " width="250px" height="250px">
 
-          </article>
+    <!-- Delete Button INSIDE the photo -->
+    {% if request.user.is_superuser %}
+    <a href="{% url 'gallery-delete' i.id %}">
+        <button style="
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #d9534f;
+            color: #fff;
+            border-radius: 5px;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+        ">
+            <span class="material-symbols-outlined">delete_forever</span>
+        </button>
+    </a>
+{% endif %}
+  </article>
           {% endfor %}
         </section>
       </div>
@@ -200,3 +236,4 @@
     {% include 'foot.html' %}
   </body>
 </html>
+

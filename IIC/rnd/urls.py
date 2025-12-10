@@ -15,8 +15,8 @@ urlpatterns = [
     path('patentform-delete/<int:pk>', views.delete_form, name="deletePatentform"),
     # ------------- dept ------------------------
     path('deptform/', views.add_deptform, name="deptform"),
-    path('deptform-update/<int:pk>', views.update_deptform, name="deptform"),
-    path('deptform-delete/<int:pk>', views.delete_deptform, name="deptform"),
+    path('deptform-update/<int:pk>', views.update_deptform, name="dept-update"),
+    path('deptform-delete/<int:pk>', views.delete_deptform, name="dept-delete"),
     
     # ------------- Book -------------------
     path('bookform/<int:pk>', views.add_bookform, name="bookform"),

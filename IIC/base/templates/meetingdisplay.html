@@ -231,6 +231,69 @@
         background: #1e4fc9;
         transform: translateY(-1px);
       }
+
+
+      .admin-add-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.admin-add-link {
+  text-decoration: none;
+}
+
+.admin-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.35);
+  transition:
+    transform 150ms ease-out,
+    box-shadow 150ms ease-out,
+    filter 150ms ease-out,
+    background 150ms ease-out;
+}
+
+.admin-add-btn .material-symbols-outlined {
+  font-size: 18px;
+}
+
+.admin-add-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+  box-shadow: 0 16px 40px rgba(37, 99, 235, 0.45);
+}
+
+.admin-add-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+}
+
+.admin-add-btn:focus-visible {
+  outline: 2px solid rgba(37, 99, 235, 0.9);
+  outline-offset: 2px;
+}
+
+/* Optional: hide text on very small screens if you just want the icon */
+@media (max-width: 420px) {
+  .admin-add-text {
+    display: none;
+  }
+  .admin-add-btn {
+    padding-inline: 10px;
+  }
+}
     </style>
   </head>
 
@@ -238,14 +301,13 @@
     {% include 'nav.html' %}
     <main class="page">
       <div class="page-header">
+        {% if request.user.is_superuser %}
         <a href="{% url 'meet-create' %}"
           ><button class="add-meeting-btn">+ Add Meeting</button></a
         >
+        {% endif %}
       </div>
       {% for i in meetings %}
-      <!-- ---------------------------------------------------------- -->
-      <!--                     MEETING CARD 1                         -->
-      <!-- ---------------------------------------------------------- -->
       <section class="meeting-card">
         <div class="meeting-header">
           <div class="meeting-header-left">
@@ -264,7 +326,8 @@
                 margin-bottom: 6px;
               "
             >
-              Published on: <span style="color: #111827">02 Mar 2025</span>
+              Published on:
+              <span style="color: #111827">{{i.created.date}}</span>
             </div>
             <button class="toggle-btn">⌄</button>
           </div>
@@ -275,7 +338,7 @@
             <div class="meta-icon">📆</div>
             <div>
               <div class="meta-label">Date</div>
-              <div class="meta-value">{{i.date.date}}</div>
+              <div class="meta-value">{{i.date}}</div>
             </div>
           </div>
 
@@ -283,15 +346,7 @@
             <div class="meta-icon">⏰</div>
             <div>
               <div class="meta-label">Time</div>
-              <div class="meta-value">11:00 AM – 2:00 PM</div>
-            </div>
-          </div>
-
-          <div class="meta-item">
-            <div class="meta-icon">📍</div>
-            <div>
-              <div class="meta-label">Location</div>
-              <div class="meta-value">TMSL</div>
+              <div class="meta-value">{{i.time}}</div>
             </div>
           </div>
         </div>
@@ -299,14 +354,14 @@
         <div class="meeting-extra">
           <h3 class="section-title">Meeting Overview</h3>
           <p class="section-body">{{i.description}}</p>
-
-          <h3 class="section-title">Key Discussion Points</h3>
+          {% if i.faculty.all %}
+          <h3 class="section-title">Faculty</h3>
           <ul class="points-list">
-            <li>Discuss new partnership opportunities</li>
-            <li>Review existing collaborations</li>
-            <li>Plan joint research projects</li>
-            <li>Explore internship programs</li>
+            {% for j in i.faculty.all %}
+            <li>{{j.suf}} {{j.name}}</li>
+            {% endfor %}
           </ul>
+          {% endif %}
 
           <h3 class="section-title">Meeting Documents</h3>
           <div class="doc-card">
@@ -319,9 +374,27 @@
                 </div>
               </div>
             </div>
-            <button class="doc-download-btn">⬇</button>
+            <button class="doc-download-btn">
+              {% if i.support %}
+              <a href="{{ i.support.url }}" target="_blank" rel="noopener noreferrer"  style="text-decoration:none; color:var(--accent-blue); font-weight:600;"> View Certificate</a>
+              {% else %}
+                <p>No support file</p>
+              {% endif %}
+            </button>
           </div>
         </div>
+
+         {% if request.user.is_superuser %}
+        <div class="admin-add-wrapper">
+            <a href="{% url "meet-delete" i.id %}" class="admin-add-link">
+                <button type="button" class="admin-add-btn">
+                    <span class="material-symbols-outlined">
+                        delete_forever
+                    </span>
+                </button>
+            </a>
+        </div>
+        {% endif %}
       </section>
       {% endfor %}
       <!-- ---------------------------------------------------------- -->

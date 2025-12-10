@@ -104,8 +104,18 @@
         <section id="basic" class="card fade" aria-labelledby="basic">
           <div class="section-title">
             <h3>Basic / Profile IDs</h3>
-            {% if request.user.is_authenticated %}
+            {% if request.user.is_superuser%}
               <div style=" position: relative; align-items: right; display: flex; justify-content: flex-end;">
+                <a href="{% url 'basic-update' faculty.id %}">
+                  <button style="background: #f0ad4e; color: #fff; border-radius: 5px; padding:5px 10px; margin-right:5px">
+                    <span class="material-symbols-outlined">
+                    edit_document
+                    </span>
+                  </button>
+                </a>
+              </div>
+              {% elif request.user.is_authenticated and request.user == faculty.user %}
+                <div style=" position: relative; align-items: right; display: flex; justify-content: flex-end;">
                 <a href="{% url 'basic-update' faculty.id %}">
                   <button style="background: #f0ad4e; color: #fff; border-radius: 5px; padding:5px 10px; margin-right:5px">
                     <span class="material-symbols-outlined">
@@ -169,7 +179,17 @@
         <section id="patents" class="card fade" aria-labelledby="patents">
           <div class="section-title">
             <h3>Patents <span class="count">{{ patent|length }}</span></h3>
-            {% if request.user.is_authenticated %}
+            {% if request.user.is_superuser %}
+            <div style="text-decoration: none; padding-bottom: 20px; position: relative; align-items: right; display: flex; justify-content: flex-end;">
+              <a href="{% url "form" faculty.id %}" style="text-decoration: none; padding-bottom: 20px">
+                <button style="background: #3788d4; color: #fff; border-radius: 5px; padding:10px 20px;">
+                  <span class="material-symbols-outlined">
+                  add
+                  </span>
+                </button>
+              </a>
+            </div>
+            {% elif request.user.is_authenticated and request.user == faculty.user%}
             <div style="text-decoration: none; padding-bottom: 20px; position: relative; align-items: right; display: flex; justify-content: flex-end;">
               <a href="{% url "form" faculty.id %}" style="text-decoration: none; padding-bottom: 20px">
                 <button style="background: #3788d4; color: #fff; border-radius: 5px; padding:10px 20px;">
@@ -186,7 +206,24 @@
           {% if patent %}
             {% for i in patent %}
               <div style=" border: 1px solid rgba(0,0,0,0.03); border-radius: 8px; padding: 12px; margin-bottom: 12px; background: #fbfbfe;">
-                {% if request.user.is_authenticated %}
+                {% if request.user.is_superuser%}
+                <div style=" position: relative; align-items: right; display: flex; justify-content: flex-end;">
+                  <a href="{% url 'updateform' i.id %}">
+                    <button style="background: #f0ad4e; color: #fff; border-radius: 5px; padding:5px 10px; margin-right:5px">
+                      <span class="material-symbols-outlined">
+                      edit_document
+                      </span>
+                    </button>
+                  </a>
+                  <a href="{% url 'deletePatentform' i.id %}">
+                    <button style="background: #d9534f; color: #fff; border-radius: 5px; padding:5px 10px;">
+                      <span class="material-symbols-outlined">
+                      delete_forever
+                      </span>
+                    </button>
+                  </a>
+                </div>
+                {% elif request.user.is_authenticated and request.user == faculty.user%}
                 <div style=" position: relative; align-items: right; display: flex; justify-content: flex-end;">
                   <a href="{% url 'updateform' i.id %}">
                     <button style="background: #f0ad4e; color: #fff; border-radius: 5px; padding:5px 10px; margin-right:5px">
@@ -249,7 +286,17 @@
         <section id="copyrights" class="card fade" aria-labelledby="copyrights">
           <div class="section-title">
             <h3>Copyrights <span class="count">{{ copyrights|length }}</span></h3>
-            {% if request.user.is_authenticated %}
+            {% if request.user.is_superuser%}
+            <div style="text-decoration: none; padding-bottom: 20px; position: relative; align-items: right; display: flex; justify-content: flex-end;">
+              <a href="{% url "copyrightform" faculty.id %}" style="text-decoration: none; padding-bottom: 20px">
+                <button style="background: #3788d4; color: #fff; border-radius: 5px; padding:10px 20px;">
+                  <span class="material-symbols-outlined">
+                  add
+                  </span>
+                </button>
+              </a>
+            </div>
+            {% elif request.user.is_authenticated and request.user == faculty.user%}
             <div style="text-decoration: none; padding-bottom: 20px; position: relative; align-items: right; display: flex; justify-content: flex-end;">
               <a href="{% url "copyrightform" faculty.id %}" style="text-decoration: none; padding-bottom: 20px">
                 <button style="background: #3788d4; color: #fff; border-radius: 5px; padding:10px 20px;">
@@ -267,7 +314,24 @@
           {% if copyrights %}
             {% for i in copyrights %}
             <div style=" border: 1px solid rgba(0,0,0,0.03); border-radius: 8px; padding: 12px; margin-bottom: 12px; background: #fbfbfe;">
-              {% if request.user.is_authenticated %}
+              {% if request.user.is_superuser%}
+              <div style=" position: relative; align-items: right; display: flex; justify-content: flex-end;">
+                <a href="{% url 'updatecopyrightform' i.id %}">
+                  <button style="background: #f0ad4e; color: #fff; border-radius: 5px; padding:5px 10px; margin-right:5px">
+                    <span class="material-symbols-outlined">
+                    edit_document
+                    </span>
+                  </button>
+                </a>
+                <a href="{% url 'deletecopyrightform' i.id %}">
+                  <button style="background: #d9534f; color: #fff; border-radius: 5px; padding:5px 10px;">
+                    <span class="material-symbols-outlined">
+                    delete_forever
+                    </span>
+                  </button>
+                </a>
+              </div>
+              {% elif request.user.is_authenticated and request.user == faculty.user%}
               <div style=" position: relative; align-items: right; display: flex; justify-content: flex-end;">
                 <a href="{% url 'updatecopyrightform' i.id %}">
                   <button style="background: #f0ad4e; color: #fff; border-radius: 5px; padding:5px 10px; margin-right:5px">
@@ -330,7 +394,17 @@
         <section id="books" class="card fade" aria-labelledby="books">
           <div class="section-title">
             <h3>Books <span class="count">{{ books|length }}</span></h3>
-            {% if request.user.is_authenticated %}
+            {% if request.user.is_superuser%}
+            <div style="text-decoration: none; padding-bottom: 20px; position: relative; align-items: right; display: flex; justify-content: flex-end;">
+              <a href="{% url "bookform" faculty.id %}" style="text-decoration: none; padding-bottom: 20px">
+                <button style="background: #3788d4; color: #fff; border-radius: 5px; padding:10px 20px;">
+                  <span class="material-symbols-outlined">
+                  add
+                  </span>
+                </button>
+              </a>
+            </div>
+            {% elif request.user.is_authenticated and request.user == faculty.user%}
             <div style="text-decoration: none; padding-bottom: 20px; position: relative; align-items: right; display: flex; justify-content: flex-end;">
               <a href="{% url "bookform" faculty.id %}" style="text-decoration: none; padding-bottom: 20px">
                 <button style="background: #3788d4; color: #fff; border-radius: 5px; padding:10px 20px;">
@@ -348,7 +422,24 @@
           {% if books %}
             {% for b in books %}
             <div style=" border: 1px solid rgba(0,0,0,0.03); border-radius: 8px; padding: 12px; margin-bottom: 12px; background: #fbfbfe;">
-              {% if request.user.is_authenticated %}
+              {% if request.user.is_superuser%}
+              <div style=" position: relative; align-items: right; display: flex; justify-content: flex-end;">
+                <a href="{% url 'updatebookform' b.id %}">
+                  <button style="background: #f0ad4e; color: #fff; border-radius: 5px; padding:5px 10px; margin-right:5px">
+                    <span class="material-symbols-outlined">
+                    edit_document
+                    </span>
+                  </button>
+                </a>
+                <a href="{% url 'deletebookform' b.id %}">
+                  <button style="background: #d9534f; color: #fff; border-radius: 5px; padding:5px 10px;">
+                    <span class="material-symbols-outlined">
+                    delete_forever
+                    </span>
+                  </button>
+                </a>
+              </div>
+              {% elif request.user.is_authenticated and request.user == faculty.user%}
               <div style=" position: relative; align-items: right; display: flex; justify-content: flex-end;">
                 <a href="{% url 'updatebookform' b.id %}">
                   <button style="background: #f0ad4e; color: #fff; border-radius: 5px; padding:5px 10px; margin-right:5px">
@@ -408,7 +499,17 @@
         <section id="chapters" class="card fade" aria-labelledby="chapters">
           <div class="section-title">
             <h3>Book Chapters <span class="count">{{ bookchapters|length }}</span></h3>
-            {% if request.user.is_authenticated %}
+            {% if request.user.is_superuser%}
+            <div style="text-decoration: none; padding-bottom: 20px; position: relative; align-items: right; display: flex; justify-content: flex-end;">
+              <a href="{% url "bookChapterform" faculty.id %}" style="text-decoration: none; padding-bottom: 20px">
+                <button style="background: #3788d4; color: #fff; border-radius: 5px; padding:10px 20px;">
+                  <span class="material-symbols-outlined">
+                  add
+                  </span>
+                </button>
+              </a>
+            </div>
+            {% elif request.user.is_authenticated and request.user == faculty.user%}
             <div style="text-decoration: none; padding-bottom: 20px; position: relative; align-items: right; display: flex; justify-content: flex-end;">
               <a href="{% url "bookChapterform" faculty.id %}" style="text-decoration: none; padding-bottom: 20px">
                 <button style="background: #3788d4; color: #fff; border-radius: 5px; padding:10px 20px;">
@@ -426,7 +527,24 @@
           {% if bookchapters %}
             {% for c in bookchapters %}
             <div style=" border: 1px solid rgba(0,0,0,0.03); border-radius: 8px; padding: 12px; margin-bottom: 12px; background: #fbfbfe;">
-              {% if request.user.is_authenticated %}
+              {% if request.user.is_superuser%}
+              <div style=" position: relative; align-items: right; display: flex; justify-content: flex-end;">
+                <a href="{% url 'updatebookChapterform' c.id %}">
+                  <button style="background: #f0ad4e; color: #fff; border-radius: 5px; padding:5px 10px; margin-right:5px">
+                    <span class="material-symbols-outlined">
+                    edit_document
+                    </span>
+                  </button>
+                </a>
+                <a href="{% url 'deletebookChapterform' c.id %}">
+                  <button style="background: #d9534f; color: #fff; border-radius: 5px; padding:5px 10px;">
+                    <span class="material-symbols-outlined">
+                    delete_forever
+                    </span>
+                  </button>
+                </a>
+              </div>
+              {% elif request.user.is_authenticated and request.user == faculty.user%}
               <div style=" position: relative; align-items: right; display: flex; justify-content: flex-end;">
                 <a href="{% url 'updatebookChapterform' c.id %}">
                   <button style="background: #f0ad4e; color: #fff; border-radius: 5px; padding:5px 10px; margin-right:5px">
@@ -516,13 +634,40 @@
                 </button>
               </a>
             </div>
+            {% elif request.user.is_authenticated and request.user == faculty.user%}
+            <div style="text-decoration: none; padding-bottom: 20px; position: relative; align-items: right; display: flex; justify-content: flex-end;">
+              <a href="{% url "journalform" faculty.id %}" style="text-decoration: none; padding-bottom: 20px">
+                <button style="background: #3788d4; color: #fff; border-radius: 5px; padding:10px 20px;">
+                  <span class="material-symbols-outlined">
+                  add
+                  </span>
+                </button>
+              </a>
+            </div>
             {% endif %}
           </div>
 
           {% if journals %}
             {% for j in journals %}
             <div style=" border: 1px solid rgba(0,0,0,0.03); border-radius: 8px; padding: 12px; margin-bottom: 12px; background: #fbfbfe;">
-              {% if request.user.is_authenticated %}
+              {% if request.user.is_superuser%}
+              <div style=" position: relative; align-items: right; display: flex; justify-content: flex-end;">
+                <a href="{% url 'updatejournalform' j.id %}">
+                  <button style="background: #f0ad4e; color: #fff; border-radius: 5px; padding:5px 10px; margin-right:5px">
+                    <span class="material-symbols-outlined">
+                    edit_document
+                    </span>
+                  </button>
+                </a>
+                <a href="{% url 'deletejournalform' j.id %}">
+                  <button style="background: #d9534f; color: #fff; border-radius: 5px; padding:5px 10px;">
+                    <span class="material-symbols-outlined">
+                    delete_forever
+                    </span>
+                  </button>
+                </a>
+              </div>
+              {% elif request.user.is_authenticated and request.user == faculty.user%}
               <div style=" position: relative; align-items: right; display: flex; justify-content: flex-end;">
                 <a href="{% url 'updatejournalform' j.id %}">
                   <button style="background: #f0ad4e; color: #fff; border-radius: 5px; padding:5px 10px; margin-right:5px">
@@ -607,7 +752,17 @@
         <section id="conferences" class="card fade" aria-labelledby="conferences">
           <div class="section-title">
             <h3>Conference Proceedings <span class="count">{{ conferences|length }}</span></h3>
-            {% if request.user.is_authenticated %}
+            {% if request.user.is_superuser%}
+            <div style="text-decoration: none; padding-bottom: 20px; position: relative; align-items: right; display: flex; justify-content: flex-end;">
+              <a href="{% url "conferenceform" faculty.id %}" style="text-decoration: none; padding-bottom: 20px">
+                <button style="background: #3788d4; color: #fff; border-radius: 5px; padding:10px 20px;">
+                  <span class="material-symbols-outlined">
+                  add
+                  </span>
+                </button>
+              </a>
+            </div>
+            {% elif request.user.is_authenticated and request.user == faculty.user%}
             <div style="text-decoration: none; padding-bottom: 20px; position: relative; align-items: right; display: flex; justify-content: flex-end;">
               <a href="{% url "conferenceform" faculty.id %}" style="text-decoration: none; padding-bottom: 20px">
                 <button style="background: #3788d4; color: #fff; border-radius: 5px; padding:10px 20px;">
@@ -624,7 +779,24 @@
           {% if conferences %}
             {% for conf in conferences %}
             <div style=" border: 1px solid rgba(0,0,0,0.03); border-radius: 8px; padding: 12px; margin-bottom: 12px; background: #fbfbfe;">
-              {% if request.user.is_authenticated %}
+              {% if request.user.is_superuser%}
+              <div style=" position: relative; align-items: right; display: flex; justify-content: flex-end;">
+                <a href="{% url 'updateconferenceform' conf.id %}">
+                  <button style="background: #f0ad4e; color: #fff; border-radius: 5px; padding:5px 10px; margin-right:5px">
+                    <span class="material-symbols-outlined">
+                    edit_document
+                    </span>
+                  </button>
+                </a>
+                <a href="{% url 'deleteconferenceform' conf.id %}">
+                  <button style="background: #d9534f; color: #fff; border-radius: 5px; padding:5px 10px;">
+                    <span class="material-symbols-outlined">
+                    delete_forever
+                    </span>
+                  </button>
+                </a>
+              </div>
+              {% elif request.user.is_authenticated and request.user == faculty.user%}
               <div style=" position: relative; align-items: right; display: flex; justify-content: flex-end;">
                 <a href="{% url 'updateconferenceform' conf.id %}">
                   <button style="background: #f0ad4e; color: #fff; border-radius: 5px; padding:5px 10px; margin-right:5px">
@@ -698,7 +870,13 @@
 
         <!-- (Optional) actions area; kept read-only -->
         <div class="card fade" style="display:flex;justify-content:flex-end;align-items:center">
-          {% if request.user.is_authenticated %}
+          {% if request.user.is_superuser%}
+          <div class="actions" style="width:100%;">
+            <button style=" border: 1px solid rgba(0,0,0,0.03); padding: 10px; border-radius: 8px; background: #fbfbfe; box-shadow: var(--card-shadow);"><a href="{% url 'faculty_pdf' faculty.pk %}" class="btn btn-primary">
+              Download Profile <span class="material-symbols-outlined">download</span>
+            </a></button>
+          </div>
+          {% elif request.user.is_authenticated and request.user == faculty.user%}
           <div class="actions" style="width:100%;">
             <button style=" border: 1px solid rgba(0,0,0,0.03); padding: 10px; border-radius: 8px; background: #fbfbfe; box-shadow: var(--card-shadow);"><a href="{% url 'faculty_pdf' faculty.pk %}" class="btn btn-primary">
               Download Profile <span class="material-symbols-outlined">download</span>

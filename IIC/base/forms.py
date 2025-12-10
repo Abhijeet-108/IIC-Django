@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django import forms
-from .models import posts ,achievement , contactOrg , organisation, querys , meeting , gallery , activity , notice ,iicInfo
+from .models import posts ,achievement , contactOrg , organisation, querys , meeting , gallery , activity , notice ,iicInfo, teamMember, certificate, ipr, incubation
 from django.contrib.auth.models import User
 
 
@@ -22,6 +22,27 @@ class postForm(ModelForm):
             }),
         }
 
+class activityFrom(ModelForm):
+    class Meta:
+        model = activity
+        fields = "__all__"
+        exclude = ["photo"]
+        widgets = {
+                'date': forms.DateInput(attrs={
+                'type' : 'date',
+                'class': 'form-control',
+                'placeholder': 'YYYY-MM-DD',
+                'style': 'resize: none; border-radius: 10px;'
+            }), 
+            'time': forms.TimeInput(attrs={
+                'type' : 'time',
+                'class': 'form-control',
+                'placeholder': 'HH:MM',
+                
+                'style': 'resize: none; border-radius: 10px;'
+            }), 
+        }
+
 class achievForm(ModelForm):
     class Meta:
         model = achievement
@@ -37,8 +58,22 @@ class achievForm(ModelForm):
                 'placeholder': 'Enter achievement description...',
                 'rows': 4,
                 'style': 'resize: none; border-radius: 10px;'
+            }), 
+            'date': forms.DateInput(attrs={
+                'type' : 'date',
+                'class': 'form-control',
+                'placeholder': 'YYYY-MM-DD',
+                'style': 'resize: none; border-radius: 10px;'
+            }), 
+            'time': forms.TimeInput(attrs={
+                'type' : 'time',
+                'class': 'form-control',
+                'placeholder': 'HH:MM',
+                
+                'style': 'resize: none; border-radius: 10px;'
             }),            
         }
+        exclude = ["stat"]
 
 class iicInfoForm(ModelForm):
     class Meta:
@@ -49,6 +84,21 @@ class meetingForm(ModelForm):
     class Meta:
         model = meeting
         fields = "__all__"
+        widgets = {
+                'date': forms.DateInput(attrs={
+                'type' : 'date',
+                'class': 'form-control',
+                'placeholder': 'YYYY-MM-DD',
+                'style': 'resize: none; border-radius: 10px;'
+            }), 
+            'time': forms.TimeInput(attrs={
+                'type' : 'time',
+                'class': 'form-control',
+                'placeholder': 'HH:MM',
+                
+                'style': 'resize: none; border-radius: 10px;'
+            }), 
+        }
 
 class galleryForm(ModelForm):
     class Meta:
@@ -144,4 +194,23 @@ class queryForm(ModelForm):
         model = querys
         fields = "__all__"
 
+class teamMembersForm(ModelForm):
+    class Meta:
+        model = teamMember
+        fields = "__all__"
+        exclude = ["support"]
     
+class certificateForm(ModelForm):
+    class Meta:
+        model = certificate
+        fields = "__all__"
+        
+class iprForm(ModelForm):
+    class Meta:
+        model = ipr
+        fields = "__all__"
+        
+class incubationForm(ModelForm):
+    class Meta:
+        model = incubation
+        fields = "__all__"

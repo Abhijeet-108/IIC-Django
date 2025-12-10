@@ -179,6 +179,14 @@
         transform: translateY(1px);
         box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
       }
+      .doc-download-btn {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 8px 10px;
+        cursor: pointer;
+        font-size: 0.95rem;
+      }
     </style>
   </head>
   <body>
@@ -188,7 +196,7 @@
         <header class="header">
           <h1 class="title">Notice Board</h1>
           <div class="decor" aria-hidden="true"></div>
-        {% if request.user.is_authenticated %}
+        {% if request.user.is_superuser %}
         <a href = {% url 'notice-create' %}><button type="button" class="btn-add">+ Add</button></a>
         {% endif %}
         </header>
@@ -199,6 +207,13 @@
           <article class="card" aria-labelledby="notice-1-title">
             <div class="head">
               <h3 id="notice-1-title">{{i.headline}}</h3>
+              <button class="doc-download-btn">
+                {% if i.pdf_file %}
+                <a href="{{ i.pdf_file.url }}" target="_blank" rel="noopener noreferrer"  style="text-decoration:none; color:var(--accent-blue); font-weight:600;"> View Certificate</a>
+                {% else %}
+                  <p>No support file</p>
+                {% endif %}
+              </button>
               <div class="meta">
                 <!-- calendar icon -->
                 <svg
@@ -213,7 +228,26 @@
                   <rect x="3" y="4" width="18" height="18" rx="2"></rect>
                   <path d="M16 2v4M8 2v4M3 10h18"></path>
                 </svg>
-                <span>24-11-2025</span>
+                <span>{{i.created.date}}</span>
+                {% if request.user.is_superuser %}
+                
+                 <a href="{% url 'notice-delete' i.id %}">
+        <button style="
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: #d9534f;
+            color: #fff;
+            border-radius: 5px;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+        ">
+            <span class="material-symbols-outlined">delete_forever</span>
+        {% endif %}
+        </button>
+    </a>
               </div>
             </div>
             <p>{{i.description}}</p>

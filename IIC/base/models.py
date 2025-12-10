@@ -11,51 +11,74 @@ class posts(models.Model):
         return self.title
     
 class achievement(models.Model):
+    class status(models.TextChoices):
+        Approved = "Approved"
+        Pending = "Pending"
     title = models.CharField(max_length = 100 , blank = True)
     description = models.TextField(max_length = 1000 , blank = False)
-    date = models.DateTimeField(auto_now = True)
+    date = models.DateField(null=True , blank = True)
+    time = models.TimeField(null=True , blank = True)
+    stat = models.CharField(choices = status , default = status.Pending , null = True , blank = True)
     photo = models.ImageField(upload_to='image/achievements/', null=True , blank = True)
     pdf_file = models.FileField(upload_to='pdfs/', null=True , blank = True)
+    created = models.DateTimeField(auto_now_add=True , null = True)
+    updated = models.DateTimeField(auto_now=True , null = True)
+
+
+    class Meta:
+        ordering = ['-created']
 
     def __str__(self):
         return self.title
     
 class meeting(models.Model):
-    date = models.DateTimeField()
+    date = models.DateField(null=True , blank = True)
+    time = models.TimeField(null=True , blank = True)
     headline = models.CharField(max_length = 100, blank = True)
     description = models.TextField()
+    support = models.FileField(upload_to='meeting/pdfs/', null=True , blank = True)
     faculty = models.ManyToManyField(facult , blank = True , null = True)
+    support = models.FileField(upload_to='meeting/pdfs/', null=True , blank = True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created']
 
     def __str__(self):
         return self.headline
     
 class notice(models.Model):
-    date = models.DateTimeField(auto_now = True)
     headline = models.CharField(max_length = 100, blank = True)
     description = models.TextField()
     pdf_file = models.FileField(upload_to='pdfs/', null=True , blank = True)
     photo = models.ImageField(upload_to='image/notices/', null=True , blank = True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    
+
+    class Meta:
+        ordering = ['-created']
+
     def __str__(self):
         return self.headline
 
 class activity(models.Model):
     class cat(models.TextChoices):
         IIC_Calender = "IIC Calender Activity"
-        MIC_Driven = "MIC_Driven Activity"
+        MIC_Driven = "MIC Driven Activity"
         Celebration = "Celebration Activity"
         Self_Driven = "Self Driven Activity"
-    date = models.DateTimeField()
+    date = models.DateField(null=True , blank = True)
+    time = models.TimeField(null=True , blank = True)
     headline = models.CharField(max_length = 100, blank = True)
     category = models.CharField(choices = cat , null = True , blank = True , max_length = 25)
     photo = models.ImageField(upload_to='image/activities/', null=True , blank = True)
     pdf_file = models.FileField(upload_to='pdfs/', null=True , blank = True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created']
 
     def __str__(self):
         return self.headline
@@ -126,3 +149,61 @@ class iicInfo(models.Model):
 
     def __str__(self):
         return "Email Info"
+    
+class teamMember(models.Model):
+    class role(models.TextChoices):
+        Convenor = "Convenor"
+        Co_Convenor = "Co-Convenor"
+        Convenor_External = "Convenor of External Affairs"
+        Director_Operations_Head = "Hult Prize Campus Director & Operations Head"
+        Chief_Financial = "Chief Financial & Strategic Advisor"
+        Head_Tech_Wing = "Head of Tech Wing"
+        Co_Head_Tech_Wing = "Co-Head of Tech Wing"
+        Head_Graphics_Wing = "Head of Graphics Wing"
+        Co_Head_Graphics_Wing = "Co-Head of Graphics Wing"
+        Head_Startup_Wing = "Head of Startup Wing"
+        Co_Head_Startup_Wing = "Co-Head of Startup Wing"
+        Head_PR_Outreach_Wing = "Head of Public Relations And Outreach wing"
+        Co_Head_PR_Outreach_Wing = "Co-Head of Public Relations And Outreach wing"
+        Head_management_Wing = "Head of Management and Resource wing"
+        Co_Head_management_Wing = "Co-Head of Management and Resource wing"
+        Head_Social_Media_Wing = "Head of Social Media Wing"
+        Co_Head_Social_Media_Wing = "Co-Head of Social Media Wing"
+        Head_Sponsorship_Wing = "Head of Sponsorship Wing"
+        Co_Head_Sponsorship_Wing = "Co-Head of Sponsorship Wing"
+        Head_content_Wing = "Head of Content Wing"
+        Co_Head_content_Wing = "Co-Head of Content Wing"
+        
+    role = models.CharField(max_length=100, choices=role.choices, blank=True, null=True,)
+    name = models.CharField(max_length = 100 , blank = False , null = False)
+    email = models.EmailField(blank = False , null = False)
+    photo = models.ImageField(upload_to='member/images/',blank = True , null = True)
+    support = models.FileField(upload_to='member/pdfs/', null = True , blank = True)
+
+    def __str__(self):
+        return self.name
+
+class certificate(models.Model):
+    name = models.CharField(max_length = 100 , blank = False , null = False)
+    photo = models.ImageField(upload_to='certificate/images/',blank = True , null = True)
+    support = models.FileField(upload_to='certificate/pdfs/', null = True , blank = True)
+    date = models.DateField(auto_now = True)
+
+    def __str__(self):
+        return self.name
+    
+class ipr(models.Model):
+    title = models.CharField(max_length = 200 , blank = False , null = False)
+    description = models.TextField(blank = False , null = False)
+    support = models.FileField(upload_to='ipr/pdfs/', null = True , blank = True)
+
+    def __str__(self):
+        return self.title
+
+class incubation(models.Model):
+    title = models.CharField(max_length = 200 , blank = False , null = False)
+    description = models.TextField(blank = False , null = False)
+    support = models.FileField(upload_to='incubation/pdfs/', null = True , blank = True)
+
+    def __str__(self):
+        return self.title

@@ -217,6 +217,11 @@
         transform: none;
       }
     </style>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
   </head>
 
   <body>
@@ -329,7 +334,7 @@
               </div>
               <div>
                 <strong style="color: #fff">Phone</strong><br />
-                <a href="tel:+91XXXXXXXXXX">+91 XXX XXX XXXX</a>
+                <a href="tel:+91XXXXXXXXXX">{{iic.phone}}</a>
               </div>
             </div>
 
@@ -349,7 +354,7 @@
               </div>
               <div>
                 <strong style="color: #fff">Email</strong><br />
-                <a href="mailto:iic@technomain.ac.in">iic@technomain.ac.in</a>
+                <a href="mailto:iic@technomain.ac.in">{{iic.email}}</a>
               </div>
             </div>
           </div>
@@ -362,8 +367,29 @@
             Rights Reserved.</span
           >
 
-          <!-- NEW BUTTON (NO JS) -->
-          <a href="#" class="footer-btn">Your Team</a>
+          <a
+            href="{% url 'team' %}"
+            class="footer-btn"
+            style="display: inline-flex; align-items: center; gap: 8px"
+          >
+            <!-- Solid red heart SVG (single, guaranteed filled) -->
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              style="vertical-align: middle; flex-shrink: 0"
+            >
+              <path
+                fill="#ea3323"
+                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41.81 4.5 2.09C12.09 4.81 13.76 4 15.5 4 18 4 20 6 20 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+              />
+            </svg>
+
+            <span style="color: var(--white); font-weight: 600"
+              >Developed By</span
+            >
+          </a>
         </div>
       </div>
     </footer>

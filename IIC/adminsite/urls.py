@@ -28,8 +28,10 @@ urlpatterns = [
 
 
     path('achievment-create/' , views.achievCreate , name = "achievment-create"),
+    path('achievment-approve/<int:pk>' , views.approveAchi , name = "achievment-approve"),
     path('achievment-update/<int:pk>' , views.achievEdit , name = "achievment-update"),
     path('achievment-delete/<int:pk>' , views.achievDeletion , name = "achievment-delete"),
+    path('achievment-delete-Prof/<int:pk>' , views.achievDeletionProf , name = "achievment-delete-prof"),
 
     path('contactOrg-create/' , views.contactOrgCreate , name = "contactOrg-create"),
     path('contactOrg-update/<int:pk>' , views.contactOrgEdit , name = "contactOrg-update"),

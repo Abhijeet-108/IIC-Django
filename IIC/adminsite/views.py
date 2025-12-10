@@ -1,4 +1,5 @@
 from django.shortcuts import render , redirect
+from rnd.models import suff
 from base.models import posts , achievement, organisation , contactOrg , notice , meeting , gallery , iicInfo
 from base.forms import postForm , achievForm , contactOrgForm , organisationForm , meetingForm , galleryForm , noticeForm , iicInfoForm , querys
 from django.contrib.auth.models import User
@@ -18,7 +19,10 @@ def homepage(req):
 
 def profilePage(req):
     info = iicInfo.objects.first()
-    context = {'iic' : info}
+    suf = suff.objects.all()
+    achi = achievement.objects.filter(stat = "Pending") 
+    context = {'iic' : info , 'suf' : suf , 'achi' : achi}
+
     if (not req.user.is_superuser):
         fac = facult.objects.get(user = req.user)
         meet = meeting.objects.filter(faculty = fac)
@@ -60,30 +64,48 @@ def postDeletion(req , pk):
 
 def achievCreate(req):
     achievf = achievForm()
+    info = iicInfo.objects.first()
     if(req.method == "POST"):
         achievf = achievForm(req.POST , req.FILES)
         if(achievf.is_valid()):
-            achievf.save()
-        return redirect("admin-site")
-    context = {'achievf' : achievf}
+            if(req.user.is_authenticated):
+                instance = achievf.save(commit = False)
+                instance.stat = "Approved"
+                instance.save()
+            else:
+                achievf.save()
+        return redirect("achievments")
+    context = {'achievf' : achievf , 'iic' : info}
     return render(req , "form1.html" , context)
+
+def approveAchi(req , pk):
+    achi = achievement.objects.get(id=pk)
+    achi.stat = "Approved"
+    achi.save()
+    return redirect('admin-profile')
 
 def achievEdit(req , pk):
     achiev = achievement.objects.get(id = pk)
     achievf = achievForm(instance = achiev)
+    info = iicInfo.objects.first()
     if(req.method == "POST"):
         achievf = achievForm(req.POST , req.FILES , instance = achiev)
 
         if achievf.is_valid():
             achievf.save()
-            return redirect('admin-site')
-    context = {'achievf' : achievf}
+            return redirect('achievments')
+    context = {'achievf' : achievf , 'iic' : info}
     return render(req,"form1.html",context)
 
 def achievDeletion(req , pk):
     achiev = achievement.objects.get(id = pk)
     achiev.delete()
-    return redirect('admin-site')
+    return redirect('achievments')
+
+def achievDeletionProf(req , pk):
+    achiev = achievement.objects.get(id = pk)
+    achiev.delete()
+    return redirect('admin-profile')
 
 def contactOrgCreate(req):
     contactf = contactOrgForm()
@@ -91,7 +113,7 @@ def contactOrgCreate(req):
         contactf = contactOrgForm(req.POST)
         if(contactf.is_valid()):
             contactf.save()
-        return redirect("admin-site")
+        return redirect("achievments")
     context = {'contactf' : contactf}
     return render(req , "form1.html" , context)
 
@@ -143,7 +165,7 @@ def organisationDeletion(req , pk):
 def add_meetform(req):
     meetform = meetingForm()
     if req.method == 'POST':
-        meetform = meetingForm(req.POST)
+        meetform = meetingForm(req.POST , req.FILES)
         if meetform.is_valid():
             meetform.save()
             return redirect('meet')
@@ -156,7 +178,7 @@ def update_meetform(req, pk):
     meetform = meeting.objects.get(id = pk)
     update_meetformform = meetingForm(instance=meetform)
     if req.method == 'POST':
-        update_meetformform = meetingForm(req.POST, instance=meetform)
+        update_meetformform = meetingForm(req.POST, req.FILES , instance=meetform)
         if update_meetformform.is_valid():
             update_meetformform.save()
             return redirect('meet')

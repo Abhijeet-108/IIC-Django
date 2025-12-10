@@ -1,0 +1,381 @@
+{% load static %}
+<style>
+:root{
+  --page-bg: #f7fafc;
+  --card-bg: #ffffff;
+  --text-strong: #071330;
+  --text-soft: #4b5563;
+  --muted: #6b7280;
+  --accent-blue: #2b51d6;
+  --accent-green: #22c55e;
+
+  --card-border: rgba(15,23,42,0.06);
+  --card-shadow: 0 20px 50px rgba(15,23,42,0.10);
+  --card-shadow-subtle: 0 10px 30px rgba(15,23,42,0.06);
+
+  --radius-lg: 18px;
+  --radius-sm: 10px;
+  --radius-full: 999px;
+  --transition-fast: 160ms cubic-bezier(.2,.9,.2,1);
+  --container-max: 1200px;
+  --max-card-width: 360px;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background:var(--page-bg);
+  color:var(--text-strong);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  line-height:1.45;
+}
+
+/* PAGE */
+.about{
+  padding: 88px 18px 140px;
+  position:relative;
+  z-index:1;
+  min-height: calc(100vh - 160px);
+}
+
+.container{
+  max-width:var(--container-max);
+  margin:0 auto;
+  padding:0 20px;
+}
+
+/* HEADER */
+.heading{
+  text-align:center;
+  margin-bottom:64px;
+}
+
+.heading h1{
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight:800;
+  margin:0 0 8px;
+  color:var(--text-strong);
+  letter-spacing:-0.02em;
+  line-height:1;
+}
+
+.heading-underline{
+  width:96px;
+  height:6px;
+  margin: 10px auto 22px;
+  background: linear-gradient(90deg, #2563eb 0%, #22c55e 100%);
+  border-radius:999px;
+  box-shadow: 0 6px 18px rgba(37,99,235,0.12);
+}
+
+.heading h3{
+  max-width:720px;
+  margin:0 auto;
+  font-size:15px;
+  font-weight:500;
+  color:var(--muted);
+}
+
+/* SECTION TITLE (centered) */
+.about h2.section-title{
+  text-align:center !important;
+  font-size: clamp(20px, 2.6vw, 28px);
+  font-weight:700;
+  margin:42px 0 24px;
+  color:var(--text-strong);
+}
+
+/* GRID of cards */
+.about-text{
+  display:grid;
+  gap:22px;
+  margin-top:12px;
+  justify-items:center;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  align-items:start;
+}
+
+/* CARD */
+.about-card{
+  width:100%;
+  max-width:var(--max-card-width);
+  background:linear-gradient(180deg, rgba(255,255,255,0.95), var(--card-bg));
+  border-radius:var(--radius-lg);
+  padding:22px;
+  border: 1px solid var(--card-border);
+  box-shadow:var(--card-shadow-subtle);
+  text-align:center;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), opacity var(--transition-fast);
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  align-items:center;
+  outline: none;
+}
+
+/* hover / focus */
+.about-card:hover,
+.about-card:focus-within,
+.about-card:focus {
+  transform: translateY(-8px);
+  box-shadow: var(--card-shadow);
+}
+
+.about-card:active{
+  transform: translateY(-2px);
+}
+
+/* accessible focus ring */
+.about-card:focus-visible{
+  box-shadow: 0 8px 30px rgba(43,81,214,0.18);
+  outline: 3px solid rgba(43,81,214,0.12);
+  outline-offset: 4px;
+}
+
+/* avatar */
+.card-icon{
+  width:160px;
+  height:160px;
+  border-radius:50%;
+  overflow:hidden;
+  background: linear-gradient(180deg, #ffffff, #eef2ff);
+  display:grid;
+  place-items:center;
+  align-self:center;
+  justify-self:center;
+  box-shadow: 0 8px 24px rgba(15,23,42,0.04);
+  flex-shrink:0;
+}
+
+.card-icon img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.card-initials{
+  font-size:44px;
+  font-weight:800;
+  color:#0f1724;
+  letter-spacing:-0.02em;
+}
+
+/* text */
+.about-card h1{
+  margin:0;
+  font-size:18px;
+  font-weight:800;
+  color:var(--text-strong);
+  line-height:1.2;
+  word-break:break-word;
+}
+
+.about-card h3{
+  margin:0;
+  font-size:14px;
+  color:var(--text-soft);
+  font-weight:600;
+}
+
+/* link */
+.about-card a{
+  text-decoration:none;
+  color:var(--accent-blue);
+  font-weight:600;
+  font-size:13px;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 12px;
+  border-radius:999px;
+  transition: transform var(--transition-fast);
+}
+
+.about-card a:hover{
+  transform: translateY(-2px);
+}
+
+/* admin controls inside card (delete) */
+.admin-add-wrapper{
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  margin-bottom:0;
+  width:100%;
+}
+
+/* admin button style reused */
+.admin-add-link{ text-decoration:none; }
+
+.admin-add-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 14px;
+  border-radius:999px;
+  border:none;
+  background: linear-gradient(135deg,#2563eb,#1d4ed8);
+  color:#fff;
+  font-size:14px;
+  font-weight:600;
+  letter-spacing:0.02em;
+  cursor:pointer;
+  box-shadow: 0 10px 28px rgba(37,99,235,0.22);
+  transition: transform 140ms ease-out, box-shadow 140ms ease-out, filter 140ms ease-out;
+}
+
+.admin-add-btn .material-symbols-outlined{
+  font-size:18px;
+  display:inline-block;
+  line-height:1;
+}
+
+.admin-add-btn:hover{
+  transform: translateY(-2px);
+  filter:brightness(1.03);
+}
+
+.admin-add-btn:active{
+  transform: translateY(0);
+  box-shadow: 0 8px 20px rgba(37,99,235,0.18);
+}
+
+.admin-add-btn:focus-visible{
+  outline:2px solid rgba(37,99,235,0.9);
+  outline-offset:2px;
+}
+
+/* back button (top-left) */
+.back-btn{
+  padding:6px;
+  border:0;
+  background:transparent;
+  font-size:16px;
+  color:var(--muted);
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  margin-bottom:12px;
+  border-radius:8px;
+  transition: background 140ms, transform 140ms;
+}
+
+.back-btn:hover{
+  background: rgba(15,23,42,0.03);
+  transform: translateY(-1px);
+}
+
+/* small screens */
+@media (max-width: 880px){
+  .about{
+    padding:64px 14px 100px;
+  }
+  .heading{
+    margin-bottom:48px;
+  }
+  .card-icon{ width:140px; height:140px; }
+  .about-card{ max-width: 520px; padding:18px; }
+}
+
+/* very small screens */
+@media (max-width: 420px){
+  .heading h1{ font-size: clamp(28px, 9vw, 40px); }
+  .heading h3{ font-size:13px; }
+  .card-icon{ width:120px; height:120px; }
+  .admin-add-text{ display:none; }
+  .admin-add-btn{ padding-inline:10px; gap:6px; }
+  .about{ padding: 36px 12px 80px; }
+}
+
+/* utility: visually-hidden for accessibility if needed */
+.visually-hidden{
+  position:absolute!important;
+  height:1px;width:1px;
+  overflow:hidden;
+  clip:rect(1px,1px,1px,1px);
+  white-space:nowrap;
+}
+</style>
+
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+<body>
+  {% include 'nav.html' %}
+<section class="about" id="about">
+  <div class="container">
+    <button type="button" class="back-btn" onclick="history.back()" style="padding:5px; border:none; background:transparent; font-size:16px; color:var(--muted); cursor:pointer; margin-bottom:12px">
+      <span class="material-symbols-outlined">
+      arrow_back
+      </span>
+    </button>
+    <div class="heading">
+        <h1>Certificate</h1>
+        <div class="heading-underline" aria-hidden="true"></div>
+    </div>
+
+    {% if request.user.is_superuser %}
+    <div class="admin-add-wrapper">
+        <a href="{% url "add_certificate" %}" class="admin-add-link">
+            <button type="button" class="admin-add-btn">
+                <span class="material-symbols-outlined">
+                    add
+                </span>
+                <span class="admin-add-text">Add Certificate</span>
+            </button>
+        </a>
+    </div>
+    {% endif %}
+
+    <div class="about-content">
+        <!-- ADMINISTRATIVE TEAM -->
+        <div class="about-text">
+            {% for i in certificates %}
+            <a aria-label="Open profile {{ i.name }}">
+                <div class="about-card" tabindex="0" role="group" aria-labelledby="fac-name-{{ i.id }}">
+                    {% if request.user.is_superuser %}
+                    <div class="admin-add-wrapper">
+                        <a href="{% url "delete_certificate" i.id %}" class="admin-add-link">
+                            <button type="button" class="admin-add-btn">
+                                <span class="material-symbols-outlined">
+                                    delete_forever
+                                </span>
+                            </button>
+                        </a>
+                    </div>
+                    {% endif %}
+                    <div class="card-icon" aria-hidden="true">
+                        {% if i.photo %}
+                        <img src="{{ i.photo.url }}" alt="Photo of {{ i.name }}">
+                        {% else %}
+                        <div class="card-initials">{{ i.name|slice:":1"|upper }}</div>
+                        {% endif %}
+                    </div>
+
+                    <h1 id="fac-name-{{ i.id }}">{{ i.name }}</h1>
+
+                    <h3 id="fac-name-{{ i.id }}">{{ i.date }}</h3>
+
+
+                    {% if i.support %}
+                    <div>
+                        <a href="{{ i.support.url }}" target="_blank" rel="noopener noreferrer" style="text-decoration:none; color:var(--accent-blue); font-weight:600;">
+                            View Certificate
+                        </a>
+                    </div>
+                     {% else %}
+                      {% endif %}
+                </div>
+            </a>
+            {% empty %}
+            <p>No certificate added yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% include 'foot.html' %}
+</body>
