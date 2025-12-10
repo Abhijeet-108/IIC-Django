@@ -143,6 +143,13 @@
             </div>
           </a>
 
+          <a class="rnd-step-link" href="#achievement">
+            <div class="rnd-bullet">Ac</div>
+            <div>
+              <div class="rnd-step-text">Pending Achievements</div>
+            </div>
+          </a>
+
           <a class="rnd-step-link" href="#Queries">
             <div class="rnd-bullet">Q</div>
             <div>
@@ -167,7 +174,6 @@
               <p class="desc">Overview of Institution Innovation Council, contact info and quick details.</p>
             </div>
           </div>
-
           <div class="divider" aria-hidden="true"></div>
 
           <div class="info-grid">
@@ -187,6 +193,46 @@
               </div>
             </div>
           </div>
+
+
+          <!-- native upload form preserved (kept commented for server-side CSRF insertion) -->
+          <form action="/about/upload/" method="post" enctype="multipart/form-data" style="margin-top:14px;">
+            <!-- Add {% csrf_token %} when rendering in Django -->
+          </form>
+        </section>
+
+        <section id="achievement" class="rnd-section" aria-labelledby="about-iic-label">
+          <div class="title">
+            <div class="rnd-badge">Ac</div>
+            <div>
+              <h3 id="about-iic-label">Pending Achievements</h3>
+            </div>
+          </div>
+
+          {% for i in achi %}
+          <div class="divider" aria-hidden="true"></div>
+
+          <div class="info-grid">
+            <div>
+              <label for="iic_email">Title</label>
+              <div class="static-val">{{ i.title }}</div>
+            </div>
+
+            <div>
+              <label for="iic_phone">Description</label>
+              <div class="static-val">{{ i.description }}</div>
+            </div>
+
+            <div class="info-full">
+              <div class="actions-row">
+                <a href = {% url 'achievment-delete' i.id %}><button class="btn" type="button" >Delete</button></a>
+              </div>
+              <div class="actions-row">
+                <a href = {% url 'achievment-approve' i.id%}><button class="btn" type="button">Approved</button></a>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
 
           <!-- native upload form preserved (kept commented for server-side CSRF insertion) -->
           <form action="/about/upload/" method="post" enctype="multipart/form-data" style="margin-top:14px;">
