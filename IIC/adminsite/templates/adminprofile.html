@@ -341,59 +341,239 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
 
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    :root{ --accent1:#2563eb; --accent2:#06b6d4; --muted:#555; --text:#111827; --card-border:rgba(15,23,36,0.06); --card-shadow:0 14px 30px rgba(2,6,23,0.06); --radius:18px; --maxw:1100px; }
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+    }
+    :root{ 
+      --accent1:#2563eb; 
+      --accent2:#06b6d4; 
+      --muted:#555; 
+      --text:#111827;
+      --card-border:rgba(15,23,36,0.06); 
+      --card-shadow:0 14px 30px rgba(2,6,23,0.06); 
+      --radius:18px; 
+      --maxw:1100px;
+     }
     body { font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont; color: var(--text); margin:0; min-height:100vh; background: radial-gradient(900px 400px at 10% 10%, rgba(37,99,235,0.06), transparent 10%), radial-gradient(700px 300px at 90% 90%, rgba(6,182,212,0.06), transparent 10%), linear-gradient(180deg,#f7f8fa 0%, #ffffff 100%); }
 
     .page { max-width: var(--maxw); margin: 32px auto 40px; padding: 0 16px 40px; }
-    .page-title { font-size: 1.6rem; font-weight: 800; margin-bottom: 22px; letter-spacing: 0.01em; text-align:center; }
+    .page-title { 
+      font-size: 1.6rem; 
+      font-weight: 800; 
+      margin-bottom: 22px; 
+      letter-spacing: 0.01em; 
+      text-align:center; 
+      color:var(--text);
+    }
 
-    .rnd-wrap{ display:grid; grid-template-columns:260px 1fr; gap:24px; align-items:flex-start; }
-    .rnd-sidebar{ background:linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0.6)); border-radius:14px; padding:14px; border:1px solid rgba(0,0,0,0.06); box-shadow:0 8px 28px rgba(2,6,23,0.06); position:sticky; top:24px; height:fit-content; }
+    .container{ width:100%; max-width:var(--maxw); margin:32px auto; padding:0 16px; }
+    .rnd-wrap{ display:grid; grid-template-columns: 300px 1fr; gap:26px; align-items:start; }
 
-    .rnd-top-image{ display:flex; flex-direction:column; align-items:center; gap:10px; margin-bottom:18px; text-align:center; }
-    .rnd-top-image img{ width:120px; height:120px; border-radius:50%; object-fit:cover; border:3px solid rgba(0,0,0,0.06); box-shadow:0 8px 22px rgba(0,0,0,0.1); }
-    .rnd-brand h3{ margin:0; font-size:18px; font-weight:800; }
-    .rnd-brand p{ margin:0; margin-top:6px; color:var(--muted); font-size:13px; }
+    /* sidebar */
+    .rnd-sidebar{
+      background:linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0.6));
+      backdrop-filter: blur(6px);
+      border-radius:var(--radius); padding:18px; border:1px solid rgba(15,23,36,0.04);
+      box-shadow:0 8px 28px rgba(2,6,23,0.06);
+      position:sticky; top:36px; height:fit-content;
+    }
+
+    .rnd-top-image { 
+      display:flex; 
+      flex-direction:column; 
+      align-items:center; gap:8px; 
+      margin-bottom:12px; 
+      text-align:center; 
+    }
+    .rnd-top-image img{ 
+      width:120px;
+      height:120px;
+      border-radius:50%;
+      object-fit:cover;
+      border:3px solid rgba(0,0,0,0.06); 
+      box-shadow:0 10px 28px rgba(2,6,23,0.06); 
+    }
+    .rnd-brand h3{
+      margin:0;
+      font-size:18px;
+      font-weight:800
+    }
+
+    .rnd-brand p{
+      margin:0;
+      margin-top:6px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .rnd-progress{ 
+      margin-top:8px; 
+      display:flex;
+      flex-direction:column;
+      gap:8px; 
+    }
+    .rnd-step-link{
+      display:flex; 
+      gap:12px; 
+      align-items:center; 
+      padding:10px; 
+      border-radius:10px; 
+      text-decoration:none; 
+      color:var(--text);
+      background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.00)); 
+      border:1px solid rgba(0,0,0,0.04);
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+    .rnd-step-link:focus, .rnd-step-link:hover{ 
+      transform:translateY(-4px); 
+      box-shadow:0 12px 30px rgba(2,6,23,0.06); 
+      background: linear-gradient(90deg, rgba(37,99,235,0.06), rgba(6,182,212,0.04)); 
+    }
+
+    .rnd-bullet{ 
+      width:44px;height:44px;
+      border-radius:10px; 
+      background:linear-gradient(135deg,var(--accent1),var(--accent2)); 
+      display:flex;align-items:center;
+      justify-content:center;
+      color:#fff;
+      font-weight:700 
+    }
+    .rnd-step-text{ 
+      font-size:13px
+    }
+    .rnd-step-sub{ 
+      font-size:12px; 
+      color:var(--muted); 
+      margin-top:4px 
+    }
 
     /* profile + meeting layout */
-    .layout { display: flex; flex-direction: column; gap: 22px; }
+    .layout { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 22px; 
+    }
 
-    .card { background: linear-gradient(180deg,#ffffff,#fbfdff); border-radius: var(--radius); padding: 20px 22px; border:1px solid var(--card-border); box-shadow: var(--card-shadow); }
+    .card { 
+      background: linear-gradient(180deg,#ffffff,#fbfdff); 
+      border-radius: var(--radius); 
+      padding: 20px 22px; 
+      border:1px solid var(--card-border); 
+      box-shadow: var(--card-shadow); 
+    }
 
-    .profile-card-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:18px; gap:10px; }
+    .profile-card-top { 
+      display:flex; 
+      justify-content:space-between; 
+      align-items:flex-start; 
+      margin-bottom:18px; 
+      gap:10px; 
+    }
     .profile-header { display:flex; gap:14px; align-items:center; }
     .avatar{ width:64px; height:64px; border-radius:50%; background:#e5e7eb; display:flex; align-items:center; justify-content:center; font-size:1.8rem; color:#4b5563; box-shadow:0 6px 16px rgba(15,23,42,0.18); }
 
-    .profile-name{ font-size:1.15rem; font-weight:800 }
+    .profile-name{ font-size:1.15rem; font-weight:800; color:var(--text) }
     .profile-meta{ font-size:0.9rem; color:#6b7280; margin-top:4px }
     .profile-update-btn{ border:none; border-radius:999px; padding:8px 18px; background: linear-gradient(90deg, var(--accent1), var(--accent2)); color:#fff; font-size:0.85rem; font-weight:600; cursor:pointer; box-shadow:0 10px 24px rgba(37,99,235,0.25); }
 
-    .profile-label-static{ font-size:0.75rem; letter-spacing:0.08em; color:#9ca3af; margin-bottom:2px; text-transform:uppercase }
-    .profile-value{ font-size:0.95rem; font-weight:500; margin-bottom:8px }
+    .profile-details{
+      margin-top:10px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap:20px;
+
+    }
+    .profile-row{ 
+      display:flex;  
+      margin-bottom:10px; 
+      gap:12px;
+      align-items:center;
+    }
+    .profile-label-static{ 
+      font-size:0.75rem; 
+      color:#9ca3af; 
+      text-transform:uppercase ;
+    }
+    .profile-value{ font-size:0.95rem; 
+      font-weight:500; 
+      color:var(--text);
+    }
 
     .meeting-card { margin-bottom: 8px; }
     .meeting-header { display:flex; justify-content:space-between; align-items:center; gap:18px; padding-bottom:12px }
     .meeting-icon{ width:46px; height:46px; border-radius:14px; background: linear-gradient(135deg,rgba(37,99,235,0.08),rgba(6,182,212,0.12)); display:flex; align-items:center; justify-content:center; font-size:1.4rem; }
-    .meeting-name{ font-size:1.12rem; font-weight:800 }
+    .meeting-name{ font-size:1.12rem; font-weight:800; color:var(--text); }
     .published{ font-size:0.8rem; color:#6b7280; font-weight:600; margin-bottom:6px }
 
-    .toggle-btn{ border:none; background:#f3f4f6; border-radius:10px; cursor:pointer; font-size:1.2rem; padding:6px 9px; box-shadow:0 4px 10px rgba(15,23,42,0.12); }
-    .toggle-btn.rotate{ transform: rotate(180deg) }
+    .toggle{ 
+      border:none; background:#f3f4f6; 
+      border-radius:10px; 
+      cursor:pointer; 
+      font-size:1.2rem; 
+      padding:6px 9px; 
+      box-shadow:0 4px 10px rgba(15,23,42,0.12);
+    }
+    .toggle-btn{
+      color: var(--text);
+    }
+    .toggle-btn.rotate{ 
+      transform: rotate(180deg) ;
+      transition: transform .3s ease;
+    }
 
-    .meeting-meta-row{ padding:14px 0; border-top:1px solid #e5e7eb; border-bottom:1px solid #e5e7eb; margin-bottom:6px }
-    .meta-item{ display:flex; gap:12px; margin-bottom:10px }
-    .meta-icon{ width:32px; height:32px; border-radius:999px; background:#eef2ff; display:flex; justify-content:center; align-items:center; color:#1d4ed8 }
-    .meta-label{ font-size:0.72rem; color:#9ca3af; text-transform:uppercase }
-    .meta-value{ font-size:0.96rem; font-weight:600; margin-top:2px }
+    .meeting-meta-row{ 
+      padding:14px 0; 
+      border-top:1px solid #e5e7eb; 
+      border-bottom:1px solid #e5e7eb; 
+      margin-bottom:6px 
+    }
+    .meta-item{ display:flex; 
+      gap:12px; 
+      margin-bottom:10px 
+    }
+    .meta-icon{ 
+      width:32px; 
+      height:32px; 
+      border-radius:999px; 
+      background:#eef2ff; 
+      display:flex; 
+      justify-content:center; 
+      align-items:center; 
+      color:#1d4ed8 
+    }
+    .meta-label{ 
+      font-size:0.72rem;  
+      text-transform:uppercase;
+    }
+    .meta-value{ 
+      font-size:0.96rem; 
+      font-weight:600; 
+      margin-top:2px; 
+      color:var(--text) 
+    }
 
     .meeting-extra{ overflow:hidden; max-height:0; transition:max-height .3s ease }
     .meeting-extra.expanded{ max-height:2000px }
 
-    .section-title{ margin-top:14px; font-size:1.04rem; font-weight:700 }
+    .section-title{ margin-top:14px; font-size:1.04rem; font-weight:700; color: var(--text); }
     .section-body{ margin:10px 0 14px; font-size:0.95rem; color:#444 }
 
     .doc-card{ background:#f9fafb; border:1px solid #e5e7eb; padding:12px 14px; border-radius:14px; max-width:420px; display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:6px }
+
+    .doc-download-btn{
+      border:none; 
+      border-radius:999px; 
+      padding:6px 14px; 
+      background: linear-gradient(135deg, #2563eb, #1d4ed8); 
+      color:#fff; 
+      font-size:0.85rem; 
+      font-weight:600; 
+      cursor:pointer; 
+      box-shadow:0 8px 22px rgba(37,99,235,0.22);
+    }
 
     @media (max-width:900px){ .rnd-wrap{ grid-template-columns:1fr } .rnd-sidebar{ position:static } }
 
@@ -434,7 +614,9 @@
         <section class="card" id="profile-section">
           <div class="profile-card-top">
             <div class="profile-header">
-              <div class="avatar">A</div>
+              <div class="avatar">
+                  <div class="card-initials" aria-hidden="false" style="weight:800; color: black">{{ fac.name|slice:":1"|upper }}</div>
+              </div>
 
               <div>
                 <div class="profile-name">{{fac.suf}} {{fac.name}}</div>
@@ -445,44 +627,46 @@
             <a href="{% url 'updatefacultform' fac.id %}"><button class="profile-update-btn">Update</button></a>
           </div>
 
-          <div class="profile-row">
-            <div class="profile-label-static">Name</div>
-            <div class="profile-value">{{fac.name}}</div>
-          </div>
+          <div class="profile-details">
+            <div class="profile-row">
+              <div class="profile-label-static">Name: </div>
+              <div class="profile-value">{{fac.name}}</div>
+            </div>
 
-          <div class="profile-row">
-            <div class="profile-label-static">Department</div>
-            <div class="profile-value">{{fac.dept}}</div>
-          </div>
+            <div class="profile-row">
+              <div class="profile-label-static">Department: </div>
+              <div class="profile-value">{{fac.dept}}</div>
+            </div>
 
-          <div class="profile-row">
-            <div class="profile-label-static">Suffix</div>
-            <div class="profile-value">{{fac.suf}}</div>
-          </div>
+            <div class="profile-row">
+              <div class="profile-label-static">Suffix:</div>
+              <div class="profile-value">{{fac.suf}}</div>
+            </div>
 
-          <div class="profile-row">
-            <div class="profile-label-static">Email</div>
-            <div class="profile-value">{{fac.email}}</div>
-          </div>
+            <div class="profile-row">
+              <div class="profile-label-static">Email:</div>
+              <div class="profile-value">{{fac.email}}</div>
+            </div>
 
-          <div class="profile-row">
-            <div class="profile-label-static">Phone</div>
-            <div class="profile-value">{{fac.phone}}</div>
-          </div>
+            <div class="profile-row">
+              <div class="profile-label-static">Phone: </div>
+              <div class="profile-value">{{fac.phone}}</div>
+            </div>
 
-          <div class="profile-row">
-            <div class="profile-label-static">Qualification</div>
-            <div class="profile-value">{{fac.qualification}}</div>
-          </div>
+            <div class="profile-row">
+              <div class="profile-label-static">Qualification: </div>
+              <div class="profile-value">{{fac.qualification}}</div>
+            </div>
 
-          <div class="profile-row">
-            <div class="profile-label-static">Role</div>
-            <div class="profile-value">{{fac.role}}</div>
-          </div>
+            <div class="profile-row">
+              <div class="profile-label-static">Role: </div>
+              <div class="profile-value">{{fac.role}}</div>
+            </div>
 
-          <div class="profile-row">
-            <div class="profile-label-static">Experience</div>
-            <div class="profile-value">{{fac.experience}} Years</div>
+            <div class="profile-row">
+              <div class="profile-label-static">Experience: </div>
+              <div class="profile-value">{{fac.experience}} Years</div>
+            </div>
           </div>
         </section>
 
@@ -501,7 +685,11 @@
 
                 <div style="text-align:right;">
                   <div class="published">Published on: <span>{{i.created.date}}</span></div>
-                  <button class="toggle-btn">⌄</button>
+                  <button class="toggle">
+                    <div class="toggle-btn">
+                      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#0c0c0cff"><path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"/></svg>
+                    </div>
+                  </button>
                 </div>
               </div>
 
@@ -509,16 +697,16 @@
                 <div class="meta-item">
                   <div class="meta-icon">📆</div>
                   <div>
-                    <div class="meta-label">Date</div>
-                    <div class="meta-value">{{i.date.date}}</div>
+                    <div class="meta-label">Date: </div>
+                    <div class="meta-value">{{i.date}}</div>
                   </div>
                 </div>
 
                 <div class="meta-item">
                   <div class="meta-icon">⏰</div>
                   <div>
-                    <div class="meta-label">Time</div>
-                    <div class="meta-value">{{i.date.time}}</div>
+                    <div class="meta-label">Time: </div>
+                    <div class="meta-value">{{i.time}}</div>
                   </div>
                 </div>
               </div>
@@ -541,10 +729,16 @@
                     <div class="doc-icon">📄</div>
                     <div>
                       <div class="doc-title">Agenda</div>
-                      <div class="doc-subtitle">Industry Partnership Summit Agenda</div>
+                      <div class="doc-subtitle">{{ i.support }}</div>
                     </div>
                   </div>
-                  <button class="doc-download-btn">⬇</button>
+                  <button class="doc-download-btn">
+                    {% if i.support %}
+                    <a href="{{ i.support.url }}" target="_blank" rel="noopener noreferrer"  style="text-decoration:none; color:var(--accent-blue); font-weight:600;"> View Certificate</a>
+                    {% else %}
+                      <p>No support file</p>
+                    {% endif %}
+                  </button>
                 </div>
               </div>
             </article>
