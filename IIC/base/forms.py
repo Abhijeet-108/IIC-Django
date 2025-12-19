@@ -2,6 +2,7 @@ from django.forms import ModelForm
 from django import forms
 from .models import posts ,achievement , contactOrg , organisation, querys , meeting , gallery , activity , notice ,iicInfo, teamMember, certificate, ipr, incubation
 from django.contrib.auth.models import User
+import datetime
 
 
 class postForm(ModelForm):
@@ -30,6 +31,7 @@ class activityFrom(ModelForm):
         widgets = {
                 'date': forms.DateInput(attrs={
                 'type' : 'date',
+                'max': datetime.date.today().strftime('%Y-%m-%d'),
                 'class': 'form-control',
                 'placeholder': 'YYYY-MM-DD',
                 'style': 'resize: none; border-radius: 10px;'
@@ -61,6 +63,7 @@ class achievForm(ModelForm):
             }), 
             'date': forms.DateInput(attrs={
                 'type' : 'date',
+                'max': datetime.date.today().strftime('%Y-%m-%d'),
                 'class': 'form-control',
                 'placeholder': 'YYYY-MM-DD',
                 'style': 'resize: none; border-radius: 10px;'
@@ -87,6 +90,7 @@ class meetingForm(ModelForm):
         widgets = {
                 'date': forms.DateInput(attrs={
                 'type' : 'date',
+                'min': datetime.date.today().strftime('%Y-%m-%d'),
                 'class': 'form-control',
                 'placeholder': 'YYYY-MM-DD',
                 'style': 'resize: none; border-radius: 10px;'
