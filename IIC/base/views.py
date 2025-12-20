@@ -6,6 +6,7 @@ from django.db.models import Q
 from .forms import queryForm , teamMembersForm, certificateForm, iprForm , incubationForm , activityFrom
 from rnd.forms import facultForm
 from .models import querys, iicInfo , notice , meeting , achievement , gallery , activity, teamMember , certificate , ipr , incubation
+from rnd.models import facult
 
 from django.contrib import messages
 from django.contrib.auth import authenticate , login , logout
@@ -15,6 +16,10 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 from django.utils import timezone
+
+from django.core.mail import send_mail
+from .models import PasswordResetOTP
+from .utils import generate_otp
 
 
 # Create your views here.
@@ -315,13 +320,15 @@ def deleteincubation(req, pk):
 def addactivity(req):
     page = 'Add Activity'
     actf = activityFrom()
+    info = iicInfo.objects.first()
     if(req.method == "POST"):
         actf = activityFrom(req.POST , req.FILES)
         if(actf.is_valid()):
             actf.save()
         return redirect("activities")
+    context = {"iic" : info , 'form' : actf, 'page' : page}
     
-    return render(req , "actform.html" , {'form' : actf, 'page' : page})
+    return render(req , "actform.html" , context)
 
 def updateactivity(req , pk):
     page = 'Update Activity'
@@ -338,7 +345,85 @@ def updateactivity(req , pk):
     return render(req , "actform.html" , {'form' : actf, 'page' : page})
 
 def deleteactivity(req , pk):
-    print(pk)
     act = activity.objects.get(id = pk)
     act.delete()
     return redirect('activities')
+
+
+#  ------------------- Forgot Password -----------------------
+
+def forgot_password(request):
+    info = iicInfo.objects.first()
+    if request.method == "POST":
+        email = request.POST.get("email")
+
+        try:
+            user1 = facult.objects.get(email=email).user
+            otp = generate_otp()
+
+            PasswordResetOTP.objects.create(user=user1, otp=otp)
+
+            send_mail(
+                "Password Reset OTP",
+                f"Your OTP is {otp}. It expires in 5 minutes.",
+                None,
+                [email],
+            )
+
+            request.session['reset_email'] = email
+            messages.success(request, "OTP sent to your email.")
+            return redirect("verify_otp")
+
+        except User.DoesNotExist:
+            messages.error(request, "Email not registered.")
+    context = {"iic" : info }
+    return render(request, "forgot_password.html" , context)
+
+
+def verify_otp(request):
+    info = iicInfo.objects.first()
+    if request.method == "POST":
+        otp_entered = request.POST.get("otp")
+        email = request.session.get("reset_email")
+
+        try:
+            user = facult.objects.get(email=email).user
+            otp_obj = PasswordResetOTP.objects.filter(user=user).last()
+
+            if otp_obj.otp == otp_entered and not otp_obj.is_expired():
+                request.session['otp_verified'] = True
+                return redirect("reset_password")
+
+            messages.error(request, "Invalid or expired OTP")
+
+        except:
+            messages.error(request, "Something went wrong")
+    context = {"iic" : info }
+    return render(request, "verify_otp.html" , context)
+
+def reset_password(request):
+    info = iicInfo.objects.first()
+    if not request.session.get('otp_verified'):
+        return redirect("forgot_password")
+
+    if request.method == "POST":
+        password1 = request.POST.get("password1")
+        password2 = request.POST.get("password2")
+        email = request.session.get("reset_email")
+
+        if password1 != password2:
+            messages.error(request, "Passwords do not match")
+            return redirect("reset_password")
+
+        user = facult.objects.get(email=email).user
+        user.set_password(password1)
+        user.save()
+
+        # Cleanup
+        PasswordResetOTP.objects.filter(user=user).delete()
+        request.session.flush()
+
+        messages.success(request, "Password reset successful")
+        return redirect("login")
+    context = {"iic" : info }
+    return render(request, "reset_password.html" , context)

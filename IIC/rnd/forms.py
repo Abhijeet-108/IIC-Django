@@ -35,6 +35,14 @@ class facultForm(forms.ModelForm):
         fields = "__all__"
         exclude = ['user']
 
+    def clean_photo(self):
+            photo = self.cleaned_data.get('photo')
+            if photo:
+                max_size = 2 * 1024 * 1024  # 2MB
+                if photo.size > max_size:
+                    raise forms.ValidationError("Image file size must be under 2MB")
+            return photo
+
 class suffForm(forms.ModelForm):
     class Meta:
         model = suff

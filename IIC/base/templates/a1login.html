@@ -350,21 +350,10 @@
           </div>
 
           <!-- Remember + Forgot -->
-          {% comment %} <div class="row-between">
-            <label
-              style="
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                font-weight: 500;
-                color: #475569;
-              "
-            >
-              <input name="remember" type="checkbox" value="1" />
-              <span style="font-size: 14px">Remember me</span>
-            </label>
-            <a href="/forgot-password">Forgot Password?</a>
-          </div> {% endcomment %}
+          <div class="row-between">
+            
+            <a href="{% url 'forgot_password' %}">Forgot Password?</a>
+          </div>
 
           <!-- Submit -->
           <button type="submit" class="btn">

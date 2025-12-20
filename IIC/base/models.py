@@ -1,5 +1,8 @@
 from django.db import models
 from rnd.models import facult
+from django.contrib.auth.models import User
+from django.utils import timezone
+from rnd.models import facult
 
 # Create your models here.
 
@@ -36,7 +39,6 @@ class meeting(models.Model):
     time = models.TimeField(null=True , blank = True)
     headline = models.CharField(max_length = 100, blank = True)
     description = models.TextField()
-    support = models.FileField(upload_to='meeting/pdfs/', null=True , blank = True)
     faculty = models.ManyToManyField(facult , blank = True , null = True)
     support = models.FileField(upload_to='meeting/pdfs/', null=True , blank = True)
     created = models.DateTimeField(auto_now_add=True)
@@ -207,3 +209,18 @@ class incubation(models.Model):
 
     def __str__(self):
         return self.title
+
+
+
+class PasswordResetOTP(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    otp = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def is_expired(self):
+        return timezone.now() > self.created_at + timezone.timedelta(minutes=5)
+
+    def _str_(self):
+        fac = facult.objects.get(user = self.user)
+        email_id = fac.email
+        return f"{email_id} - {self.otp}"
