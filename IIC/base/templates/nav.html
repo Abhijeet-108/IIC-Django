@@ -242,11 +242,7 @@
       <div style="max-width: 1200px; margin: 40px auto; padding: 0px"></div>
     </main>
 
-    <!-- KEEP JS LOGIC UNCHANGED -->
     <script>
-      /****************************************************************
-       * Navbar data
-       ****************************************************************/
       const navItems = [
         { name: "Home", path: "{% if request.user.is_superuser %}{% url 'admin-site' %}{% else %}{% url 'home' %}{% endif %}" },
         {
@@ -270,6 +266,7 @@
           submenu: [
             { name: "IPR Cell", path: "{% url 'ipr' %}" },
             { name: "Incubators List", path: "{% url 'incubation' %}" },
+            { name: "Idea Proposed", path: "{% url 'idea' %}" },
             {% comment %} { name: "Students Start-ups", path: "/innovation/startups" }, {% endcomment %}
           ],
         },

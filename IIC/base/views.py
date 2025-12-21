@@ -3,9 +3,9 @@ from .models import posts
 
 from django.db.models import Q
 
-from .forms import queryForm , teamMembersForm, certificateForm, iprForm , incubationForm , activityFrom
+from .forms import queryForm , teamMembersForm, certificateForm, iprForm , incubationForm , activityFrom, ideaForm
 from rnd.forms import facultForm
-from .models import querys, iicInfo , notice , meeting , achievement , gallery , activity, teamMember , certificate , ipr , incubation
+from .models import querys, iicInfo , notice , meeting , achievement , gallery , activity, teamMember , certificate , ipr , incubation, idea
 from rnd.models import facult
 
 from django.contrib import messages
@@ -159,9 +159,10 @@ def queryDeletion(req, pk):
 def teamMenbers(req):
     teamMembers = teamMember.objects.all()
     info = iicInfo.objects.first()
+    faculty = teamMember.objects.filter(Q(role="Faculty"))
     administrative = teamMember.objects.filter(Q(role="Convenor") | Q(role="Co-Convenor") | Q(role="Convenor of External Affairs") | Q(role="Hult Prize Campus Director & Operations Head") | Q(role="Chief Financial & Strategic Advisor"))
     heads_cohead = teamMember.objects.filter(Q(role="Head of Tech Wing") | Q(role="Co-Head of Tech Wing")|Q(role="Head of Graphics Wing") | Q(role="Co-Head of Graphics Wing")|Q(role="Head of Startup Wing") | Q(role="Co-Head of Startup Wing")|Q(role="Head of Public Relations And Outreach wing") | Q(role="Co-Head of Public Relations And Outreach wing")|Q(role="Head of Management and Resource wing") | Q(role="Co-Head of Management and Resource wing")|Q(role="Head of Social Media Wing") | Q(role="Co-Head of Social Media Wing")|Q(role="Head of Sponsorship Wing") | Q(role="Co-Head of Sponsorship Wing")|Q(role="Head of Content Wing") | Q(role="Co-Head of Content Wing"))
-    context = {'iic' : info , 'teamMembers' : teamMembers, 'administrative' : administrative , 'heads_cohead' : heads_cohead}
+    context = {'iic' : info , 'teamMembers' : teamMembers, 'faculty': faculty ,'administrative' : administrative , 'heads_cohead' : heads_cohead}
     return render(req, "teamForm.html" , context)
 
 
@@ -313,6 +314,31 @@ def deleteincubation(req, pk):
     incubatione = incubation.objects.get(id = pk)
     incubatione.delete()
     return redirect('incubation')
+
+# ----------------------Idea----------------------------------------
+
+def ideas(req):
+    ideas = idea.objects.all()
+    info = iicInfo.objects.first()
+    context = {'iic' : info , 'ideas' : ideas}
+    return render(req, "idea.html" , context)
+
+def addidea(req):
+    page = 'Add Idea'
+    ideaf = ideaForm()
+    info = iicInfo.objects.first()
+    if(req.method == "POST"):
+        ideaf = ideaForm(req.POST , req.FILES)
+        if(ideaf.is_valid()):
+            ideaf.save()
+        return redirect("idea")
+    
+    return render(req , "Form3.html" , {'Form' : ideaf, 'page' : page, 'iic' : info})
+
+def deleteidea(req, pk):
+    ideas = idea.objects.get(id = pk)
+    ideas.delete()
+    return redirect('idea')
 
 
 # ------------------------------ Activity -----------------------------

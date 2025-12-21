@@ -266,7 +266,7 @@ body {
         <!--  Faculty TEAM -->
         <h2 class="section-title">Faculty</h2>
         <div class="about-text">
-            {% for i in administrative %}
+            {% for i in faculty %}
             <a aria-label="Open profile {{ i.name }}">
                 <div class="about-card" tabindex="0" role="group" aria-labelledby="fac-name-{{ i.id }}">
                     {% if request.user.is_superuser %}
@@ -294,7 +294,11 @@ body {
                         <div class="role">{{ i.email }}</div>
                     {% endif %}
 
-                    <div class="role">{{ i.role }}</div>
+                    {% if i.role == "Faculty" %}
+                        <p>{{ i.facultRole }}</p>
+                    {% else %}
+                        <p>{{ i.role }}</p>
+                    {% endif %}
                 </div>
             </a>
             {% empty %}

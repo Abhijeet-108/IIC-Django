@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django import forms
-from .models import posts ,achievement , contactOrg , organisation, querys , meeting , gallery , activity , notice ,iicInfo, teamMember, certificate, ipr, incubation
+from .models import posts ,achievement , contactOrg , organisation, querys , meeting , gallery , activity , notice ,iicInfo, teamMember, certificate, ipr, incubation, idea
 from django.contrib.auth.models import User
 import datetime
 
@@ -235,6 +235,7 @@ class teamMembersForm(ModelForm):
         model = teamMember
         fields = "__all__"
         exclude = ["support"]
+        
     def clean_photo(self):
             photo = self.cleaned_data.get('photo')
             if photo:
@@ -256,4 +257,9 @@ class iprForm(ModelForm):
 class incubationForm(ModelForm):
     class Meta:
         model = incubation
+        fields = "__all__"
+        
+class ideaForm(ModelForm):
+    class Meta:
+        model = idea
         fields = "__all__"

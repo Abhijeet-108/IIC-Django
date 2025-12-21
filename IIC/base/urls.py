@@ -42,6 +42,10 @@ urlpatterns = [
     path('update_incubation/<int:pk>/', views.updateincubation , name = "update_incubation"),
     path('delete_incubation/<int:pk>/', views.deleteincubation , name = "delete_incubation"),
     
+    path('idea/', views.ideas , name = "idea"),
+    path('add_idea/', views.addidea , name = "add_idea"),  
+    path('delete_idea/<int:pk>/', views.deleteidea , name = "delete_idea"),
+    
 
     path('activity-create/' , views.addactivity , name = "activity-create"),
     path('activity-update/<int:pk>' , views.updateactivity , name = "activity-update"),
