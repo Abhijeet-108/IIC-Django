@@ -3,9 +3,10 @@ from .models import posts
 
 from django.db.models import Q
 
-from .forms import queryForm , teamMembersForm, certificateForm, iprForm , incubationForm , activityFrom
+from .forms import queryForm , teamMembersForm, certificateForm, iprForm , incubationForm , activityFrom, ideaForm
 from rnd.forms import facultForm
-from .models import querys, iicInfo , notice , meeting , achievement , gallery , activity, teamMember , certificate , ipr , incubation
+from .models import querys, iicInfo , notice , meeting , achievement , gallery , activity, teamMember , certificate , ipr , incubation, idea
+from rnd.models import facult
 
 from django.contrib import messages
 from django.contrib.auth import authenticate , login , logout
@@ -15,6 +16,10 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 from django.utils import timezone
+
+from django.core.mail import send_mail
+from .models import PasswordResetOTP
+from .utils import generate_otp
 
 
 # Create your views here.
@@ -84,22 +89,24 @@ def registerFac(req):
     form = UserCreationForm()
     form1 = facultForm()
     if(req.method == "POST"):
-        count = 0
         form = UserCreationForm(req.POST)
         form1 = facultForm(req.POST , req.FILES)
-        if(form.is_valid):
-            user = form.save(commit = False)
+        if form.is_valid() and form1.is_valid():
+            user = form.save(commit=False)
             user.username = user.username.lower()
             user.save()
-            login(req , user)
-            count += 1
-        if(form1.is_valid):
-            fac = form1.save(commit = False)
-            fac.user = req.user
+
+            fac = form1.save(commit=False)
+            fac.user = user
             fac.save()
-            count +=1
-        if(count == 2):
+
+            login(req, user)
             return redirect('rndinfo')
+        else:
+            if form.errors:
+                messages.error(req, 'User details are invalid.')
+            if form1.errors:
+                messages.error(req, 'Password is not correct or not entered properly.')
     context = {'iic' : info , 'page' : page , 'form' : form , 'form1' : form1}
     return render(req , 'signup1.html' , context)
 
@@ -110,14 +117,13 @@ def loginFac(req):
         if(req.user.is_superuser):
             return redirect('admin-site')
         return redirect('home')
+    
     if(req.method == "POST"):
         username = req.POST.get('username')
         password = req.POST.get('password')
-        try:
-            user = User.objects.get(username = username)
-        except:
-            messages.error(req , 'User does not exist!')
+        
         user1 = authenticate(req , username = username , password = password)
+        
         if user1 is not None:
             login(req , user1)
             if user1.is_superuser:
@@ -154,9 +160,10 @@ def queryDeletion(req, pk):
 def teamMenbers(req):
     teamMembers = teamMember.objects.all()
     info = iicInfo.objects.first()
+    faculty = teamMember.objects.filter(Q(role="Faculty"))
     administrative = teamMember.objects.filter(Q(role="Convenor") | Q(role="Co-Convenor") | Q(role="Convenor of External Affairs") | Q(role="Hult Prize Campus Director & Operations Head") | Q(role="Chief Financial & Strategic Advisor"))
     heads_cohead = teamMember.objects.filter(Q(role="Head of Tech Wing") | Q(role="Co-Head of Tech Wing")|Q(role="Head of Graphics Wing") | Q(role="Co-Head of Graphics Wing")|Q(role="Head of Startup Wing") | Q(role="Co-Head of Startup Wing")|Q(role="Head of Public Relations And Outreach wing") | Q(role="Co-Head of Public Relations And Outreach wing")|Q(role="Head of Management and Resource wing") | Q(role="Co-Head of Management and Resource wing")|Q(role="Head of Social Media Wing") | Q(role="Co-Head of Social Media Wing")|Q(role="Head of Sponsorship Wing") | Q(role="Co-Head of Sponsorship Wing")|Q(role="Head of Content Wing") | Q(role="Co-Head of Content Wing"))
-    context = {'iic' : info , 'teamMembers' : teamMembers, 'administrative' : administrative , 'heads_cohead' : heads_cohead}
+    context = {'iic' : info , 'teamMembers' : teamMembers, 'faculty': faculty ,'administrative' : administrative , 'heads_cohead' : heads_cohead}
     return render(req, "teamForm.html" , context)
 
 
@@ -309,19 +316,46 @@ def deleteincubation(req, pk):
     incubatione.delete()
     return redirect('incubation')
 
+# ----------------------Idea----------------------------------------
+
+def ideas(req):
+    ideas = idea.objects.all()
+    info = iicInfo.objects.first()
+    context = {'iic' : info , 'ideas' : ideas}
+    return render(req, "idea.html" , context)
+
+def addidea(req):
+    page = 'Add Idea'
+    ideaf = ideaForm()
+    info = iicInfo.objects.first()
+    if(req.method == "POST"):
+        ideaf = ideaForm(req.POST , req.FILES)
+        if(ideaf.is_valid()):
+            ideaf.save()
+        return redirect("idea")
+    
+    return render(req , "Form3.html" , {'Form' : ideaf, 'page' : page, 'iic' : info})
+
+def deleteidea(req, pk):
+    ideas = idea.objects.get(id = pk)
+    ideas.delete()
+    return redirect('idea')
+
 
 # ------------------------------ Activity -----------------------------
 
 def addactivity(req):
     page = 'Add Activity'
     actf = activityFrom()
+    info = iicInfo.objects.first()
     if(req.method == "POST"):
         actf = activityFrom(req.POST , req.FILES)
         if(actf.is_valid()):
             actf.save()
         return redirect("activities")
+    context = {"iic" : info , 'form' : actf, 'page' : page}
     
-    return render(req , "actform.html" , {'form' : actf, 'page' : page})
+    return render(req , "actform.html" , context)
 
 def updateactivity(req , pk):
     page = 'Update Activity'
@@ -338,7 +372,85 @@ def updateactivity(req , pk):
     return render(req , "actform.html" , {'form' : actf, 'page' : page})
 
 def deleteactivity(req , pk):
-    print(pk)
     act = activity.objects.get(id = pk)
     act.delete()
     return redirect('activities')
+
+
+#  ------------------- Forgot Password -----------------------
+
+def forgot_password(request):
+    info = iicInfo.objects.first()
+    if request.method == "POST":
+        email = request.POST.get("email")
+
+        try:
+            user1 = facult.objects.get(email=email).user
+            otp = generate_otp()
+
+            PasswordResetOTP.objects.create(user=user1, otp=otp)
+
+            send_mail(
+                "Password Reset OTP",
+                f"Your OTP is {otp}. It expires in 5 minutes.",
+                None,
+                [email],
+            )
+
+            request.session['reset_email'] = email
+            messages.success(request, "OTP sent to your email.")
+            return redirect("verify_otp")
+
+        except User.DoesNotExist:
+            messages.error(request, "Email not registered.")
+    context = {"iic" : info }
+    return render(request, "forgot_password.html" , context)
+
+
+def verify_otp(request):
+    info = iicInfo.objects.first()
+    if request.method == "POST":
+        otp_entered = request.POST.get("otp")
+        email = request.session.get("reset_email")
+
+        try:
+            user = facult.objects.get(email=email).user
+            otp_obj = PasswordResetOTP.objects.filter(user=user).last()
+
+            if otp_obj.otp == otp_entered and not otp_obj.is_expired():
+                request.session['otp_verified'] = True
+                return redirect("reset_password")
+
+            messages.error(request, "Invalid or expired OTP")
+
+        except:
+            messages.error(request, "Something went wrong")
+    context = {"iic" : info }
+    return render(request, "verify_otp.html" , context)
+
+def reset_password(request):
+    info = iicInfo.objects.first()
+    if not request.session.get('otp_verified'):
+        return redirect("forgot_password")
+
+    if request.method == "POST":
+        password1 = request.POST.get("password1")
+        password2 = request.POST.get("password2")
+        email = request.session.get("reset_email")
+
+        if password1 != password2:
+            messages.error(request, "Passwords do not match")
+            return redirect("reset_password")
+
+        user = facult.objects.get(email=email).user
+        user.set_password(password1)
+        user.save()
+
+        # Cleanup
+        PasswordResetOTP.objects.filter(user=user).delete()
+        request.session.flush()
+
+        messages.success(request, "Password reset successful")
+        return redirect("login")
+    context = {"iic" : info }
+    return render(request, "reset_password.html" , context)

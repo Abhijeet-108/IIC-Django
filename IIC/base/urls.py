@@ -42,10 +42,19 @@ urlpatterns = [
     path('update_incubation/<int:pk>/', views.updateincubation , name = "update_incubation"),
     path('delete_incubation/<int:pk>/', views.deleteincubation , name = "delete_incubation"),
     
+    path('idea/', views.ideas , name = "idea"),
+    path('add_idea/', views.addidea , name = "add_idea"),  
+    path('delete_idea/<int:pk>/', views.deleteidea , name = "delete_idea"),
+    
 
     path('activity-create/' , views.addactivity , name = "activity-create"),
     path('activity-update/<int:pk>' , views.updateactivity , name = "activity-update"),
     path('activity-delete/<int:pk>' , views.deleteactivity , name = "activity-delete"),
+
+
+    path("forgot-password/", views.forgot_password, name="forgot_password"),
+    path("verify-otp/", views.verify_otp, name="verify_otp"),
+    path("reset-password/", views.reset_password, name="reset_password"),
 
 
 ] + static(settings.MEDIA_URL , document_root = settings.MEDIA_ROOT)

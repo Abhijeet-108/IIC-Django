@@ -168,24 +168,32 @@
           {{page}} Form
         </h1>
 
+        {% comment %} <form class="patent-form" method="post" enctype="multipart/form-data" action="">
+          {% csrf_token %}
+
+          
+
+        </Form> {% endcomment %}
+
         <form class="patent-form" method="post" enctype="multipart/form-data" action="">
           {% csrf_token %}
 
-      {% with Form as f %}
-        {% if f.non_field_errors %}
-          <div class="non-field-errors">
-            {{ f.non_field_errors }}
-          </div>
-        {% endif %}
-
-        </Form>
-
-        <form class="patent-form" method="post" enctype="multipart/form-data" action="">
-          {% csrf_token %}
+          {% with Form as f %}
+            {% if f.non_field_errors %}
+              <div class="non-field-errors">
+                {{ f.non_field_errors }}
+              </div>
+            {% endif %}
 
           <div class="form-grid">
             {% for field in f %}
-              <div class="form-group">
+              <div class="form-group"
+                {% if field.name == "facultRole" %}
+                id="faculty-role-wrapper"
+                style="display:none;"
+                {% endif %}
+              >
+
                 <label for="{{ field.id_for_label }}">
                   {{ field.label }}{% if field.field.required %} *{% endif %}
                 </label>
@@ -225,4 +233,23 @@
 
   {% include 'foot.html' %}
 </body>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const roleSelect = document.getElementById("id_role");
+    const facultyWrapper = document.getElementById("faculty-role-wrapper");
+
+    if (!roleSelect || !facultyWrapper) return;
+
+    function toggleFacultyRole() {
+        if (roleSelect.value === "Faculty") {
+            facultyWrapper.style.display = "flex";
+        } else {
+            facultyWrapper.style.display = "none";
+        }
+    }
+
+    roleSelect.addEventListener("change", toggleFacultyRole);
+    toggleFacultyRole(); 
+});
+</script>
 </html>

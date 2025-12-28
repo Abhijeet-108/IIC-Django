@@ -1,5 +1,8 @@
 from django.db import models
 from rnd.models import facult
+from django.contrib.auth.models import User
+from django.utils import timezone
+from rnd.models import facult
 
 # Create your models here.
 
@@ -36,7 +39,6 @@ class meeting(models.Model):
     time = models.TimeField(null=True , blank = True)
     headline = models.CharField(max_length = 100, blank = True)
     description = models.TextField()
-    support = models.FileField(upload_to='meeting/pdfs/', null=True , blank = True)
     faculty = models.ManyToManyField(facult , blank = True , null = True)
     support = models.FileField(upload_to='meeting/pdfs/', null=True , blank = True)
     created = models.DateTimeField(auto_now_add=True)
@@ -152,6 +154,7 @@ class iicInfo(models.Model):
     
 class teamMember(models.Model):
     class role(models.TextChoices):
+        Facult = "Faculty"
         Convenor = "Convenor"
         Co_Convenor = "Co-Convenor"
         Convenor_External = "Convenor of External Affairs"
@@ -174,7 +177,22 @@ class teamMember(models.Model):
         Head_content_Wing = "Head of Content Wing"
         Co_Head_content_Wing = "Co-Head of Content Wing"
         
+        
+    class facultRole(models.TextChoices):
+        Director_Global = "Director of Global Operations, Techno India Group"
+        Sustainability_Director = "Sustainability Director, Techno India Group"
+        Principal = "Principal & Director, Techno Main Salt Lake"
+        Registrar = "Registrar, Techno Main Salt Lake"
+        President = "President, IIC - TMSL"
+        Convenor = "Teacher Convenor, IIC - TMSL"
+        Innovation = "Innovation Co-ordinator, IIC - TMSL"
+        Social_Media = "Social Media Co-ordinator, IIC - TMSL"
+        Startup = "Startup Co-ordinator, IIC - TMSL"
+        Member = "Member, IIC - TMSL"
+        
+        
     role = models.CharField(max_length=100, choices=role.choices, blank=True, null=True,)
+    facultRole = models.CharField(max_length=100, choices=facultRole.choices, blank=True, null=True,)
     name = models.CharField(max_length = 100 , blank = False , null = False)
     email = models.EmailField(blank = False , null = False)
     photo = models.ImageField(upload_to='member/images/',blank = True , null = True)
@@ -207,3 +225,32 @@ class incubation(models.Model):
 
     def __str__(self):
         return self.title
+    
+class idea(models.Model):
+    class status(models.TextChoices):
+        Approved = "Approved"
+        Pending = "Pending"
+    title = models.CharField(max_length = 200 , blank = False , null = False)
+    description = models.TextField(blank = False , null = False)
+    support = models.FileField(upload_to='idea/pdfs/', null = True , blank = True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(choices = status , default = status.Approved , null = True , blank = True)
+     
+
+    def __str__(self):
+        return self.title
+
+
+
+class PasswordResetOTP(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    otp = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def is_expired(self):
+        return timezone.now() > self.created_at + timezone.timedelta(minutes=5)
+
+    def _str_(self):
+        fac = facult.objects.get(user = self.user)
+        email_id = fac.email
+        return f"{email_id} - {self.otp}"

@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django import forms
-from .models import posts ,achievement , contactOrg , organisation, querys , meeting , gallery , activity , notice ,iicInfo, teamMember, certificate, ipr, incubation
+from .models import posts ,achievement , contactOrg , organisation, querys , meeting , gallery , activity , notice ,iicInfo, teamMember, certificate, ipr, incubation, idea
 from django.contrib.auth.models import User
 import datetime
 
@@ -44,6 +44,22 @@ class activityFrom(ModelForm):
                 'style': 'resize: none; border-radius: 10px;'
             }), 
         }
+    def clean_photo(self):
+            photo = self.cleaned_data.get('photo')
+            if photo:
+                max_size = 2 * 1024 * 1024  # 2MB
+                if photo.size > max_size:
+                    raise forms.ValidationError("Image file size must be under 2MB")
+            return photo
+
+    def clean_photo(self):
+            photo = self.cleaned_data.get('photo')
+            if photo:
+                max_size = 2 * 1024 * 1024  # 2MB
+                if photo.size > max_size:
+                    raise forms.ValidationError("Image file size must be under 2MB")
+            return photo
+
 
 class achievForm(ModelForm):
     class Meta:
@@ -108,11 +124,27 @@ class galleryForm(ModelForm):
     class Meta:
         model = gallery
         fields = "__all__"
+    def clean_photo(self):
+            photo = self.cleaned_data.get('photo')
+            if photo:
+                max_size = 2 * 1024 * 1024  # 2MB
+                if photo.size > max_size:
+                    raise forms.ValidationError("Image file size must be under 2MB")
+            return photo
+
 
 class noticeForm(ModelForm):
     class Meta:
         model = notice
         fields = "__all__"
+    def clean_photo(self):
+            photo = self.cleaned_data.get('photo')
+            if photo:
+                max_size = 2 * 1024 * 1024  # 2MB
+                if photo.size > max_size:
+                    raise forms.ValidationError("Image file size must be under 2MB")
+            return photo
+
 
 class contactOrgForm(ModelForm):
     class Meta:
@@ -203,7 +235,15 @@ class teamMembersForm(ModelForm):
         model = teamMember
         fields = "__all__"
         exclude = ["support"]
-    
+        
+    def clean_photo(self):
+            photo = self.cleaned_data.get('photo')
+            if photo:
+                max_size = 2 * 1024 * 1024  # 2MB
+                if photo.size > max_size:
+                    raise forms.ValidationError("Image file size must be under 2MB")
+            return photo
+
 class certificateForm(ModelForm):
     class Meta:
         model = certificate
@@ -217,4 +257,9 @@ class iprForm(ModelForm):
 class incubationForm(ModelForm):
     class Meta:
         model = incubation
+        fields = "__all__"
+        
+class ideaForm(ModelForm):
+    class Meta:
+        model = idea
         fields = "__all__"

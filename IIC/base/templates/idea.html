@@ -88,12 +88,11 @@ body {
 /* ===== GRID ===== */
 
 .about-text {
+  {% comment %} background: black; {% endcomment %}
   display: grid;
   gap: 5px;
   margin-top: 8px;
-  justify-items: start;
-  
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  justify-items: center;
 }
 
 .about-text > a {
@@ -105,7 +104,6 @@ body {
 
 .about-card {
   width: 100%;
-  max-width: 320px;
   background: var(--card-bg);
   border-radius: var(--radius-lg);
   padding: 20px 18px;
@@ -152,6 +150,7 @@ body {
   margin: 6px 0 0;
   font-size: 20px;
   font-weight: 800;
+  color: var(--text-strong);
 }
 
 .about-card .role {
@@ -250,31 +249,28 @@ body {
       </span>
     </button>
     <div class="heading">
-        <h1>Incubators</h1>
+        <h1>IDEAS</h1>
         <div class="heading-underline" aria-hidden="true"></div>
     </div>
 
-    {% if request.user.is_superuser %}
     <div class="admin-add-wrapper">
-        <a href="{% url "add_incubation" %}" class="admin-add-link">
+        <a href="{% url "add_idea" %}" class="admin-add-link">
             <button type="button" class="admin-add-btn">
                 <span class="material-symbols-outlined">
                     add
                 </span>
-                <span class="admin-add-text">Add Incubators</span>
+                <span class="admin-add-text">Add Idea</span>
             </button>
         </a>
     </div>
-    {% endif %}
 
     <div class="about-content">
         <div class="about-text">
-            {% for i in incubations %}
+            {% for i in ideas %}
             <a aria-label="Open profile {{ i.name }}">
                 <div class="about-card" tabindex="0" role="group" aria-labelledby="fac-name-{{ i.id }}">
-                    {% if request.user.is_superuser %}
                     <div class="admin-add-wrapper">
-                        <a href="{% url "delete_incubation" i.id %}" class="admin-add-link">
+                        <a href="{% url "delete_idea" i.id %}" class="admin-add-link">
                             <button type="button" class="admin-add-btn">
                                 <span class="material-symbols-outlined">
                                     delete_forever
@@ -282,7 +278,6 @@ body {
                             </button>
                         </a>
                     </div>
-                    {% endif %}
                    
 
                     <h3 id="fac-name-{{ i.id }}">{{ i.title }}</h3>
@@ -300,7 +295,7 @@ body {
                 </div>
             </a>
             {% empty %}
-            <p>No certificate added yet.</p>
+            <p>No Ideas Proposed yet.</p>
             {% endfor %}
         </div>
     </div>

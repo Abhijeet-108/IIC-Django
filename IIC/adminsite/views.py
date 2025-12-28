@@ -5,6 +5,7 @@ from base.forms import postForm , achievForm , contactOrgForm , organisationForm
 from django.contrib.auth.models import User
 from base.models import iicInfo
 from rnd.models import facult
+from django.urls import reverse
 # Create your views here.
 
 def homepage(req):
@@ -21,7 +22,10 @@ def profilePage(req):
     info = iicInfo.objects.first()
     suf = suff.objects.all()
     achi = achievement.objects.filter(stat = "Pending") 
-    context = {'iic' : info , 'suf' : suf , 'achi' : achi}
+    signup_path = reverse('signup')
+    signup_url = req.build_absolute_uri(signup_path)
+
+    context = {'iic' : info , 'suf' : suf , 'achi' : achi , 'signup_url' : signup_url}
 
     if (not req.user.is_superuser):
         fac = facult.objects.get(user = req.user)

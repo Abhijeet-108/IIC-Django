@@ -278,7 +278,7 @@ def update_facultform(req, pk):
         update_facultform = facultForm(req.POST, req.FILES, instance=facultform)
         if update_facultform.is_valid():
             update_facultform.save()
-            return redirect('research')
+            return redirect('admin-profile')
         else:
             update_facultform = facultForm()
     
